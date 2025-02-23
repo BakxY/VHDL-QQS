@@ -1,10 +1,7 @@
 import * as vscode from 'vscode';
-import { getSelectedExpression, getAllEntities, getEntityContents } from './lib/EntityUtils';
+import { getSelectedExpression, getAllEntities, getEntityContents, getPropertiesFromContent } from './lib/EntityUtils';
 
 const TOML_PATH: string = './vhdl_ls.toml';
-
-const ENTITY_GENERIC_REGEX: RegExp = /generic\s*\(([\s\S]*?)\)\s*;/;
-const ENTITY_PORT_REGEX: RegExp = /port\s*\(([\s\S]*?)\)\s*;/;
 
 export function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('extension.generateTestBench', () => {
@@ -50,6 +47,8 @@ export function activate(context: vscode.ExtensionContext) {
 			// Error message is printed in function
 			return;
 		}
+		
+		getPropertiesFromContent(entityContent);
 	});
 	context.subscriptions.push(disposable);
 }

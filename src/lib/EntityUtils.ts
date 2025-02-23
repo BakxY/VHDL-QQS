@@ -8,10 +8,16 @@ interface TomlConfig {
             files: string[];
         };
     };
-    // ... other top-level properties
 }
 
-const ENTITY_BLOCK_FORMAT = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end\s+\1\s*;/;
+export type entityProperty = {
+    propertyName: string;
+    propertyType: string;
+    propertySignalDir: string;
+    propertySubType: string;
+}
+
+const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end\s+\1\s*;/;
 
 export function getSelectedExpression(editor: vscode.TextEditor | undefined) {
     const selection = editor?.selection;
@@ -49,7 +55,7 @@ export function getEntityContents(pathToEntityFile: string) {
         return;
     }
 
-    const entityBlockRegexMatch = entityFile.match(ENTITY_BLOCK_FORMAT);
+    const entityBlockRegexMatch: RegExpMatchArray | null = entityFile.match(ENTITY_BLOCK_FORMAT);
 
     if (!entityBlockRegexMatch) {
         vscode.window.showErrorMessage('Entity didn\'t match expected format in "' + pathToEntityFile + '"!');
@@ -57,4 +63,60 @@ export function getEntityContents(pathToEntityFile: string) {
     }
 
     return entityBlockRegexMatch![2];
+}
+
+export function getPropertiesFromContent(entityContent: string) {
+    entityContent = entityContent.replace(/--.*$/gm, '').replaceAll('\n', '');
+    let entityProperties: entityProperty[] = [];
+
+    let portContent: string = '';
+
+    let parenthesesCount: number = 0;
+
+    for (let index = entityContent.indexOf('port'); index < entityContent.length; index++) {
+        if (entityContent[index] == '(') {
+            parenthesesCount++;
+        }
+
+        if (entityContent[index] == ')') {
+            parenthesesCount--;
+        }
+
+        if (entityContent[index] == ';' && parenthesesCount == 0) {
+            break;
+
+        }
+        portContent += entityContent[index];
+    }
+
+    if (parenthesesCount != 0) {
+        vscode.window.showErrorMessage('Entity port definition didn\'t match expected format!');
+        return;
+    }
+
+    let genericContent: string = '';
+    parenthesesCount = 0;
+
+    if (entityContent.includes('generic')) {
+        for (let index = entityContent.indexOf('generic'); index < entityContent.length; index++) {
+            if (entityContent[index] == '(') {
+                parenthesesCount++;
+            }
+
+            if (entityContent[index] == ')') {
+                parenthesesCount--;
+            }
+
+            if (entityContent[index] == ';' && parenthesesCount == 0) {
+                break;
+
+            }
+            genericContent += entityContent[index];
+        }
+
+        if (parenthesesCount != 0) {
+            vscode.window.showErrorMessage('Entity generic definition didn\'t match expected format!');
+            return;
+        }
+    }
 }
