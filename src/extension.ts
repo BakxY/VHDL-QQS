@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
-import { getSelectedExpression, getAllEntities, getEntityContents, getPropertiesFromContent } from './lib/EntityUtils';
+import * as fs from 'fs';
+import * as path from 'path';
+import { entityProperty, getSelectedExpression, getAllEntities, getEntityContents, getPortContent, getGenericContent, getPortPropertiesFromContent, getGenericPropertiesFromContent } from './lib/EntityUtils';
 
 const TOML_PATH: string = './vhdl_ls.toml';
 
@@ -13,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const selectedExpression: string | undefined = getSelectedExpression(editor);
+		const selectedExpression: string | null = getSelectedExpression(editor);
 
 		if (!selectedExpression) {
 			// Error message is printed in function
@@ -47,6 +49,24 @@ export function activate(context: vscode.ExtensionContext) {
 			// Error message is printed in function
 			return;
 		}
+
+		const genericContent: string | null = getGenericContent(entityContent);
+		const portContent: string | null = getPortContent(entityContent);
+
+		if (!portContent) {
+			// Error message is printed in function
+			return;
+		}
+
+		const portProperties: entityProperty[] | null = getPortPropertiesFromContent(portContent);
+
+		let genericProperties: entityProperty[] | null;
+
+		if(genericContent)
+		{
+			genericProperties = getGenericPropertiesFromContent(genericContent);
+		}
+		
 		
 		getPropertiesFromContent(entityContent);
 	});
