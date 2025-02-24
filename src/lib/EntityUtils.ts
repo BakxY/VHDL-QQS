@@ -133,10 +133,10 @@ export function getPortContent(entityContent: string) {
     return portContent;
 }
 
-export function getPortPropertiesFromContent(entityContent: string) {
+export function getPortPropertiesFromContent(entityContent: string | null) {
     let entityProperties: entityProperty[] = [];
 
-    const splitContent: string[] = entityContent.split(';');
+    const splitContent: string[] = entityContent!.split(';');
 
     for (let propertyIndex = 0; propertyIndex < splitContent.length; propertyIndex++) {
         const currentPropertySplit: string[] = splitContent[propertyIndex].split(':');
@@ -164,10 +164,10 @@ export function getPortPropertiesFromContent(entityContent: string) {
     return entityProperties;
 }
 
-export function getGenericPropertiesFromContent(entityContent: string) {
+export function getGenericPropertiesFromContent(entityContent: string | null) {
     let entityProperties: entityProperty[] = [];
 
-    const splitContent: string[] = entityContent.split(';');
+    const splitContent: string[] = entityContent!.split(';');
 
     for (let propertyIndex = 0; propertyIndex < splitContent.length; propertyIndex++) {
         const currentPropertySplit: string[] = splitContent[propertyIndex].split(':');

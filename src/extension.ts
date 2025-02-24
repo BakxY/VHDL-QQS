@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { entityProperty, getSelectedExpression, getAllEntities, getEntityContents, getPortContent, getGenericContent, getPortPropertiesFromContent, getGenericPropertiesFromContent } from './lib/EntityUtils';
+import { generateTestbenchComponent } from './lib/TestbenchUtils';
 
 const TOML_PATH: string = './vhdl_ls.toml';
 
@@ -58,17 +59,18 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
+		const PATH_TO_TESTBENCH_TEMPLATE: string = path.join(context.extensionPath, 'res', 'testbench_template.vhd');
+
+		let generatedTestbench: string = fs.readFileSync(PATH_TO_TESTBENCH_TEMPLATE, 'utf-8');
+
+		generatedTestbench = generatedTestbench.replaceAll('TESTBENCH_ENTITY', selectedExpression);
+		generatedTestbench = generatedTestbench.replaceAll('DATE_CREATED', new Date().toLocaleDateString('de-CH'));
+
 		const portProperties: entityProperty[] | null = getPortPropertiesFromContent(portContent);
+		const genericProperties: entityProperty[] | null = getGenericPropertiesFromContent(genericContent);
 
-		let genericProperties: entityProperty[] | null;
-
-		if(genericContent)
-		{
-			genericProperties = getGenericPropertiesFromContent(genericContent);
-		}
-		
-		
-		getPropertiesFromContent(entityContent);
+		let componentContent = generateTestbenchComponent(genericProperties, portProperties);
+		generatedTestbench = generatedTestbench.replaceAll('ENTITY_CONTENT', componentContent);
 	});
 	context.subscriptions.push(disposable);
 }
