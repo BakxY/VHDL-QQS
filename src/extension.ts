@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import { entityProperty, getSelectedExpression, getAllEntities, getEntityContents, getPortContent, getGenericContent, getPortPropertiesFromContent, getGenericPropertiesFromContent } from './lib/EntityUtils';
-import { generateTestbenchComponent } from './lib/TestbenchUtils';
+import { generateTestbenchComponent, generateTestbenchSignals, generateSignalMapping } from './lib/TestbenchUtils';
 
 const TOML_PATH: string = './vhdl_ls.toml';
 
@@ -71,6 +71,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 		let componentContent = generateTestbenchComponent(genericProperties, portProperties);
 		generatedTestbench = generatedTestbench.replaceAll('ENTITY_CONTENT', componentContent);
+
+		let testbenchSignals = generateTestbenchSignals(portProperties);
+		generatedTestbench = generatedTestbench.replaceAll('TESTBENCH_INTERNAL_SIGNALS', testbenchSignals);
+
+		let testbenchSignalMapping = generateSignalMapping(portProperties);
+		generatedTestbench = generatedTestbench.replaceAll('ENTITY_INTERAL_MAPPING', testbenchSignalMapping);
+
+		fs.writeFileSync(pathToEntityFile.replace('.vhd', '_tp.vhd'), generatedTestbench);
 	});
 	context.subscriptions.push(disposable);
 }

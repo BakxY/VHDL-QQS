@@ -31,3 +31,28 @@ export function generateTestbenchComponent(genericProperties : entityProperty[] 
 
     return componentContent;
 }
+
+export function generateTestbenchSignals(portProperties: entityProperty[] | null) {
+    let testbenchSignals = '';
+
+    for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {
+
+        testbenchSignals += 'signal ' + portProperties![signalIndex].propertyName + '_tb_internal : ' + portProperties![signalIndex].propertyType + ';\n';
+    }
+
+    return testbenchSignals;
+}
+
+export function generateSignalMapping(portProperties: entityProperty[] | null) {
+    let testbenchSignals = '';
+
+    for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {
+        if (signalIndex > 0) {
+            testbenchSignals += ',\n';
+        }
+
+        testbenchSignals += portProperties![signalIndex].propertyName + ' => ' + portProperties![signalIndex].propertyName + '_tb_internal'
+    }
+
+    return testbenchSignals;
+}
