@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
+import * as fs from 'fs';
 import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './commands';
 import { getAllEntities } from './lib/TomlUtils'
@@ -6,7 +8,7 @@ import { getAllEntities } from './lib/TomlUtils'
 const TOML_PATH: string = './vhdl_ls.toml';
 
 export function activate(context: vscode.ExtensionContext) {
-	var disposable = vscode.commands.registerCommand('extension.generateTestBenchSelection', () => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
 		const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 
 		// Check if editor is opened
@@ -26,7 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
-	var disposable = vscode.commands.registerCommand('extension.generateTestBenchExplorer', async () => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchExplorer', async () => {
 		const allEntities = getAllEntities(TOML_PATH);
 
 		if (!allEntities) {
@@ -34,19 +36,27 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		for(let entity = 0; entity < allEntities.length; entity++)
-		{
-			if(allEntities[entity].endsWith('_tp.vhd'))
-			{
-				delete allEntities[entity];
-				continue;
-			}
-			allEntities[entity] = allEntities[entity].replace('.vhd', '');
+		for (let entity = 0; entity < allEntities.length; entity++) {
+			allEntities[entity] = path.basename(allEntities[entity]).replace('.vhd', '');
 		}
 
-		const pick = await vscode.window.showQuickPick(allEntities);
+		const selectedEntity: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select a entity to create a testbench!' });
 
-		//createNewTestbench(context, selectedEntity);
+		if (selectedEntity == undefined) {
+			return;
+		}
+
+		if (selectedEntity.endsWith('_tp')) {
+			vscode.window.showErrorMessage('Can\'t create a testbench of a testbench!');
+			return;
+		}
+
+		if (allEntities.includes(selectedEntity + '_tp')) {
+			vscode.window.showErrorMessage('The testbench for this entity already exists!');
+			return;
+		}
+
+		createNewTestbench(context, selectedEntity);
 	});
 	context.subscriptions.push(disposable);
 }

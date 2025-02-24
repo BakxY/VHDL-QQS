@@ -1,3 +1,4 @@
 node_modules/
 out/
-.vscode/
+.vscode/extensions.json
+.vscode/settings.json

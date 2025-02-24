@@ -14,14 +14,18 @@
     "contributes": {
         "commands": [
             {
-                "command": "extension.generateTestBenchExplorer",
-                "title": "Generate Testbench"
+                "command": "vhdl-qqs.generateTestBenchExplorer",
+                "title": "Generate testbench by menu selection"
+            },
+            {
+                "command": "vhdl-qqs.generateTestBenchSelection",
+                "title": "Generate testbench by expression selection"
             }
         ],
         "menus": {
             "editor/context": [
                 {
-                    "command": "extension.generateTestBenchSelection",
+                    "command": "vhdl-qqs.generateTestBenchSelection",
                     "when": "editorHasSelection"
                 }
             ]
