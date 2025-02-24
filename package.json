@@ -14,14 +14,14 @@
     "contributes": {
         "commands": [
             {
-                "command": "extension.generateTestBench",
-                "title": "Generate Test Bench"
+                "command": "extension.generateTestBenchExplorer",
+                "title": "Generate Testbench"
             }
         ],
         "menus": {
             "editor/context": [
                 {
-                    "command": "extension.generateTestBench",
+                    "command": "extension.generateTestBenchSelection",
                     "when": "editorHasSelection"
                 }
             ]

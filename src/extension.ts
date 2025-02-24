@@ -1,13 +1,12 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
-import { entityProperty, getSelectedExpression, getAllEntities, getEntityContents, getPortContent, getGenericContent, getPortPropertiesFromContent, getGenericPropertiesFromContent } from './lib/EntityUtils';
-import { generateTestbenchComponent, generateTestbenchSignals, generateSignalMapping } from './lib/TestbenchUtils';
+import { getSelectedExpression } from './lib/EntityUtils';
+import { createNewTestbench } from './commands';
+import { getAllEntities } from './lib/TomlUtils'
 
 const TOML_PATH: string = './vhdl_ls.toml';
 
 export function activate(context: vscode.ExtensionContext) {
-	var disposable = vscode.commands.registerCommand('extension.generateTestBench', () => {
+	var disposable = vscode.commands.registerCommand('extension.generateTestBenchSelection', () => {
 		const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 
 		// Check if editor is opened
@@ -23,6 +22,11 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
+		createNewTestbench(context, selectedExpression);
+	});
+	context.subscriptions.push(disposable);
+
+	var disposable = vscode.commands.registerCommand('extension.generateTestBenchExplorer', async () => {
 		const allEntities = getAllEntities(TOML_PATH);
 
 		if (!allEntities) {
@@ -30,55 +34,19 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		let pathToEntityFile: string = '';
-
-		for (let entity in allEntities) {
-			if (allEntities[entity].endsWith(selectedExpression + '.vhd')) {
-				pathToEntityFile = allEntities[entity].replaceAll('\\', '/');
-				break;
+		for(let entity = 0; entity < allEntities.length; entity++)
+		{
+			if(allEntities[entity].endsWith('_tp.vhd'))
+			{
+				delete allEntities[entity];
+				continue;
 			}
+			allEntities[entity] = allEntities[entity].replace('.vhd', '');
 		}
 
-		if (pathToEntityFile == '') {
-			vscode.window.showErrorMessage('Selected expression is not defined as a entity in your project!');
-			return;
-		}
+		const pick = await vscode.window.showQuickPick(allEntities);
 
-		const entityContent: string | undefined = getEntityContents(pathToEntityFile)?.replaceAll('\r', '');
-
-		if (!entityContent) {
-			// Error message is printed in function
-			return;
-		}
-
-		const genericContent: string | null = getGenericContent(entityContent);
-		const portContent: string | null = getPortContent(entityContent);
-
-		if (!portContent) {
-			// Error message is printed in function
-			return;
-		}
-
-		const PATH_TO_TESTBENCH_TEMPLATE: string = path.join(context.extensionPath, 'res', 'testbench_template.vhd');
-
-		let generatedTestbench: string = fs.readFileSync(PATH_TO_TESTBENCH_TEMPLATE, 'utf-8');
-
-		generatedTestbench = generatedTestbench.replaceAll('TESTBENCH_ENTITY', selectedExpression);
-		generatedTestbench = generatedTestbench.replaceAll('DATE_CREATED', new Date().toLocaleDateString('de-CH'));
-
-		const portProperties: entityProperty[] | null = getPortPropertiesFromContent(portContent);
-		const genericProperties: entityProperty[] | null = getGenericPropertiesFromContent(genericContent);
-
-		let componentContent = generateTestbenchComponent(genericProperties, portProperties);
-		generatedTestbench = generatedTestbench.replaceAll('ENTITY_CONTENT', componentContent);
-
-		let testbenchSignals = generateTestbenchSignals(portProperties);
-		generatedTestbench = generatedTestbench.replaceAll('TESTBENCH_INTERNAL_SIGNALS', testbenchSignals);
-
-		let testbenchSignalMapping = generateSignalMapping(portProperties);
-		generatedTestbench = generatedTestbench.replaceAll('ENTITY_INTERAL_MAPPING', testbenchSignalMapping);
-
-		fs.writeFileSync(pathToEntityFile.replace('.vhd', '_tp.vhd'), generatedTestbench);
+		//createNewTestbench(context, selectedEntity);
 	});
 	context.subscriptions.push(disposable);
 }
