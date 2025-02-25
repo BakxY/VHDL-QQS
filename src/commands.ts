@@ -19,13 +19,15 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
 
     for (let entity in allEntities) {
         if (allEntities[entity].endsWith(entityName + '.vhd')) {
-            pathToEntityFile = allEntities[entity].replaceAll('\\', '/');
+            pathToEntityFile = allEntities[entity];
+            console.log('Found file associated with selected entity at "' + allEntities[entity] + '"');
             break;
         }
     }
 
     if (pathToEntityFile == '') {
         vscode.window.showErrorMessage('Selected expression is not defined as a entity in your project!');
+        console.error('Selected expression is not defined as a entity in your project!');
         return;
     }
 
@@ -46,6 +48,8 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
 
     const PATH_TO_TESTBENCH_TEMPLATE: string = path.join(context.extensionPath, 'res', 'testbench_template.vhd');
 
+    console.log('Loading template file from "' + PATH_TO_TESTBENCH_TEMPLATE + '"');
+
     let generatedTestbench: string = fs.readFileSync(PATH_TO_TESTBENCH_TEMPLATE, 'utf-8');
 
     generatedTestbench = generatedTestbench.replaceAll('TESTBENCH_ENTITY', entityName);
@@ -62,6 +66,15 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
 
     let testbenchSignalMapping = generateSignalMapping(portProperties);
     generatedTestbench = generatedTestbench.replaceAll('ENTITY_INTERAL_MAPPING', testbenchSignalMapping);
+
+    if(fs.existsSync(pathToEntityFile.replace('.vhd', '_tb.vhd')))
+    {
+        vscode.window.showErrorMessage('File "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '" already exits!');
+        console.error('File "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '" already exits!');
+        return;
+    }
+
+    console.log('Writing testbench to "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '"');
 
     fs.writeFileSync(pathToEntityFile.replace('.vhd', '_tb.vhd'), generatedTestbench);
 }

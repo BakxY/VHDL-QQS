@@ -13,8 +13,11 @@ export function activate(context: vscode.ExtensionContext) {
 		// Check if editor is opened
 		if (editor == undefined) {
 			vscode.window.showErrorMessage('No editor opened!');
+			console.error('No editor opened!');
 			return;
 		}
+
+		console.log('Found current open file "' + editor.document.fileName + '"');
 
 		const selectedExpression: string | null = getSelectedExpression(editor);
 
