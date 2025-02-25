@@ -67,6 +67,13 @@ function resolvePathWithWildcards(pattern: string, baseDir: string = process.cwd
 export function getAllEntities(pathToToml: string) {
     console.log('Using toml file at "' + pathToToml + '"');
 
+    if(!fs.existsSync(pathToToml))
+    {
+        vscode.window.showErrorMessage('No file at "' + pathToToml + '"!');
+        console.error('No file at "' + pathToToml + '"!')
+        return null;
+    }
+
     const tomlString: string = fs.readFileSync(pathToToml, 'utf8');
 
     if (!tomlString) {
