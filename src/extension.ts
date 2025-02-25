@@ -4,7 +4,7 @@ import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './commands';
 import { getAllEntities } from './lib/TomlUtils'
 
-const TOML_PATH: string = './vhdl_ls.toml';
+const TOML_PATH: string = path.normalize('./vhdl_ls.toml');
 
 export function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {

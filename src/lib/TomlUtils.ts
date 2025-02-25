@@ -79,7 +79,7 @@ export function getAllEntities(pathToToml: string) {
 
     for (let fileIndex = 0; fileIndex < filesFromToml.length; fileIndex++) {
         if (!filesFromToml[fileIndex].includes('*')) {
-            filteredFiles.push(filesFromToml[fileIndex]);
+            filteredFiles.push(path.normalize(filesFromToml[fileIndex]));
             continue;
         }
 
