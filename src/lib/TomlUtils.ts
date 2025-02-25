@@ -65,10 +65,13 @@ function resolvePathWithWildcards(pattern: string, baseDir: string = process.cwd
 }
 
 export function getAllEntities(pathToToml: string) {
+    console.log('Using toml file at "' + pathToToml + '"');
+
     const tomlString: string = fs.readFileSync(pathToToml, 'utf8');
 
     if (!tomlString) {
         vscode.window.showErrorMessage('Unable to read toml file at "' + pathToToml + '"!');
+        console.error('Unable to read toml file at "' + pathToToml + '"!')
         return null;
     }
 
@@ -76,6 +79,8 @@ export function getAllEntities(pathToToml: string) {
 
     const filesFromToml = parsedToml['libraries']['lib']['files'];
     let filteredFiles: string[] = [];
+
+    console.log('Found ' + filesFromToml.length + ' number of raw paths');
 
     for (let fileIndex = 0; fileIndex < filesFromToml.length; fileIndex++) {
         if (!filesFromToml[fileIndex].includes('*')) {
@@ -87,6 +92,7 @@ export function getAllEntities(pathToToml: string) {
 
         for (let pathIndex = 0; pathIndex < resolvedPath.length; pathIndex++) {
             filteredFiles.push(resolvedPath[pathIndex]);
+            console.log('Expanded wildcard path "' + filesFromToml[fileIndex] + '" to file "' + resolvedPath[pathIndex] + '"');
         }
     }
 

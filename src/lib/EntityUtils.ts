@@ -16,13 +16,18 @@ export function getSelectedExpression(editor: vscode.TextEditor | undefined) {
     // Check if user has selected any text
     if (!selection || selection.isEmpty) {
         vscode.window.showErrorMessage('No expression selected!');
+        console.error('No expression selected!');
         return null;
     }
 
     // Convert selection object and get selected text
     const selectionRange = new vscode.Range(selection.start.line, selection.start.character, selection.end.line, selection.end.character);
 
-    return editor.document.getText(selectionRange);
+    const selectedText: string = editor.document.getText(selectionRange);
+    
+    console.log('Found user selected text: "' + selectedText + '"');
+
+    return selectedText;
 }
 
 export function getEntityContents(pathToEntityFile: string) {
@@ -30,6 +35,7 @@ export function getEntityContents(pathToEntityFile: string) {
 
     if (!entityFile) {
         vscode.window.showErrorMessage('Unable to read entity file "' + pathToEntityFile + '"!');
+        console.error('Unable to read entity file "' + pathToEntityFile + '"!');
         return null;
     }
 
@@ -37,6 +43,7 @@ export function getEntityContents(pathToEntityFile: string) {
 
     if (!entityBlockRegexMatch) {
         vscode.window.showErrorMessage('Entity didn\'t match expected format in "' + pathToEntityFile + '"!');
+        console.error('Entity didn\'t match expected format in "' + pathToEntityFile + '"!');
         return null;
     }
 
@@ -125,6 +132,7 @@ export function getPortPropertiesFromContent(entityContent: string | null) {
 
         if (!currentPropertyDir) {
             vscode.window.showErrorMessage('Entity port definition didn\'t match expected format!');
+            console.error('Entity port definition didn\'t match expected format!');
             return null;
         }
 
