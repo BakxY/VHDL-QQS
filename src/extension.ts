@@ -3,6 +3,7 @@ import * as path from 'path';
 import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './lib/TestbenchCommand';
 import { getAllEntities } from './lib/TomlUtils'
+import { getAllProjectFiles } from './lib/QuartusUtils'
 
 export function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
@@ -65,6 +66,26 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		createNewTestbench(context, selectedEntity);
+	});
+	context.subscriptions.push(disposable);
+
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectCurrentProject', async () => {
+		const allProjectFiles: string[] = getAllProjectFiles();
+
+		if (allProjectFiles.length == 0) {
+			vscode.window.showErrorMessage('There are no project in your workfolder!');
+			console.error('There are no project in your workfolder!');
+			return;
+		}
+
+		const selectedProject: string | undefined = await vscode.window.showQuickPick(allProjectFiles, { title: 'Select a project' });
+
+		if (selectedProject == undefined) {
+			return;
+		}
+	});
+	context.subscriptions.push(disposable);
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.compileCurrentProject', () => {
 	});
 	context.subscriptions.push(disposable);
 }
