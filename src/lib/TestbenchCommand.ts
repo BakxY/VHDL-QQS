@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { entityProperty, getEntityContents, getPortContent, getGenericContent, getPortPropertiesFromContent, getGenericPropertiesFromContent } from './lib/EntityUtils';
-import { generateTestbenchComponent, generateTestbenchSignals, generateSignalMapping } from './lib/TestbenchUtils';
-import { getAllEntities } from './lib/TomlUtils'
+import { entityProperty, getEntityContents, getPortContent, getGenericContent, getPortPropertiesFromContent, getGenericPropertiesFromContent } from './EntityUtils';
+import { generateTestbenchComponent, generateTestbenchSignals, generateSignalMapping } from './TestbenchUtils';
+import { getAllEntities } from './TomlUtils'
 
 export function createNewTestbench(context: vscode.ExtensionContext, entityName: string) {
     const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');

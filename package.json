@@ -22,6 +22,14 @@
             {
                 "command": "vhdl-qqs.generateTestBenchSelection",
                 "title": "Generate testbench by expression selection"
+            },
+            {
+                "command": "vhdl-qqs.selectCurrentProject",
+                "title": "Select quartus project"
+            },
+            {
+                "command": "vhdl-qqs.compileCurrentProject",
+                "title": "Compile quartus project"
             }
         ],
         "menus": {
@@ -38,7 +46,17 @@
                 "vhdl-qqs.tomlPath": {
                     "type": "string",
                     "default": "./vhdl_ls.toml",
-                    "description": "The path to the toml file used for the current project."
+                    "description": "The path to the toml file used for the current project"
+                },
+                "vhdl-qqs.quartusBinPath": {
+                    "type": "string",
+                    "default": "C:\\Program Files\\intelFPGA_lite\\23.1std\\quartus\\bin64",
+                    "description": "The path to your quartus installations bin64 folder"
+                },
+                "vhdl-qqs.storeActiveProjectWorkspace": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Store the active set project in workspace storage"
                 }
             }
         }
