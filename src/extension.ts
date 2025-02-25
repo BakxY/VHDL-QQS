@@ -230,7 +230,7 @@ export function activate(context: vscode.ExtensionContext) {
 			allEntities[entity] = path.basename(allEntities[entity]).replace('.vhd', '');
 		}
 
-		const newTopLevel: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select a entity to create a testbench' });
+		const newTopLevel: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select new top level entity' });
 
 		if (newTopLevel == undefined) {
 			return;
@@ -254,12 +254,23 @@ export function activate(context: vscode.ExtensionContext) {
 	let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
 	currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
 	let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
-	if (activeProjectName == undefined) { activeProjectName = 'None' }
-	activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
+	if (activeProjectName == undefined) {
+		activeProjectName = 'None'
+	}
+	else {
+		activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
+	}
 	currentProjectDisplay.text = 'Project: ' + activeProjectName;
 	currentProjectDisplay.tooltip = 'Change current active quartus project';
 	context.subscriptions.push(currentProjectDisplay);
 	currentProjectDisplay.show();
+
+	let currentTopLevelDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
+	currentTopLevelDisplay.command = 'vhdl-qqs.changeTopLevel';
+	currentTopLevelDisplay.text = '$(file-code)';
+	currentTopLevelDisplay.tooltip = 'Change current top level entity of quartus project';
+	context.subscriptions.push(currentTopLevelDisplay);
+	currentTopLevelDisplay.show();
 
 	let compileProjectButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 	compileProjectButton.command = 'vhdl-qqs.compileCurrentProject';
