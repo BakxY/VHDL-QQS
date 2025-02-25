@@ -11,34 +11,34 @@
     "categories": [
         "Other"
     ],
-    "activationEvents": [],
+    "activationEvents": ["*"],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
             {
                 "command": "vhdl-qqs.generateTestBenchExplorer",
-                "title": "Generate testbench by menu selection"
+                "title": "VHDL-QQS: Generate testbench by menu selection"
             },
             {
                 "command": "vhdl-qqs.generateTestBenchSelection",
-                "title": "Generate testbench by expression selection"
+                "title": "VHDL-QQS: Generate testbench by expression selection"
             },
             {
                 "command": "vhdl-qqs.selectCurrentProject",
-                "title": "Select quartus project"
+                "title": "VHDL-QQS: Select quartus project"
             },
             {
                 "command": "vhdl-qqs.compileCurrentProject",
-                "title": "Compile quartus project"
+                "title": "VHDL-QQS: Compile quartus project"
             },
             {
                 "command": "vhdl-qqs.cleanCompileFiles",
-                "title": "Clean quartus output folder"
+                "title": "VHDL-QQS: Clean quartus output folder"
             }
             ,
             {
                 "command": "vhdl-qqs.openProgrammerActiveProject",
-                "title": "Open programmer for active project"
+                "title": "VHDL-QQS: Open programmer for active project"
             }
         ],
         "menus": {

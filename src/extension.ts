@@ -90,6 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
+		currentProjectDisplay.text = 'Project: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '') ;
 	});
 	context.subscriptions.push(disposable);
 
@@ -189,9 +190,40 @@ export function activate(context: vscode.ExtensionContext) {
 
 		cp.exec('"' + programmerFilePath + '" "' + fileToUpload + '"');
 
-		vscode.window.showInformationMessage('Opening programmer for project "' + activeProject + '"');
+		vscode.window.showInformationMessage('Opening programmer for project "' + path.basename(activeProject).replace(path.extname(activeProject), '') + '"');
 	});
 	context.subscriptions.push(disposable);
+
+	let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
+	currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
+	let activeProjectName:string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+	if(activeProjectName == undefined) { activeProjectName = 'None' }
+	activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
+	currentProjectDisplay.text = 'Project: ' + activeProjectName;
+	currentProjectDisplay.tooltip = 'Change current active quartus project';
+	context.subscriptions.push(currentProjectDisplay);
+	currentProjectDisplay.show();
+
+	let compileProjectButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+	compileProjectButton.command = 'vhdl-qqs.compileCurrentProject';
+	compileProjectButton.text = '$(play)';
+	compileProjectButton.tooltip = 'Compile the currently selected quartus project';
+	context.subscriptions.push(compileProjectButton);
+	compileProjectButton.show();
+
+	let cleanCompileFilesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+	cleanCompileFilesButton.command = 'vhdl-qqs.cleanCompileFiles';
+	cleanCompileFilesButton.text = '$(trash)';
+	cleanCompileFilesButton.tooltip = 'Cleanup files from previous quartus compilation';
+	context.subscriptions.push(cleanCompileFilesButton);
+	cleanCompileFilesButton.show();
+
+	let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+	openProgrammerButton.command = 'vhdl-qqs.openProgrammerActiveProject';
+	openProgrammerButton.text = '$(flame)';
+	openProgrammerButton.tooltip = 'Open quartus programmer on active compiled project';
+	context.subscriptions.push(openProgrammerButton);
+	openProgrammerButton.show();
 }
 
 export function deactivate() {
