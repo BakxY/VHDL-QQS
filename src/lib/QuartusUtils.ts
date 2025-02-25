@@ -1,3 +1,4 @@
+import * as vscode from 'vscode';
 import * as path from 'path'
 import * as fs from 'fs';
 import { resolvePathWithWildcards } from './PathUtils';
@@ -8,7 +9,7 @@ export function getAllProjectFiles() {
 
     for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {
         if (path.extname(allFiles[fileIndex]) == '.qpf') {
-            allProjectFiles.push(allFiles[fileIndex].replace(process.cwd(), '').replaceAll('\\', '/'));
+            allProjectFiles.push(allFiles[fileIndex].replace(vscode.workspace.workspaceFolders![0].uri.fsPath, '').replaceAll('\\', '/'));
         }
     }
 
