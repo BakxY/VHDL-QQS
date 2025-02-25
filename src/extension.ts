@@ -4,8 +4,6 @@ import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './commands';
 import { getAllEntities } from './lib/TomlUtils'
 
-const TOML_PATH: string = path.normalize('./vhdl_ls.toml');
-
 export function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
 		const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
@@ -31,7 +29,15 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchExplorer', async () => {
-		const allEntities = getAllEntities(TOML_PATH);
+		const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
+
+		if (pathToToml == undefined) {
+			vscode.window.showErrorMessage('No path for toml file set! Please change in settings!');
+			console.error('No path for toml file set! Please change in settings!');
+			return;
+		}
+
+		const allEntities = getAllEntities(pathToToml);
 
 		if (!allEntities) {
 			// Error message is printed in function
