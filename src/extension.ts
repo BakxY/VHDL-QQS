@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as cp from 'child_process';
 import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './lib/TestbenchCommand';
 import { getAllEntities } from './lib/TomlUtils'
@@ -150,6 +151,45 @@ export function activate(context: vscode.ExtensionContext) {
 		catch (err) {
 			console.log(err)
 		}
+	});
+	context.subscriptions.push(disposable);
+
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.openProgrammerActiveProject', async () => {
+		const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+
+		if (activeProject == undefined) {
+			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
+			console.error('No project selected! Select a project before compiling!');
+			return;
+		}
+
+		const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
+
+		if (quartusPath == undefined) {
+			vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
+			console.error('No quartus installation folder defined in settings!');
+			return;
+		}
+
+		if (!checkForQuartusInstallation(path.normalize(quartusPath))) {
+			vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
+			console.error('No quartus installation at provided path! Check your settings!');
+			return;
+		}
+
+		const fileToUpload = path.join(process.cwd(), path.dirname(activeProject), 'output_files', path.basename(activeProject).replace(path.extname(activeProject), '') + '.sof');
+
+		if (!fs.existsSync(fileToUpload)) {
+			vscode.window.showErrorMessage('No compiled project found! Compile project before opening programmer!');
+			console.error('No compiled project found! Compile project before opening programmer!');
+			return;
+		}
+
+		const programmerFilePath = path.join(path.normalize(quartusPath), 'quartus_pgmw');
+
+		cp.exec('"' + programmerFilePath + '" "' + fileToUpload + '"');
+
+		vscode.window.showInformationMessage('Opening programmer for project "' + activeProject + '"');
 	});
 	context.subscriptions.push(disposable);
 }

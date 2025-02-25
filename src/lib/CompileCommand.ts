@@ -1,8 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as cp from 'child_process';
-import process from 'process';
 
 export function compileQuartusProject(context: vscode.ExtensionContext, currentProjectPath: string, pathToQuartus: string) {
     const PATH_TO_COMPILE_SCRIPT_TEMPLATE: string = path.join(context.extensionPath, 'res', 'compile.tcl');

@@ -35,6 +35,11 @@
                 "command": "vhdl-qqs.cleanCompileFiles",
                 "title": "Clean quartus output folder"
             }
+            ,
+            {
+                "command": "vhdl-qqs.openProgrammerActiveProject",
+                "title": "Open programmer for active project"
+            }
         ],
         "menus": {
             "editor/context": [
