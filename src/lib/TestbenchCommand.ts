@@ -15,7 +15,7 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
         return;
     }
 
-    const allEntities = getAllEntities(pathToToml);
+    const allEntities = getAllEntities(vscode.workspace.workspaceFolders![0].uri.fsPath, pathToToml);
 
     if (!allEntities) {
         // Error message is printed in function

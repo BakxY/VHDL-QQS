@@ -11,14 +11,16 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
 
     generatedCompileScript = generatedCompileScript.replace('CURRENT_PROJECT', currentProjectPath.replaceAll('\\', '/'));
 
-    if (fs.existsSync('compile.tcl')) {
+    const compileScriptPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, 'compile.tcl')
+
+    if (fs.existsSync(compileScriptPath)) {
         console.warn('Removing old version of compile script!');
-        fs.rmSync('compile.tcl');
+        fs.rmSync(compileScriptPath);
     }
 
     console.log('Writing compile script to workspace!');
 
-    fs.writeFileSync('compile.tcl', generatedCompileScript);
+    fs.writeFileSync(compileScriptPath, generatedCompileScript);
 
     let terminal = vscode.window.activeTerminal;
     if (!terminal) {

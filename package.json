@@ -39,6 +39,10 @@
             {
                 "command": "vhdl-qqs.openProgrammerActiveProject",
                 "title": "VHDL-QQS: Open programmer for active project"
+            },
+            {
+                "command": "vhdl-qqs.changeTopLevel",
+                "title": "VHDL-QQS: Change top level entity for active project"
             }
         ],
         "menus": {
