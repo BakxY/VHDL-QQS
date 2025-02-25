@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { getSelectedExpression } from './lib/EntityUtils';
-import { createNewTestbench } from './commands';
+import { createNewTestbench } from './lib/TestbenchCommand';
 import { getAllEntities } from './lib/TomlUtils'
 
 export function activate(context: vscode.ExtensionContext) {
