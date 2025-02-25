@@ -11,25 +11,34 @@
     "categories": [
         "Other"
     ],
-    "activationEvents": [],
+    "activationEvents": ["*"],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
             {
                 "command": "vhdl-qqs.generateTestBenchExplorer",
-                "title": "Generate testbench by menu selection"
+                "title": "VHDL-QQS: Generate testbench by menu selection"
             },
             {
                 "command": "vhdl-qqs.generateTestBenchSelection",
-                "title": "Generate testbench by expression selection"
+                "title": "VHDL-QQS: Generate testbench by expression selection"
             },
             {
                 "command": "vhdl-qqs.selectCurrentProject",
-                "title": "Select quartus project"
+                "title": "VHDL-QQS: Select quartus project"
             },
             {
                 "command": "vhdl-qqs.compileCurrentProject",
-                "title": "Compile quartus project"
+                "title": "VHDL-QQS: Compile quartus project"
+            },
+            {
+                "command": "vhdl-qqs.cleanCompileFiles",
+                "title": "VHDL-QQS: Clean quartus output folder"
+            }
+            ,
+            {
+                "command": "vhdl-qqs.openProgrammerActiveProject",
+                "title": "VHDL-QQS: Open programmer for active project"
             }
         ],
         "menus": {
@@ -52,11 +61,6 @@
                     "type": "string",
                     "default": "C:\\Program Files\\intelFPGA_lite\\23.1std\\quartus\\bin64",
                     "description": "The path to your quartus installations bin64 folder"
-                },
-                "vhdl-qqs.storeActiveProjectWorkspace": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Store the active set project in workspace storage"
                 }
             }
         }

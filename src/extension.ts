@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as fs from 'fs';
+import * as cp from 'child_process';
 import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './lib/TestbenchCommand';
 import { getAllEntities } from './lib/TomlUtils'
 import { getAllProjectFiles, checkForQuartusInstallation } from './lib/QuartusUtils'
 import { compileQuartusProject } from './lib/CompileCommand';
-
-let StoreActiveProject: boolean = true;
 
 export function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
@@ -89,11 +89,8 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		StoreActiveProject = vscode.workspace.getConfiguration('vhdl-qqs').get<boolean>('storeActiveProjectWorkspace') as boolean;
-
-		if (StoreActiveProject == true) {
-			context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
-		}
+		context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
+		currentProjectDisplay.text = 'Project: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '') ;
 	});
 	context.subscriptions.push(disposable);
 
@@ -105,18 +102,16 @@ export function activate(context: vscode.ExtensionContext) {
 			console.error('No project selected! Select a project before compiling!');
 			return;
 		}
-		
+
 		const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
 
-		if(quartusPath == undefined)
-		{
+		if (quartusPath == undefined) {
 			vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
 			console.error('No quartus installation folder defined in settings!');
 			return;
 		}
 
-		if(!checkForQuartusInstallation(path.normalize(quartusPath)))
-		{
+		if (!checkForQuartusInstallation(path.normalize(quartusPath))) {
 			vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
 			console.error('No quartus installation at provided path! Check your settings!');
 			return;
@@ -125,6 +120,110 @@ export function activate(context: vscode.ExtensionContext) {
 		compileQuartusProject(context, path.join(process.cwd(), activeProject), path.normalize(quartusPath));
 	});
 	context.subscriptions.push(disposable);
+
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.cleanCompileFiles', () => {
+		const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+
+		if (activeProject == undefined) {
+			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
+			console.error('No project selected! Select a project before compiling!');
+			return;
+		}
+
+		const folderToClean = path.join(process.cwd(), path.dirname(activeProject));
+
+		try {
+			fs.rmSync(path.join(folderToClean, 'output_files'), { recursive: true })
+		}
+		catch (err) {
+			console.log(err)
+		}
+
+		try {
+			fs.rmSync(path.join(folderToClean, 'db'), { recursive: true })
+		}
+		catch (err) {
+			console.log(err)
+		}
+
+		try {
+			fs.rmSync(path.join(folderToClean, 'incremental_db'), { recursive: true })
+		}
+		catch (err) {
+			console.log(err)
+		}
+	});
+	context.subscriptions.push(disposable);
+
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.openProgrammerActiveProject', async () => {
+		const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+
+		if (activeProject == undefined) {
+			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
+			console.error('No project selected! Select a project before compiling!');
+			return;
+		}
+
+		const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
+
+		if (quartusPath == undefined) {
+			vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
+			console.error('No quartus installation folder defined in settings!');
+			return;
+		}
+
+		if (!checkForQuartusInstallation(path.normalize(quartusPath))) {
+			vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
+			console.error('No quartus installation at provided path! Check your settings!');
+			return;
+		}
+
+		const fileToUpload = path.join(process.cwd(), path.dirname(activeProject), 'output_files', path.basename(activeProject).replace(path.extname(activeProject), '') + '.sof');
+
+		if (!fs.existsSync(fileToUpload)) {
+			vscode.window.showErrorMessage('No compiled project found! Compile project before opening programmer!');
+			console.error('No compiled project found! Compile project before opening programmer!');
+			return;
+		}
+
+		const programmerFilePath = path.join(path.normalize(quartusPath), 'quartus_pgmw');
+
+		cp.exec('"' + programmerFilePath + '" "' + fileToUpload + '"');
+
+		vscode.window.showInformationMessage('Opening programmer for project "' + path.basename(activeProject).replace(path.extname(activeProject), '') + '"');
+	});
+	context.subscriptions.push(disposable);
+
+	let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
+	currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
+	let activeProjectName:string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+	if(activeProjectName == undefined) { activeProjectName = 'None' }
+	activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
+	currentProjectDisplay.text = 'Project: ' + activeProjectName;
+	currentProjectDisplay.tooltip = 'Change current active quartus project';
+	context.subscriptions.push(currentProjectDisplay);
+	currentProjectDisplay.show();
+
+	let compileProjectButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+	compileProjectButton.command = 'vhdl-qqs.compileCurrentProject';
+	compileProjectButton.text = '$(play)';
+	compileProjectButton.tooltip = 'Compile the currently selected quartus project';
+	context.subscriptions.push(compileProjectButton);
+	compileProjectButton.show();
+
+	let cleanCompileFilesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+	cleanCompileFilesButton.command = 'vhdl-qqs.cleanCompileFiles';
+	cleanCompileFilesButton.text = '$(trash)';
+	cleanCompileFilesButton.tooltip = 'Cleanup files from previous quartus compilation';
+	context.subscriptions.push(cleanCompileFilesButton);
+	cleanCompileFilesButton.show();
+
+	let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+	openProgrammerButton.command = 'vhdl-qqs.openProgrammerActiveProject';
+	openProgrammerButton.text = '$(flame)';
+	openProgrammerButton.tooltip = 'Open quartus programmer on active compiled project';
+	context.subscriptions.push(openProgrammerButton);
+	openProgrammerButton.show();
 }
 
 export function deactivate() {
