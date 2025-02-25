@@ -63,5 +63,5 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
     let testbenchSignalMapping = generateSignalMapping(portProperties);
     generatedTestbench = generatedTestbench.replaceAll('ENTITY_INTERAL_MAPPING', testbenchSignalMapping);
 
-    fs.writeFileSync(pathToEntityFile.replace('.vhd', '_tp.vhd'), generatedTestbench);
+    fs.writeFileSync(pathToEntityFile.replace('.vhd', '_tb.vhd'), generatedTestbench);
 }

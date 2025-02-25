@@ -45,12 +45,12 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		if (selectedEntity.endsWith('_tp')) {
+		if (selectedEntity.endsWith('_tb')) {
 			vscode.window.showErrorMessage('Can\'t create a testbench of a testbench!');
 			return;
 		}
 
-		if (allEntities.includes(selectedEntity + '_tp')) {
+		if (allEntities.includes(selectedEntity + '_tb')) {
 			vscode.window.showErrorMessage('The testbench for this entity already exists!');
 			return;
 		}
