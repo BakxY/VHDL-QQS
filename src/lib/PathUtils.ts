@@ -1,7 +1,8 @@
+import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path'
 
-export function resolvePathWithWildcards(pattern: string, baseDir: string = process.cwd()): string[] {
+export function resolvePathWithWildcards(pattern: string, baseDir: string = vscode.workspace.workspaceFolders![0].uri.fsPath): string[] {
     const parts = pattern.split(path.sep);
     const results: string[] = [];
 

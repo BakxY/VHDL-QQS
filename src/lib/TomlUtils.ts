@@ -12,7 +12,9 @@ interface TomlConfig {
     };
 }
 
-export function getAllEntities(pathToToml: string) {
+export function getAllEntities(workspacePath: string, pathToToml: string) {
+    pathToToml = path.join(workspacePath, pathToToml);
+    
     console.log('Using toml file at "' + pathToToml + '"');
 
     if(!fs.existsSync(pathToToml))
