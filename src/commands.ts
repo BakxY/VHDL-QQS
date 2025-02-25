@@ -5,7 +5,7 @@ import { entityProperty, getEntityContents, getPortContent, getGenericContent, g
 import { generateTestbenchComponent, generateTestbenchSignals, generateSignalMapping } from './lib/TestbenchUtils';
 import { getAllEntities } from './lib/TomlUtils'
 
-const TOML_PATH: string = './vhdl_ls.toml';
+const TOML_PATH: string = path.normalize('./vhdl_ls.toml');
 
 export function createNewTestbench(context: vscode.ExtensionContext, entityName: string) {
     const allEntities = getAllEntities(TOML_PATH);
@@ -63,5 +63,5 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
     let testbenchSignalMapping = generateSignalMapping(portProperties);
     generatedTestbench = generatedTestbench.replaceAll('ENTITY_INTERAL_MAPPING', testbenchSignalMapping);
 
-    fs.writeFileSync(pathToEntityFile.replace('.vhd', '_tp.vhd'), generatedTestbench);
+    fs.writeFileSync(pathToEntityFile.replace('.vhd', '_tb.vhd'), generatedTestbench);
 }

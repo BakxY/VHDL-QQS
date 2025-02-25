@@ -4,7 +4,7 @@ import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './commands';
 import { getAllEntities } from './lib/TomlUtils'
 
-const TOML_PATH: string = './vhdl_ls.toml';
+const TOML_PATH: string = path.normalize('./vhdl_ls.toml');
 
 export function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
@@ -45,12 +45,12 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		if (selectedEntity.endsWith('_tp')) {
+		if (selectedEntity.endsWith('_tb')) {
 			vscode.window.showErrorMessage('Can\'t create a testbench of a testbench!');
 			return;
 		}
 
-		if (allEntities.includes(selectedEntity + '_tp')) {
+		if (allEntities.includes(selectedEntity + '_tb')) {
 			vscode.window.showErrorMessage('The testbench for this entity already exists!');
 			return;
 		}

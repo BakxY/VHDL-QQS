@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------
--- @file    TESTBENCH_ENTITY_tp.vhd
+-- @file    TESTBENCH_ENTITY_tb.vhd
 -- @brief   Testbench for design "TESTBENCH_ENTITY"
 -- @date    DATE_CREATED
 -- @version v1.0.0
