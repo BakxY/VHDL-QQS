@@ -4,14 +4,16 @@
     "publisher": "BakxY",
     "description": "VS Code extension to automate the process of generating testbenches for vhdl entities.",
     "repository": "https://github.com/BakxY/VHDL-QQS",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "engines": {
         "vscode": "^1.97.0"
     },
     "categories": [
         "Other"
     ],
-    "activationEvents": ["*"],
+    "activationEvents": [
+        "*"
+    ],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
@@ -34,8 +36,7 @@
             {
                 "command": "vhdl-qqs.cleanCompileFiles",
                 "title": "VHDL-QQS: Clean quartus output folder"
-            }
-            ,
+            },
             {
                 "command": "vhdl-qqs.openProgrammerActiveProject",
                 "title": "VHDL-QQS: Open programmer for active project"
