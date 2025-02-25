@@ -35,7 +35,8 @@
     },
     "files": [
         "out/",
-        "res/"
+        "res/",
+        "LICENSE"
     ],
     "scripts": {
         "vscode:prepublish": "npm run compile",
