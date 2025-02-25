@@ -49,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
 			allEntities[entity] = path.basename(allEntities[entity]).replace('.vhd', '');
 		}
 
-		const selectedEntity: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select a entity to create a testbench!' });
+		const selectedEntity: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select a entity to create a testbench' });
 
 		if (selectedEntity == undefined) {
 			return;
@@ -57,11 +57,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 		if (selectedEntity.endsWith('_tb')) {
 			vscode.window.showErrorMessage('Can\'t create a testbench of a testbench!');
+			console.error('Can\'t create a testbench of a testbench!');
 			return;
 		}
 
 		if (allEntities.includes(selectedEntity + '_tb')) {
 			vscode.window.showErrorMessage('The testbench for this entity already exists!');
+			console.error('The testbench for this entity already exists!');
 			return;
 		}
 
