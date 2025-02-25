@@ -4,7 +4,7 @@
     "publisher": "BakxY",
     "description": "This project aims to automate the creation of test benches and support files for FPGA designs created using Quartus from Intel. By integrating a custom extension into VS Code, users can efficiently set up simulation environments with minimal manual effort. ",
     "repository": "https://github.com/BakxY/VHDL-QQS",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "engines": {
         "vscode": "^1.97.0"
     },
