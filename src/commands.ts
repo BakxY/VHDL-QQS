@@ -5,10 +5,17 @@ import { entityProperty, getEntityContents, getPortContent, getGenericContent, g
 import { generateTestbenchComponent, generateTestbenchSignals, generateSignalMapping } from './lib/TestbenchUtils';
 import { getAllEntities } from './lib/TomlUtils'
 
-const TOML_PATH: string = path.normalize('./vhdl_ls.toml');
-
 export function createNewTestbench(context: vscode.ExtensionContext, entityName: string) {
-    const allEntities = getAllEntities(TOML_PATH);
+    const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
+
+    if(pathToToml == undefined)
+    {
+        vscode.window.showErrorMessage('No path for toml file set! Please change in settings!');
+        console.error('No path for toml file set! Please change in settings!');
+        return;
+    }
+
+    const allEntities = getAllEntities(pathToToml);
 
     if (!allEntities) {
         // Error message is printed in function

@@ -31,6 +31,16 @@
                     "when": "editorHasSelection"
                 }
             ]
+        },
+        "configuration": {
+            "title": "VHDL-QQS",
+            "properties": {
+                "vhdl-qqs.tomlPath": {
+                    "type": "string",
+                    "default": "./vhdl_ls.toml",
+                    "description": "The path to the toml file used for the current project."
+                }
+            }
         }
     },
     "files": [
