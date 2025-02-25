@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as fs from 'fs';
 import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './lib/TestbenchCommand';
 import { getAllEntities } from './lib/TomlUtils'
 import { getAllProjectFiles, checkForQuartusInstallation } from './lib/QuartusUtils'
 import { compileQuartusProject } from './lib/CompileCommand';
-
-let StoreActiveProject: boolean = true;
 
 export function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
@@ -89,11 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		StoreActiveProject = vscode.workspace.getConfiguration('vhdl-qqs').get<boolean>('storeActiveProjectWorkspace') as boolean;
-
-		if (StoreActiveProject == true) {
-			context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
-		}
+		context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
 	});
 	context.subscriptions.push(disposable);
 
@@ -105,24 +100,56 @@ export function activate(context: vscode.ExtensionContext) {
 			console.error('No project selected! Select a project before compiling!');
 			return;
 		}
-		
+
 		const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
 
-		if(quartusPath == undefined)
-		{
+		if (quartusPath == undefined) {
 			vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
 			console.error('No quartus installation folder defined in settings!');
 			return;
 		}
 
-		if(!checkForQuartusInstallation(path.normalize(quartusPath)))
-		{
+		if (!checkForQuartusInstallation(path.normalize(quartusPath))) {
 			vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
 			console.error('No quartus installation at provided path! Check your settings!');
 			return;
 		}
 
 		compileQuartusProject(context, path.join(process.cwd(), activeProject), path.normalize(quartusPath));
+	});
+	context.subscriptions.push(disposable);
+
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.cleanCompileFiles', () => {
+		const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+
+		if (activeProject == undefined) {
+			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
+			console.error('No project selected! Select a project before compiling!');
+			return;
+		}
+
+		const folderToClean = path.join(process.cwd(), path.dirname(activeProject));
+
+		try {
+			fs.rmSync(path.join(folderToClean, 'output_files'), { recursive: true })
+		}
+		catch (err) {
+			console.log(err)
+		}
+
+		try {
+			fs.rmSync(path.join(folderToClean, 'db'), { recursive: true })
+		}
+		catch (err) {
+			console.log(err)
+		}
+
+		try {
+			fs.rmSync(path.join(folderToClean, 'incremental_db'), { recursive: true })
+		}
+		catch (err) {
+			console.log(err)
+		}
 	});
 	context.subscriptions.push(disposable);
 }

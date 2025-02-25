@@ -30,6 +30,10 @@
             {
                 "command": "vhdl-qqs.compileCurrentProject",
                 "title": "Compile quartus project"
+            },
+            {
+                "command": "vhdl-qqs.cleanCompileFiles",
+                "title": "Clean quartus output folder"
             }
         ],
         "menus": {
@@ -52,11 +56,6 @@
                     "type": "string",
                     "default": "C:\\Program Files\\intelFPGA_lite\\23.1std\\quartus\\bin64",
                     "description": "The path to your quartus installations bin64 folder"
-                },
-                "vhdl-qqs.storeActiveProjectWorkspace": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Store the active set project in workspace storage"
                 }
             }
         }
