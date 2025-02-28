@@ -1,6 +1,6 @@
 import { entityProperty } from './EntityUtils';
 
-export function generateTestbenchComponent(genericProperties : entityProperty[] | null, portProperties: entityProperty[] | null) {
+export function generateTestbenchComponent(genericProperties: entityProperty[] | null, portProperties: entityProperty[] | null) {
     let componentContent = '';
 
     if (genericProperties) {
@@ -24,7 +24,7 @@ export function generateTestbenchComponent(genericProperties : entityProperty[] 
             componentContent += ';\n';
         }
 
-        componentContent += portProperties![portIndex].propertyName + ' : ' + portProperties![portIndex].propertyType;
+        componentContent += portProperties![portIndex].propertyName + ' : ' + portProperties![portIndex].propertySignalDir + ' ' + portProperties![portIndex].propertyType;
     }
 
     componentContent += '\n);'
@@ -37,7 +37,7 @@ export function generateTestbenchSignals(portProperties: entityProperty[] | null
 
     for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {
 
-        testbenchSignals += 'signal ' + portProperties![signalIndex].propertyName + '_tb_internal : ' + portProperties![signalIndex].propertyType + ';\n';
+        testbenchSignals += 'signal ' + portProperties![signalIndex].propertyName + ' : ' + portProperties![signalIndex].propertyType + ';\n';
     }
 
     return testbenchSignals;
@@ -51,7 +51,7 @@ export function generateSignalMapping(portProperties: entityProperty[] | null) {
             testbenchSignals += ',\n';
         }
 
-        testbenchSignals += portProperties![signalIndex].propertyName + ' => ' + portProperties![signalIndex].propertyName + '_tb_internal'
+        testbenchSignals += portProperties![signalIndex].propertyName + ' => ' + portProperties![signalIndex].propertyName
     }
 
     return testbenchSignals;

@@ -53,6 +53,11 @@ export function getEntityContents(pathToEntityFile: string) {
 export function getGenericContent(entityContent: string) {
     entityContent = entityContent.replace(/--.*$/gm, '').replaceAll('\n', '');
 
+    if(!entityContent.includes('generic'))
+    {
+        return null;
+    }
+
     let genericContent: string = '';
     let parenthesesCount = 0;
 
@@ -151,6 +156,11 @@ export function getPortPropertiesFromContent(entityContent: string | null) {
 }
 
 export function getGenericPropertiesFromContent(entityContent: string | null) {
+    if(!entityContent)
+    {
+        return null;
+    }
+    
     let entityProperties: entityProperty[] = [];
 
     const splitContent: string[] = entityContent!.split(';');
