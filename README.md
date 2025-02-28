@@ -6,10 +6,11 @@ This project aims to automate the creation of test benches and support files for
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation (Coming soon)](#installation)
-- [Usage (Coming soon)](#usage)
+- [Introduction](#Introduction)
+- [Features](#Features)
+- [Installation](#Installation)
+- [Initial setup](#Initial-setup)
+- [Usage (Coming soon)](USAGE)
 - [Contributing (Coming soon)](CONTRIBUTING)
 - [License](LICENSE)
 - [Support (Coming soon)](#support)
@@ -22,11 +23,44 @@ During my studies, I took a course on FPGAs that heavily relied on Intel Quartus
 
 ## Features
 
-List the key features of your project using bullet points or a numbered list. Be specific and highlight the most important functionalities.
-
-* Feature 1
-* Feature 2
-* Feature 3
-* ...
+* **Seamless Quartus Project Compilation:** Compile your Quartus projects directly within VS Code, eliminating the need to switch between applications.
+* **Project Configuration within VS Code:** Manage essential project settings, such as top-level entities and include files, directly from VS Code, streamlining the configuration process.
+* **Direct Access to Quartus Programmer:** Easily open the Quartus programmer for compiled projects directly from VS Code, simplifying the programming workflow.
+* **Automated Testbench Generation:** Generate entity testbenches for use with QuestaSim, automating a crucial step in the verification process and saving valuable development time.
 
 ## Installation
+
+This extension requires VS Code, Quartus Prime and Questa Prime. It can be installed directly from the VS Code Marketplace or build the extension from source. It is also recommended that you use the [VHDL LS](https://github.com/VHDL-LS/rust_hdl_vscode) extension for code completion and language support.
+
+### Installation via VS Code Marketplace (Recommended):
+1. Open VS Code.
+2. Go to the Extensions view.
+3. Search for "VHDL-QQS".
+4. Click the Install button.
+
+### Build the extension from source:
+1. Prerequisites: Ensure you have Node.js and npm.
+2. Clone the repository: `git clone https://github.com/BakxY/VHDL-QQS.git`
+3. Open the project in VS Code.
+4. Open the terminal in VS Code (View > Terminal).
+5. Run `npm install` to install the project dependencies.
+6. Press F5 to compile and run the extension in debug mode. This will open a new VS Code window with your extension running.
+
+## Initial setup
+
+Before you can start using the VHDL-QQS extension, you'll need to perform a few initial setup steps. This ensures that the extension can correctly interact with your Quartus and QuestaSim installations.
+
+### 1. Setting paths
+
+The extension needs to know the locations of your Quartus installation and the QuestaSim executable. You can configure these paths in the VS Code settings.
+
+* Open VS Code settings:
+    *   File > Preferences > Settings (or Code > Preferences > Settings on macOS)
+    *   Alternatively, use the keyboard shortcut: Ctrl + , (or Cmd + , on macOS)
+
+* Search for "VHDL-QQS" in the settings search bar.  This will filter the settings to show only those related to the extension.
+
+* Locate the following setting:
+    * `vhdl-qqs.quartusBinPath`: Enter the path to your Quartus installation directory. This is usually the directory where `quartus` or `quartus_sh` (on Linux) is located. [Example: `/path/to/intelFPGA_lite/23.1/quartus/bin` or `C:\intelFPGA_lite\23.1\quartus\bin`]
+
+* Make sure to enter the *full paths* to the directories or executables.
