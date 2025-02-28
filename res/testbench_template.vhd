@@ -65,9 +65,20 @@ begin
             read_arguments(lincnt, tv, line_in, cmd); --
             tv.clock_period := clock_period;
 
-            ------------------------------
-            -- Implement you tests here --
-            ------------------------------
+            if cmd.all = "reset_target" then
+                rst_sim(tv, key_0);
+            elsif cmd.all = "run_simulation_for" then
+                run_sim(tv);
+
+                ------------------------------
+                -- Implement you tests here --
+                ------------------------------
+
+            else
+                assert false
+                report "NO MATCHING COMMAND FOUND IN 'testcase.dat' AT LINE: " & integer'image(lincnt)
+                    severity error;
+            end if;
 
             if tv.fail_flag = true then
                 fail_counter := fail_counter + 1;
