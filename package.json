@@ -12,7 +12,8 @@
         "Other"
     ],
     "activationEvents": [
-        "*"
+        "workspaceContains:**/*.qsf",
+        "onStartupFinished"
     ],
     "main": "./out/extension.js",
     "contributes": {
