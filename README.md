@@ -10,8 +10,8 @@ This project aims to automate the creation of test benches and support files for
 - [Features](#Features)
 - [Installation](#Installation)
 - [Initial setup](#Initial-setup)
-- [Usage (Coming soon)](USAGE)
-- [Contributing (Coming soon)](CONTRIBUTING)
+- [Usage](USAGE.md)
+- [Contributing (Coming soon)](CONTRIBUTING.md)
 - [License](LICENSE)
 - [Support (Coming soon)](#support)
 
