@@ -11,6 +11,20 @@
     "categories": [
         "Other"
     ],
+    "keywords": [
+        "open-source",
+        "typescript",
+        "fpga",
+        "simulation",
+        "vhdl",
+        "vscode",
+        "visual-studio-code",
+        "vscode-extension",
+        "questasim",
+        "quartus",
+        "intel-fpga",
+        "testbench-generation"
+    ],
     "activationEvents": [
         "workspaceContains:**/*.qsf",
         "onStartupFinished"
