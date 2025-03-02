@@ -10,10 +10,10 @@ This project aims to automate the creation of test benches and support files for
 - [Features](#Features)
 - [Installation](#Installation)
 - [Initial setup](#Initial-setup)
+- [Project setup](#Project-setup)
 - [Usage](USAGE.md)
-- [Contributing (Coming soon)](CONTRIBUTING.md)
+- [Contributing](CONTRIBUTING.md)
 - [License](LICENSE)
-- [Support (Coming soon)](#support)
 
 ## Introduction
 
@@ -64,3 +64,42 @@ The extension needs to know the locations of your Quartus installation and the Q
     * `vhdl-qqs.quartusBinPath`: Enter the path to your Quartus installation directory. This is usually the directory where `quartus` or `quartus_sh` (on Linux) is located. [Example: `/path/to/intelFPGA_lite/23.1/quartus/bin` or `C:\intelFPGA_lite\23.1\quartus\bin`]
 
 * Make sure to enter the *full paths* to the directories or executables.
+
+## Project Setup
+
+The VHDL-QQS extension relies on a `vhdl_ls.toml` file to correctly identify and manage your VHDL/Verilog project files. This file defines the project structure, including source files, include paths, and other relevant settings. **Without a properly configured `vhdl_ls.toml` file, the extension may not function correctly.**
+
+Here's how to set up your project:
+
+1.  **Create `vhdl_ls.toml`:** In the root directory of your VHDL/Verilog project, create a file named `vhdl_ls.toml`.  This file *must* be in the root of your project, not in a subdirectory.
+
+2.  **Configure the File:** Edit the `vhdl_ls.toml` file to reflect your project's structure. A basic example is shown below, but you'll need to adapt it to your specific project:
+
+    ```toml
+    [library]
+    name = "MyProject"  # Replace with your project name
+
+    lib.files = [
+        "source\\this_one_file.vhd", # You can specify one or multiple files.
+        "source\\*.vhd" # Or you can use wildcard paths to include all files.
+    ]
+    ```
+
+3.  **Save the File:** Save the `vhdl_ls.toml` file.
+
+**Example Project Structure:**
+
+```
+MyProject/
+├── vhdl_ls.toml
+├── quartus/
+│   ├── MyProject.qpf
+│   └── MyProject.qsf
+└── source/
+    ├── top_level.vhd
+    └── submodule.vhd
+```
+
+**Troubleshooting:**
+
+*   If the extension is not recognizing your files, double-check the paths in your `vhdl_ls.toml` file.  Make sure they are relative to the directory where the `vhdl_ls.toml` file is located.
