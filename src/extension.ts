@@ -136,21 +136,21 @@ export function activate(context: vscode.ExtensionContext) {
 			fs.rmSync(path.join(folderToClean, 'output_files'), { recursive: true })
 		}
 		catch (err) {
-			console.log(err)
+			console.warn(err)
 		}
 
 		try {
 			fs.rmSync(path.join(folderToClean, 'db'), { recursive: true })
 		}
 		catch (err) {
-			console.log(err)
+			console.warn(err)
 		}
 
 		try {
 			fs.rmSync(path.join(folderToClean, 'incremental_db'), { recursive: true })
 		}
 		catch (err) {
-			console.log(err)
+			console.warn(err)
 		}
 	});
 	context.subscriptions.push(disposable);

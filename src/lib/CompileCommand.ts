@@ -30,6 +30,6 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
     terminal.show();
     terminal.sendText('"' + path.join(pathToQuartus, 'quartus_sh') + '"' + ' -t compile.tcl');
 
-    console.warn('Started compilation in terminal!');
+    console.log('Started compilation in terminal!');
     vscode.window.showInformationMessage('Started compilation in terminal!');
 }
