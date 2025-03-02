@@ -5,7 +5,7 @@ import * as cp from 'child_process';
 import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './lib/TestbenchCommand';
 import { getAllEntities } from './lib/TomlUtils'
-import { getAllProjectFiles, checkForQuartusInstallation } from './lib/QuartusUtils'
+import { getAllProjectFiles, checkForQuartusInstallation, getProjectGlobal } from './lib/QuartusUtils'
 import { compileQuartusProject } from './lib/CompileCommand';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -191,6 +191,11 @@ export function activate(context: vscode.ExtensionContext) {
 		cp.exec('"' + programmerFilePath + '" "' + fileToUpload + '"');
 
 		vscode.window.showInformationMessage('Opening programmer for project "' + path.basename(activeProject).replace(path.extname(activeProject), '') + '"');
+	});
+	context.subscriptions.push(disposable);
+
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.devCommand', async () => {
+		getProjectGlobal('FAMILY');
 	});
 	context.subscriptions.push(disposable);
 
