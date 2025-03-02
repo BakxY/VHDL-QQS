@@ -10,6 +10,13 @@ export type entityProperty = {
 const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end\s+\1\s*;/;
 const MATCH_PROPERTY_DIR: RegExp = /\s+(in|out)\s+/;
 
+/**
+ * @brief Gets the expression the user has currently selected
+ * 
+ * @param editor Currently opened vs code editor
+ * 
+ * @returns The selected expression as a string
+ */
 export function getSelectedExpression(editor: vscode.TextEditor | undefined) {
     const selection = editor?.selection;
 
@@ -30,6 +37,13 @@ export function getSelectedExpression(editor: vscode.TextEditor | undefined) {
     return selectedText;
 }
 
+/**
+ * @brief Gets the entity content from the path to a entities .vhd file
+ * 
+ * @param pathToEntityFile Path to the entity that the contents should extracted from
+ * 
+ * @returns The content of the entities declaration as a string
+ */
 export function getEntityContents(pathToEntityFile: string) {
     const entityFile: string = fs.readFileSync(pathToEntityFile, 'utf-8');
 
@@ -50,6 +64,13 @@ export function getEntityContents(pathToEntityFile: string) {
     return entityBlockRegexMatch![2];
 }
 
+/**
+ * @brief Separates the generic part of a entity declaration from the rest
+ * 
+ * @param entityContent The entire entity declaration
+ * 
+ * @returns The separated generic content as a string
+ */
 export function getGenericContent(entityContent: string) {
     entityContent = entityContent.replace(/--.*$/gm, '').replaceAll('\n', '');
 
@@ -89,6 +110,13 @@ export function getGenericContent(entityContent: string) {
     return genericContent;
 }
 
+/**
+ * @brief Separates the port part of a entity declaration from the rest
+ * 
+ * @param entityContent The entire entity declaration
+ * 
+ * @returns The separated port content as a string
+ */
 export function getPortContent(entityContent: string) {
     entityContent = entityContent.replace(/--.*$/gm, '').replaceAll('\n', '');
 
@@ -123,6 +151,13 @@ export function getPortContent(entityContent: string) {
     return portContent;
 }
 
+/**
+ * @brief Converts the port content to a array of port properties
+ * 
+ * @param entityContent The port content as a string
+ * 
+ * @returns An array of all entity port properties
+ */
 export function getPortPropertiesFromContent(entityContent: string | null) {
     let entityProperties: entityProperty[] = [];
 
@@ -155,6 +190,13 @@ export function getPortPropertiesFromContent(entityContent: string | null) {
     return entityProperties;
 }
 
+/**
+ * @brief Converts the generic content to a array of generic properties
+ * 
+ * @param entityContent The generic content as a string
+ * 
+ * @returns An array of all entity generic properties
+ */
 export function getGenericPropertiesFromContent(entityContent: string | null) {
     if(!entityContent)
     {

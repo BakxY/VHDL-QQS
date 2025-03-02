@@ -3,6 +3,11 @@ import * as path from 'path'
 import * as fs from 'fs';
 import { resolvePathWithWildcards } from './PathUtils';
 
+/**
+ * @brief Gets all quartus project files (file extension .qpf) in the current workspace
+ * 
+ * @returns An array of all quartus project files
+ */
 export function getAllProjectFiles() {
     const allFiles: string[] = resolvePathWithWildcards(path.normalize('**/*'));
     let allProjectFiles: string[] = [];
@@ -16,6 +21,13 @@ export function getAllProjectFiles() {
     return allProjectFiles;
 }
 
+/**
+ * @brief Checks a path for files common for a quartus installation
+ * 
+ * @param pathToQuartus The installation path to check
+ * 
+ * @returns A boolean type, true if common files are present, else false
+ */
 export function checkForQuartusInstallation(pathToQuartus: string) {
     if (!fs.existsSync(pathToQuartus)) {
         return false;

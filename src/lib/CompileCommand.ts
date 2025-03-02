@@ -2,6 +2,13 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
+/**
+ * @brief Runs all support function to compile a quartus project and start a terminal with running compilation
+ * 
+ * @param context Context from where the command was ran
+ * @param currentProjectPath Path to the currently selected project
+ * @param pathToQuartus Path to the users quartus installation, where the binaries reside
+ */
 export function compileQuartusProject(context: vscode.ExtensionContext, currentProjectPath: string, pathToQuartus: string) {
     const PATH_TO_COMPILE_SCRIPT_TEMPLATE: string = path.join(context.extensionPath, 'res', 'compile.tcl');
 
