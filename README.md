@@ -11,7 +11,7 @@ This project aims to automate the creation of test benches and support files for
 - [Installation](#Installation)
 - [Initial setup](#Initial-setup)
 - [Usage](USAGE.md)
-- [Contributing (Coming soon)](CONTRIBUTING.md)
+- [Contributing](CONTRIBUTING.md)
 - [License](LICENSE)
 - [Support (Coming soon)](#support)
 
