@@ -1,5 +1,13 @@
 import { entityProperty } from './EntityUtils';
 
+/**
+ * @brief Generates the testbench component string to apply to the testbench template
+ * 
+ * @param genericProperties Array containing all generic properties of the original entity
+ * @param portProperties Array containing all port properties of the original entity
+ * 
+ * @returns The component content to apply to the testbench template
+ */
 export function generateTestbenchComponent(genericProperties: entityProperty[] | null, portProperties: entityProperty[] | null) {
     let componentContent = '';
 
@@ -32,6 +40,13 @@ export function generateTestbenchComponent(genericProperties: entityProperty[] |
     return componentContent;
 }
 
+/**
+ * @brief Generates the testbench internal signals to apply to the testbench template
+ * 
+ * @param portProperties Array containing all port properties of the original entity
+ * 
+ * @returns The generated testbench signals as a string
+ */
 export function generateTestbenchSignals(portProperties: entityProperty[] | null) {
     let testbenchSignals = '';
 
@@ -43,6 +58,13 @@ export function generateTestbenchSignals(portProperties: entityProperty[] | null
     return testbenchSignals;
 }
 
+/**
+ * @brief Generates the testbench internal signal mapping to the entity
+ * 
+ * @param portProperties Array containing all port properties of the original entity
+ * 
+ * @returns The generated testbench signal mapping
+ */
 export function generateSignalMapping(portProperties: entityProperty[] | null) {
     let testbenchSignals = '';
 

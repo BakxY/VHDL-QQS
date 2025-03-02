@@ -2,8 +2,16 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path'
 
-export function resolvePathWithWildcards(pattern: string, baseDir: string = vscode.workspace.workspaceFolders![0].uri.fsPath): string[] {
-    const parts = pattern.split(path.sep);
+/**
+ * @brief Resolves a path with wildcard syntax to an array of all possible paths
+ * 
+ * @param wildcardPath The raw path including the wildcard syntax
+ * @param baseDir The path to from where the path should be explored
+ * 
+ * @returns An array of all possible paths included by the provided path
+ */
+export function resolvePathWithWildcards(wildcardPath: string, baseDir: string = vscode.workspace.workspaceFolders![0].uri.fsPath): string[] {
+    const parts = wildcardPath.split(path.sep);
     const results: string[] = [];
 
     function recursiveResolve(dir: string, remainingParts: string[]): void {

@@ -5,6 +5,12 @@ import { entityProperty, getEntityContents, getPortContent, getGenericContent, g
 import { generateTestbenchComponent, generateTestbenchSignals, generateSignalMapping } from './TestbenchUtils';
 import { getAllEntities } from './TomlUtils'
 
+/**
+ * @brief Runs all support function that are needed to create a new testbench for a provided entity and writes that testbench to the file system
+ * 
+ * @param context Context from where the command was ran
+ * @param entityName Name of the entity that the testbench should be generated for
+ */
 export function createNewTestbench(context: vscode.ExtensionContext, entityName: string) {
     const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
 

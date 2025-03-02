@@ -12,6 +12,13 @@ interface TomlConfig {
     };
 }
 
+/**
+ * @brief Reads the toml file and gets all .vhd files
+ * 
+ * @param workspacePath Base path for where to search paths given in toml file
+ * 
+ * @returns An array of all files listed in toml file
+ */
 export function getAllEntities(workspacePath: string, pathToToml: string) {
     pathToToml = path.join(workspacePath, pathToToml);
     
