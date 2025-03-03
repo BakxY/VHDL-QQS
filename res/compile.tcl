@@ -1,7 +1,7 @@
 load_package project
 load_package flow
 
-project_open "CURRENT_PROJECT"
+project_open [lindex $argv 0]
 
 execute_flow -compile
 
