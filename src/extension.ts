@@ -250,13 +250,17 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 
 		fs.writeFileSync(pathToProjectFile, projectFileContent.join("\n"), 'utf-8');
+
+		currentTopLevelDisplay.text = 'Top Level: ' + newTopLevel;
 	});
 	context.subscriptions.push(disposable);
 
-	let currentProjectDisplay = statusBarCreator.createChangeTopLevel();
+	let currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
+	context.subscriptions.push(currentTopLevelDisplay);
+
+	let currentProjectDisplay = statusBarCreator.createActiveProject(context);
 	context.subscriptions.push(currentProjectDisplay);
 
-	context.subscriptions.push(statusBarCreator.createActiveProject(context));
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());

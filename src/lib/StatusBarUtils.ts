@@ -1,5 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode'
+import * as pathUtils from './PathUtils'
+import * as quartus from './QuartusUtils'
 
 export function createActiveProject(context: vscode.ExtensionContext) {
     let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
@@ -22,14 +24,26 @@ export function createActiveProject(context: vscode.ExtensionContext) {
     return currentProjectDisplay;
 }
 
-export function createChangeTopLevel() {
+export async function createChangeTopLevel(context: vscode.ExtensionContext) {
     let currentTopLevelDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
     currentTopLevelDisplay.command = 'vhdl-qqs.changeTopLevel';
-    currentTopLevelDisplay.text = '$(file-code)';
+    currentTopLevelDisplay.text = 'Top Level: None';
     currentTopLevelDisplay.tooltip = 'Change current top level entity of quartus project';
 
     currentTopLevelDisplay.show();
+
+    const activeProject: string | null = await pathUtils.getCurrentProject(context);
+    if (activeProject == null) { return currentTopLevelDisplay; }
+
+    const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+    if (quartusPath == null) { return currentTopLevelDisplay; }
+
+    const currentTopLevel: string = quartus.getProjectTopLevel(context, activeProject, quartusPath);
+
+    if(currentTopLevel == undefined) { return currentTopLevelDisplay; }
+
+    currentTopLevelDisplay.text = 'Top Level: ' + currentTopLevel;
 
     return currentTopLevelDisplay;
 }
