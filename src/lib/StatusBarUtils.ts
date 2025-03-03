@@ -3,6 +3,8 @@ import * as vscode from 'vscode'
 import * as pathUtils from './PathUtils'
 import * as quartus from './QuartusUtils'
 
+// TODO: Comment all of this code
+
 export function createActiveProject(context: vscode.ExtensionContext) {
     let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
     currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
