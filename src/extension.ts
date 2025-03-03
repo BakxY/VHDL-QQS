@@ -7,6 +7,7 @@ import { createNewTestbench } from './lib/TestbenchCommand';
 import { getAllEntities } from './lib/TomlUtils'
 import { getAllProjectFiles, checkForQuartusInstallation, getProjectGlobal } from './lib/QuartusUtils'
 import { compileQuartusProject } from './lib/CompileCommand';
+import * as statusBarCreator from './lib/StatusBarUtils';
 
 export function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
@@ -243,10 +244,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 		let projectFileContent = fs.readFileSync(pathToProjectFile, 'utf-8').split('\n');
 
-		for(let lineIndex = 0; lineIndex < projectFileContent.length; lineIndex++)
-		{
-			if(projectFileContent[lineIndex].includes('set_global_assignment -name TOP_LEVEL_ENTITY'))
-			{
+		for (let lineIndex = 0; lineIndex < projectFileContent.length; lineIndex++) {
+			if (projectFileContent[lineIndex].includes('set_global_assignment -name TOP_LEVEL_ENTITY')) {
 				projectFileContent[lineIndex] = 'set_global_assignment -name TOP_LEVEL_ENTITY ' + newTopLevel;
 				break;
 			}
@@ -256,47 +255,13 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
-	let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
-	currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
-	let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
-	if (activeProjectName == undefined) {
-		activeProjectName = 'None'
-	}
-	else {
-		activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
-	}
-	currentProjectDisplay.text = 'Project: ' + activeProjectName;
-	currentProjectDisplay.tooltip = 'Change current active quartus project';
+	let currentProjectDisplay = statusBarCreator.createChangeTopLevel();
 	context.subscriptions.push(currentProjectDisplay);
-	currentProjectDisplay.show();
 
-	let currentTopLevelDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
-	currentTopLevelDisplay.command = 'vhdl-qqs.changeTopLevel';
-	currentTopLevelDisplay.text = '$(file-code)';
-	currentTopLevelDisplay.tooltip = 'Change current top level entity of quartus project';
-	context.subscriptions.push(currentTopLevelDisplay);
-	currentTopLevelDisplay.show();
-
-	let compileProjectButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
-	compileProjectButton.command = 'vhdl-qqs.compileCurrentProject';
-	compileProjectButton.text = '$(play)';
-	compileProjectButton.tooltip = 'Compile the currently selected quartus project';
-	context.subscriptions.push(compileProjectButton);
-	compileProjectButton.show();
-
-	let cleanCompileFilesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
-	cleanCompileFilesButton.command = 'vhdl-qqs.cleanCompileFiles';
-	cleanCompileFilesButton.text = '$(trash)';
-	cleanCompileFilesButton.tooltip = 'Cleanup files from previous quartus compilation';
-	context.subscriptions.push(cleanCompileFilesButton);
-	cleanCompileFilesButton.show();
-
-	let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
-	openProgrammerButton.command = 'vhdl-qqs.openProgrammerActiveProject';
-	openProgrammerButton.text = '$(flame)';
-	openProgrammerButton.tooltip = 'Open quartus programmer on active compiled project';
-	context.subscriptions.push(openProgrammerButton);
-	openProgrammerButton.show();
+	context.subscriptions.push(statusBarCreator.createActiveProject(context));
+	context.subscriptions.push(statusBarCreator.createCleanProject());
+	context.subscriptions.push(statusBarCreator.createCompileProject());
+	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
 }
 
 export function deactivate() {
