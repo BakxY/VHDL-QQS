@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path'
+import * as quartus from './QuartusUtils'
 
 /**
  * @brief Resolves a path with wildcard syntax to an array of all possible paths
@@ -61,4 +62,55 @@ export function resolvePathWithWildcards(wildcardPath: string, baseDir: string =
 
     recursiveResolve(baseDir, parts);
     return results;
+}
+
+/**
+ * @brief Gets the currently selected project from the workspace storage
+ * 
+ * @param context Context from where the command was ran
+ * 
+ * @returns The workstation path to the current project
+ */
+export function getCurrentProject(context: vscode.ExtensionContext): string | null {
+    const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+
+    if (activeProject == undefined) {
+        vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
+        console.error('No project selected! Select a project before compiling!');
+        return null;
+    }
+
+    return activeProject;
+}
+
+/**
+ * @brief Gets the path to the current workspace
+ * 
+ * @returns The current workstation path
+ */
+export function getWorkspacePath(): string | null {
+    return vscode.workspace.workspaceFolders![0].uri.fsPath;
+}
+
+/**
+ * @brief Gets the quartus binary path from the vs code settings and checks for an installation
+ * 
+ * @returns The path to a valid quartus installation
+ */
+export async function getQuartusBinPath(): Promise<string | null> {
+    const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
+
+    if (quartusPath == undefined) {
+        vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
+        console.error('No quartus installation folder defined in settings!');
+        return null;
+    }
+
+    if (!quartus.checkForQuartusInstallation(path.normalize(quartusPath))) {
+        vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
+        console.error('No quartus installation at provided path! Check your settings!');
+        return null;
+    }
+
+    return path.normalize(quartusPath);
 }

@@ -8,6 +8,7 @@ import { getAllEntities } from './lib/TomlUtils'
 import { getAllProjectFiles, checkForQuartusInstallation, getProjectGlobal } from './lib/QuartusUtils'
 import { compileQuartusProject } from './lib/CompileCommand';
 import * as statusBarCreator from './lib/StatusBarUtils';
+import * as pathUtils from './lib/PathUtils'
 
 export async function activate(context: vscode.ExtensionContext) {
 	/**
@@ -112,27 +113,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.compileCurrentProject', async () => {
-		const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if(activeProject == null) { return; }
 
-		if (activeProject == undefined) {
-			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
-			console.error('No project selected! Select a project before compiling!');
-			return;
-		}
-
-		const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
-
-		if (quartusPath == undefined) {
-			vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
-			console.error('No quartus installation folder defined in settings!');
-			return;
-		}
-
-		if (!checkForQuartusInstallation(path.normalize(quartusPath))) {
-			vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
-			console.error('No quartus installation at provided path! Check your settings!');
-			return;
-		}
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if(quartusPath == null) { return; }
 
 		compileQuartusProject(context, path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, activeProject), path.normalize(quartusPath));
 	});
@@ -181,27 +166,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.openProgrammerActiveProject', async () => {
-		const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if(activeProject == null) { return; }
 
-		if (activeProject == undefined) {
-			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
-			console.error('No project selected! Select a project before compiling!');
-			return;
-		}
-
-		const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
-
-		if (quartusPath == undefined) {
-			vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
-			console.error('No quartus installation folder defined in settings!');
-			return;
-		}
-
-		if (!checkForQuartusInstallation(path.normalize(quartusPath))) {
-			vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
-			console.error('No quartus installation at provided path! Check your settings!');
-			return;
-		}
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if(quartusPath == null) { return; }
 
 		const fileToUpload = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, path.dirname(activeProject), 'output_files', path.basename(activeProject).replace(path.extname(activeProject), '') + '.sof');
 
@@ -220,27 +189,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.devCommand', async () => {
-		const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if(activeProject == null) { return; }
 
-		if (activeProject == undefined) {
-			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
-			console.error('No project selected! Select a project before compiling!');
-			return;
-		}
-
-		const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
-
-		if (quartusPath == undefined) {
-			vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
-			console.error('No quartus installation folder defined in settings!');
-			return;
-		}
-
-		if (!checkForQuartusInstallation(path.normalize(quartusPath))) {
-			vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
-			console.error('No quartus installation at provided path! Check your settings!');
-			return;
-		}
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if(quartusPath == null) { return; }
 
 		getProjectGlobal(context, activeProject, quartusPath, 'FAMILY');
 	});
@@ -251,13 +204,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.changeTopLevel', async () => {
-		const activeProject: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
-
-		if (activeProject == undefined) {
-			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
-			console.error('No project selected! Select a project before compiling!');
-			return;
-		}
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if(activeProject == null) { return; }
 
 		const pathToProjectFile = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, activeProject).replace('.qpf', '.qsf');
 
