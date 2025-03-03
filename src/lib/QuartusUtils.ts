@@ -36,6 +36,7 @@ export function getAllProjectFiles() {
     const allFiles: string[] = pathUtils.resolvePathWithWildcards(path.normalize('**/*'));
     let allProjectFiles: string[] = [];
 
+    // Check all files for project file extension
     for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {
         if (path.extname(allFiles[fileIndex]) == '.qpf') {
             allProjectFiles.push(allFiles[fileIndex].replace(vscode.workspace.workspaceFolders![0].uri.fsPath, '').replaceAll('\\', '/'));
@@ -53,13 +54,15 @@ export function getAllProjectFiles() {
  * @returns A boolean type, true if common files are present, else false
  */
 export function checkForQuartusInstallation(pathToQuartus: string) {
-    if (!fs.existsSync(pathToQuartus)) {
-        return false;
-    }
+    // Check if bin path exists
+    if (!fs.existsSync(pathToQuartus)) { return false; }
 
+    // Read all files in folder
     const allQuartusFiles: string[] = fs.readdirSync(pathToQuartus);
 
+    // Check what platform is running
     if (process.platform == 'win32') {
+        // Check of required quartus files
         if (!allQuartusFiles.includes('quartus_sh.exe')) {
             return false;
         }
@@ -69,6 +72,7 @@ export function checkForQuartusInstallation(pathToQuartus: string) {
         }
     }
     else {
+        // Check of required quartus files
         if (!allQuartusFiles.includes('quartus_sh')) {
             return false;
         }
@@ -92,17 +96,20 @@ export function checkForQuartusInstallation(pathToQuartus: string) {
  * @returns An array of all assignments set
  */
 export function getProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string) {
-    const totalProjectPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, currentProjectPath);
+    const totalProjectPath = path.join(pathUtils.getWorkspacePath()!, currentProjectPath);
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
     const totalScriptPath = path.join(context.extensionPath, 'res', 'getGlobal.tcl');
 
+    // Generate all command argument
     const scriptCmdArgs = '"' + totalProjectPath + '" ' + name;
 
+    // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
     const commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
 
     let filteredCommandOutput: string[] = []
 
+    // Filter output to not include info statements
     for (let currentLine = 0; currentLine < commandOutput.length; currentLine++) {
         if (!commandOutput[currentLine].trim().startsWith('Info') && commandOutput[currentLine].trim() != '') {
             filteredCommandOutput.push(commandOutput[currentLine].trim())
@@ -126,8 +133,10 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
     const totalScriptPath = path.join(context.extensionPath, 'res', 'setGlobal.tcl');
 
+    // Generate all command argument
     const scriptCmdArgs = '"' + totalProjectPath + '" ' + name + ' "' + value + '"';
 
+    // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
     cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
 }

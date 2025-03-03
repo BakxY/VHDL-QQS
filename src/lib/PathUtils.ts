@@ -11,7 +11,7 @@ import * as quartus from './QuartusUtils'
  * 
  * @returns An array of all possible paths included by the provided path
  */
-export function resolvePathWithWildcards(wildcardPath: string, baseDir: string = vscode.workspace.workspaceFolders![0].uri.fsPath): string[] {
+export function resolvePathWithWildcards(wildcardPath: string, baseDir: string = getWorkspacePath()!): string[] {
     const parts = wildcardPath.split(path.sep);
     const results: string[] = [];
 
@@ -74,6 +74,7 @@ export function resolvePathWithWildcards(wildcardPath: string, baseDir: string =
 export function getCurrentProject(context: vscode.ExtensionContext): string | null {
     const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
 
+    // Check if no project is set in current worksapce
     if (activeProject == undefined) {
         vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
         console.error('No project selected! Select a project before compiling!');
@@ -100,12 +101,14 @@ export function getWorkspacePath(): string | null {
 export async function getQuartusBinPath(): Promise<string | null> {
     const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
 
+    // Check if no quartus path has been set
     if (quartusPath == undefined) {
         vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
         console.error('No quartus installation folder defined in settings!');
         return null;
     }
 
+    // Check if path is a valid quartus install path
     if (!quartus.checkForQuartusInstallation(path.normalize(quartusPath))) {
         vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
         console.error('No quartus installation at provided path! Check your settings!');
@@ -118,6 +121,7 @@ export async function getQuartusBinPath(): Promise<string | null> {
 export function getTomlLocalPath() {
     const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
 
+    // Check if no toml path has been set
     if (pathToToml == undefined) {
         vscode.window.showErrorMessage('No path for toml file set! Please change in settings!');
         console.error('No path for toml file set! Please change in settings!');
