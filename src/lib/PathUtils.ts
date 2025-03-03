@@ -114,3 +114,15 @@ export async function getQuartusBinPath(): Promise<string | null> {
 
     return path.normalize(quartusPath);
 }
+
+export function getTomlLocalPath() {
+    const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
+
+    if (pathToToml == undefined) {
+        vscode.window.showErrorMessage('No path for toml file set! Please change in settings!');
+        console.error('No path for toml file set! Please change in settings!');
+        return null;
+    }
+
+    return pathToToml;
+}

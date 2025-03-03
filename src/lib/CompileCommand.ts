@@ -29,11 +29,7 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
 
     fs.writeFileSync(compileScriptPath, generatedCompileScript);
 
-    let terminal = vscode.window.activeTerminal;
-    if (!terminal) {
-        terminal = vscode.window.createTerminal('Quartus Compilation');
-    }
-
+    let terminal = vscode.window.createTerminal('Quartus Compilation');
     terminal.show();
     terminal.sendText('"' + path.join(pathToQuartus, 'quartus_sh') + '"' + ' -t compile.tcl');
 
