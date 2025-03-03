@@ -60,6 +60,11 @@
                 "command": "vhdl-qqs.changeTopLevel",
                 "title": "VHDL-QQS: Change top level entity for active project"
             }
+            ,
+            {
+                "command": "vhdl-qqs.devCommand",
+                "title": "VHDL-QQS: devCommand"
+            }
         ],
         "menus": {
             "editor/context": [
