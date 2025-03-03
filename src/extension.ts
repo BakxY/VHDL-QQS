@@ -111,8 +111,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 		if (quartusPath == null) { return; }
 
-		// Run compile command
-		compileCommands.compileQuartusProject(context, path.join(pathUtils.getWorkspacePath()!, activeProject), path.normalize(quartusPath));
+    // Run compile command
+		compileCommands.compileQuartusProject(context, activeProject, path.normalize(quartusPath));
 	});
 	context.subscriptions.push(disposable);
 
