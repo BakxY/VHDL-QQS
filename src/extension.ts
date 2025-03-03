@@ -2,11 +2,11 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as cp from 'child_process';
-import { getSelectedExpression } from './lib/EntityUtils';
-import { createNewTestbench } from './lib/TestbenchCommand';
-import { getAllEntities } from './lib/TomlUtils'
+import * as entityUtils from './lib/EntityUtils';
+import * as testbenchCommands from './lib/TestbenchCommand';
+import * as tomlUtils from './lib/TomlUtils'
 import * as quartus from './lib/QuartusUtils'
-import { compileQuartusProject } from './lib/CompileCommand';
+import * as compileCommands from './lib/CompileCommand';
 import * as statusBarCreator from './lib/StatusBarUtils';
 import * as pathUtils from './lib/PathUtils'
 
@@ -27,14 +27,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		console.log('Found current open file "' + editor.document.fileName + '"');
 
-		const selectedExpression: string | null = getSelectedExpression(editor);
+		const selectedExpression: string | null = entityUtils.getSelectedExpression(editor);
 
 		if (!selectedExpression) {
 			// Error message is printed in function
 			return;
 		}
 
-		createNewTestbench(context, selectedExpression);
+		testbenchCommands.createNewTestbench(context, selectedExpression);
 	});
 	context.subscriptions.push(disposable);
 
@@ -51,7 +51,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const allEntities = getAllEntities(vscode.workspace.workspaceFolders![0].uri.fsPath, pathToToml);
+		const allEntities = tomlUtils.getAllEntities(vscode.workspace.workspaceFolders![0].uri.fsPath, pathToToml);
 
 		if (!allEntities) {
 			// Error message is printed in function
@@ -80,7 +80,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		createNewTestbench(context, selectedEntity);
+		testbenchCommands.createNewTestbench(context, selectedEntity);
 	});
 	context.subscriptions.push(disposable);
 
@@ -119,7 +119,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 		if(quartusPath == null) { return; }
 
-		compileQuartusProject(context, path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, activeProject), path.normalize(quartusPath));
+		compileCommands.compileQuartusProject(context, path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, activeProject), path.normalize(quartusPath));
 	});
 	context.subscriptions.push(disposable);
 
@@ -207,7 +207,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const allEntities = getAllEntities(vscode.workspace.workspaceFolders![0].uri.fsPath, pathToToml);
+		const allEntities = tomlUtils.getAllEntities(vscode.workspace.workspaceFolders![0].uri.fsPath, pathToToml);
 
 		if (!allEntities) {
 			// Error message is printed in function

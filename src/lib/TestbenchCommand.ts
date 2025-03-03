@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import { entityProperty, getEntityContents, getPortContent, getGenericContent, getPortPropertiesFromContent, getGenericPropertiesFromContent } from './EntityUtils';
-import { generateTestbenchComponent, generateTestbenchSignals, generateSignalMapping } from './TestbenchUtils';
-import { getAllEntities } from './TomlUtils'
+import * as entityUtils from './EntityUtils';
+import * as testbenchUtils from './TestbenchUtils';
+import * as tomlUtils from './TomlUtils'
 
 /**
  * @brief Runs all support function that are needed to create a new testbench for a provided entity and writes that testbench to the file system
@@ -21,7 +21,7 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
         return;
     }
 
-    const allEntities = getAllEntities(vscode.workspace.workspaceFolders![0].uri.fsPath, pathToToml);
+    const allEntities = tomlUtils.getAllEntities(vscode.workspace.workspaceFolders![0].uri.fsPath, pathToToml);
 
     if (!allEntities) {
         // Error message is printed in function
@@ -44,15 +44,15 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
         return;
     }
 
-    const entityContent: string | undefined = getEntityContents(pathToEntityFile)?.replaceAll('\r', '');
+    const entityContent: string | undefined = entityUtils.getEntityContents(pathToEntityFile)?.replaceAll('\r', '');
 
     if (!entityContent) {
         // Error message is printed in function
         return;
     }
 
-    const genericContent: string | null = getGenericContent(entityContent);
-    const portContent: string | null = getPortContent(entityContent);
+    const genericContent: string | null = entityUtils.getGenericContent(entityContent);
+    const portContent: string | null = entityUtils.getPortContent(entityContent);
 
     if (!portContent) {
         // Error message is printed in function
@@ -68,16 +68,16 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
     generatedTestbench = generatedTestbench.replaceAll('TESTBENCH_ENTITY', entityName);
     generatedTestbench = generatedTestbench.replaceAll('DATE_CREATED', new Date().toLocaleDateString('de-CH'));
 
-    const portProperties: entityProperty[] | null = getPortPropertiesFromContent(portContent);
-    const genericProperties: entityProperty[] | null = getGenericPropertiesFromContent(genericContent);
+    const portProperties: entityUtils.entityProperty[] | null = entityUtils.getPortPropertiesFromContent(portContent);
+    const genericProperties: entityUtils.entityProperty[] | null = entityUtils.getGenericPropertiesFromContent(genericContent);
 
-    let componentContent = generateTestbenchComponent(genericProperties, portProperties);
+    let componentContent = testbenchUtils.generateTestbenchComponent(genericProperties, portProperties);
     generatedTestbench = generatedTestbench.replaceAll('ENTITY_CONTENT', componentContent);
 
-    let testbenchSignals = generateTestbenchSignals(portProperties);
+    let testbenchSignals = testbenchUtils.generateTestbenchSignals(portProperties);
     generatedTestbench = generatedTestbench.replaceAll('TESTBENCH_INTERNAL_SIGNALS', testbenchSignals);
 
-    let testbenchSignalMapping = generateSignalMapping(portProperties);
+    let testbenchSignalMapping = testbenchUtils.generateSignalMapping(portProperties);
     generatedTestbench = generatedTestbench.replaceAll('ENTITY_INTERAL_MAPPING', testbenchSignalMapping);
 
     if(fs.existsSync(pathToEntityFile.replace('.vhd', '_tb.vhd')))

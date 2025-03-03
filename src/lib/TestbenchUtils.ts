@@ -1,4 +1,4 @@
-import { entityProperty } from './EntityUtils';
+import * as entityUtils from './EntityUtils';
 
 /**
  * @brief Generates the testbench component string to apply to the testbench template
@@ -8,7 +8,7 @@ import { entityProperty } from './EntityUtils';
  * 
  * @returns The component content to apply to the testbench template
  */
-export function generateTestbenchComponent(genericProperties: entityProperty[] | null, portProperties: entityProperty[] | null) {
+export function generateTestbenchComponent(genericProperties: entityUtils.entityProperty[] | null, portProperties: entityUtils.entityProperty[] | null) {
     let componentContent = '';
 
     if (genericProperties) {
@@ -47,7 +47,7 @@ export function generateTestbenchComponent(genericProperties: entityProperty[] |
  * 
  * @returns The generated testbench signals as a string
  */
-export function generateTestbenchSignals(portProperties: entityProperty[] | null) {
+export function generateTestbenchSignals(portProperties: entityUtils.entityProperty[] | null) {
     let testbenchSignals = '';
 
     for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {
@@ -65,7 +65,7 @@ export function generateTestbenchSignals(portProperties: entityProperty[] | null
  * 
  * @returns The generated testbench signal mapping
  */
-export function generateSignalMapping(portProperties: entityProperty[] | null) {
+export function generateSignalMapping(portProperties: entityUtils.entityProperty[] | null) {
     let testbenchSignals = '';
 
     for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {

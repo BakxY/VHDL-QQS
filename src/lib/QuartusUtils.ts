@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path'
 import * as fs from 'fs';
 import * as cp from 'child_process';
-import { resolvePathWithWildcards } from './PathUtils';
+import * as pathUtils from './PathUtils';
 
 export type globalAssignment = {
     name: string;
@@ -33,7 +33,7 @@ export type qsfContent = {
  * @returns An array of all quartus project files
  */
 export function getAllProjectFiles() {
-    const allFiles: string[] = resolvePathWithWildcards(path.normalize('**/*'));
+    const allFiles: string[] = pathUtils.resolvePathWithWildcards(path.normalize('**/*'));
     let allProjectFiles: string[] = [];
 
     for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {

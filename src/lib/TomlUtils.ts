@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path'
 import * as toml from '@iarna/toml';
-import { resolvePathWithWildcards } from './PathUtils';
+import * as pathUtils from './PathUtils';
 
 interface TomlConfig {
     libraries: {
@@ -52,7 +52,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
             continue;
         }
 
-        const resolvedPath = resolvePathWithWildcards(path.normalize(filesFromToml[fileIndex]));
+        const resolvedPath = pathUtils.resolvePathWithWildcards(path.normalize(filesFromToml[fileIndex]));
 
         for (let pathIndex = 0; pathIndex < resolvedPath.length; pathIndex++) {
             filteredFiles.push(resolvedPath[pathIndex]);
