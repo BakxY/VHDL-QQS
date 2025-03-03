@@ -196,7 +196,29 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.devCommand', async () => {
-		getProjectGlobal('FAMILY');
+		const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+
+		if (activeProject == undefined) {
+			vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
+			console.error('No project selected! Select a project before compiling!');
+			return;
+		}
+
+		const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
+
+		if (quartusPath == undefined) {
+			vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
+			console.error('No quartus installation folder defined in settings!');
+			return;
+		}
+
+		if (!checkForQuartusInstallation(path.normalize(quartusPath))) {
+			vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
+			console.error('No quartus installation at provided path! Check your settings!');
+			return;
+		}
+
+		getProjectGlobal(context, activeProject, quartusPath, 'FAMILY');
 	});
 	context.subscriptions.push(disposable);
 

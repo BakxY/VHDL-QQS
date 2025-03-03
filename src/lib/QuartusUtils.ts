@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import * as path from 'path'
 import * as fs from 'fs';
 import * as cp from 'child_process';
-import * as readline from 'readline';
 import { resolvePathWithWildcards } from './PathUtils';
 
 export type globalAssignment = {
@@ -83,22 +82,46 @@ export function checkForQuartusInstallation(pathToQuartus: string) {
 }
 
 /**
- * @brief Parses a string read from a psf file into a data structure
+ * @brief Get a global assignment for the currently active project
  * 
- * @param qsfContent The content of a qsf file, read from the fs
+ * @param context The content of a qsf file, read from the fs
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param name Name of the assignment to get
  * 
- * @returns The data structure containing the data of the qsf data
+ * @returns An array of all assignments set
  */
-export function getProjectGlobal(name: string) {
-    const commandOutput = cp.execSync('quartus_sh -t "c:/Users/Severin Sprenger/Documents/Git/zhaw-et24-pm2/synthi_top/openProject.tcl"', { encoding: 'utf8' }).split('\n');
+export function getProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string) {
+    const totalProjectPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, currentProjectPath);
+    const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
+    const totalScriptPath = path.join(context.extensionPath, 'res', 'getGlobal.tcl');
+
+    const scriptCmdArgs = '"' + totalProjectPath + '" ' + name
+
+    const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs
+    const commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
 
     let filteredCommandOutput: string[] = []
 
-    for(let currentLine = 0; currentLine < commandOutput.length; currentLine++)
-    {
-        if(!commandOutput[currentLine].trim().startsWith('Info'))
-        {
+    for (let currentLine = 0; currentLine < commandOutput.length; currentLine++) {
+        if (!commandOutput[currentLine].trim().startsWith('Info') && commandOutput[currentLine].trim() != '') {
             filteredCommandOutput.push(commandOutput[currentLine].trim())
         }
     }
+
+    return filteredCommandOutput;
+}
+
+/**
+ * @brief Get the top level file of a project
+ * 
+ * @param context The content of a qsf file, read from the fs
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * 
+ * @returns String of top level project file
+ */
+export function getProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string)
+{
+    return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY')[0]
 }
