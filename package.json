@@ -4,7 +4,7 @@
     "publisher": "BakxY",
     "description": "VS Code extension to automate the process of generating testbenches for vhdl entities.",
     "repository": "https://github.com/BakxY/VHDL-QQS",
-    "version": "1.4.3",
+    "version": "1.5.0",
     "engines": {
         "vscode": "^1.97.0"
     },
@@ -59,8 +59,7 @@
             {
                 "command": "vhdl-qqs.changeTopLevel",
                 "title": "VHDL-QQS: Change top level entity for active project"
-            }
-            ,
+            },
             {
                 "command": "vhdl-qqs.devCommand",
                 "title": "VHDL-QQS: devCommand"
