@@ -5,7 +5,7 @@ import * as cp from 'child_process';
 import { getSelectedExpression } from './lib/EntityUtils';
 import { createNewTestbench } from './lib/TestbenchCommand';
 import { getAllEntities } from './lib/TomlUtils'
-import { getAllProjectFiles, checkForQuartusInstallation, getProjectGlobal } from './lib/QuartusUtils'
+import * as quartus from './lib/QuartusUtils'
 import { compileQuartusProject } from './lib/CompileCommand';
 import * as statusBarCreator from './lib/StatusBarUtils';
 import * as pathUtils from './lib/PathUtils'
@@ -89,7 +89,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectCurrentProject', async () => {
-		const allProjectFiles: string[] = getAllProjectFiles();
+		const allProjectFiles: string[] = quartus.getAllProjectFiles();
 
 		if (allProjectFiles.length == 0) {
 			vscode.window.showErrorMessage('There are no project in your workfolder!');
@@ -188,17 +188,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.devCommand', async () => {
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if(activeProject == null) { return; }
-
-		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if(quartusPath == null) { return; }
-
-		getProjectGlobal(context, activeProject, quartusPath, 'FAMILY');
-	});
-	context.subscriptions.push(disposable);
-
 	/**
 	 * @brief Command changes the current top level entity file of the active project.
 	 * @author BakxY
@@ -207,13 +196,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
 		if(activeProject == null) { return; }
 
-		const pathToProjectFile = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, activeProject).replace('.qpf', '.qsf');
-
-		if (!fs.existsSync(pathToProjectFile)) {
-			vscode.window.showErrorMessage('Project files doesn\'t exists! Please reselect your project!');
-			console.error('Project files doesn\'t exists! Please reselect your project!');
-			return;
-		}
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if(quartusPath == null) { return; }
 
 		const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
 
@@ -240,16 +224,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		let projectFileContent = fs.readFileSync(pathToProjectFile, 'utf-8').split('\n');
-
-		for (let lineIndex = 0; lineIndex < projectFileContent.length; lineIndex++) {
-			if (projectFileContent[lineIndex].includes('set_global_assignment -name TOP_LEVEL_ENTITY')) {
-				projectFileContent[lineIndex] = 'set_global_assignment -name TOP_LEVEL_ENTITY ' + newTopLevel;
-				break;
-			}
-		}
-
-		fs.writeFileSync(pathToProjectFile, projectFileContent.join("\n"), 'utf-8');
+		quartus.setProjectTopLevel(context, activeProject, quartusPath, newTopLevel);
 
 		currentTopLevelDisplay.text = 'Top Level: ' + newTopLevel;
 	});

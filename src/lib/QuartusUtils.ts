@@ -96,9 +96,9 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
     const totalScriptPath = path.join(context.extensionPath, 'res', 'getGlobal.tcl');
 
-    const scriptCmdArgs = '"' + totalProjectPath + '" ' + name
+    const scriptCmdArgs = '"' + totalProjectPath + '" ' + name;
 
-    const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs
+    const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
     const commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
 
     let filteredCommandOutput: string[] = []
@@ -113,6 +113,26 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
 }
 
 /**
+ * @brief Sets a global assignment for the currently active project
+ * 
+ * @param context The content of a qsf file, read from the fs
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param name Name of the assignment to set
+ * @param value Value to assign to the assignment
+ */
+export function setProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string, value: string) {
+    const totalProjectPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, currentProjectPath);
+    const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
+    const totalScriptPath = path.join(context.extensionPath, 'res', 'setGlobal.tcl');
+
+    const scriptCmdArgs = '"' + totalProjectPath + '" ' + name + ' "' + value + '"';
+
+    const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
+    cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
+}
+
+/**
  * @brief Get the top level file of a project
  * 
  * @param context The content of a qsf file, read from the fs
@@ -123,5 +143,18 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
  */
 export function getProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string)
 {
-    return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY')[0]
+    return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY')[0];
+}
+
+/**
+ * @brief Sets the top level file of a project
+ * 
+ * @param context The content of a qsf file, read from the fs
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param newTopLevel The new top level entity
+ */
+export function setProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newTopLevel: string)
+{
+    setProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY', newTopLevel);
 }
