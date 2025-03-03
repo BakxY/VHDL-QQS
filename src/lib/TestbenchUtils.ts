@@ -11,9 +11,12 @@ import * as entityUtils from './EntityUtils';
 export function generateTestbenchComponent(genericProperties: entityUtils.entityProperty[] | null, portProperties: entityUtils.entityProperty[] | null) {
     let componentContent = '';
 
+    // Check if any generic components exist
     if (genericProperties) {
+        // Add generic header
         componentContent += 'generic (\n';
 
+        // Add all generic properties
         for (let genericIndex = 0; genericIndex < genericProperties.length; genericIndex++) {
             if (genericIndex > 0) {
                 componentContent += ';\n';
@@ -22,11 +25,14 @@ export function generateTestbenchComponent(genericProperties: entityUtils.entity
             componentContent += genericProperties[genericIndex].propertyName + ' : ' + genericProperties[genericIndex].propertyType;
         }
 
+        // End generic part
         componentContent += '\n);\n'
     }
 
+    // Add port header
     componentContent += 'port (\n';
 
+    // Add all port properties
     for (let portIndex = 0; portIndex < portProperties!.length; portIndex++) {
         if (portIndex > 0) {
             componentContent += ';\n';
@@ -35,6 +41,7 @@ export function generateTestbenchComponent(genericProperties: entityUtils.entity
         componentContent += portProperties![portIndex].propertyName + ' : ' + portProperties![portIndex].propertySignalDir + ' ' + portProperties![portIndex].propertyType;
     }
 
+    // End port part
     componentContent += '\n);'
 
     return componentContent;
@@ -50,6 +57,7 @@ export function generateTestbenchComponent(genericProperties: entityUtils.entity
 export function generateTestbenchSignals(portProperties: entityUtils.entityProperty[] | null) {
     let testbenchSignals = '';
 
+    // Add all necessary signals
     for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {
 
         testbenchSignals += 'signal ' + portProperties![signalIndex].propertyName + ' : ' + portProperties![signalIndex].propertyType + ';\n';
@@ -68,6 +76,7 @@ export function generateTestbenchSignals(portProperties: entityUtils.entityPrope
 export function generateSignalMapping(portProperties: entityUtils.entityProperty[] | null) {
     let testbenchSignals = '';
 
+    // Add all signals to entity ports
     for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {
         if (signalIndex > 0) {
             testbenchSignals += ',\n';
