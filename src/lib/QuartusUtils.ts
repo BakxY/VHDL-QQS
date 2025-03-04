@@ -88,7 +88,7 @@ export function checkForQuartusInstallation(pathToQuartus: string) {
 /**
  * @brief Get a global assignment for the currently active project
  * 
- * @param context The content of a qsf file, read from the fs
+ * @param context The context form where the function was ran
  * @param currentProjectPath Workspace path to current project
  * @param quartusBinPath Path to quartus binaries
  * @param name Name of the assignment to get
@@ -122,7 +122,7 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
 /**
  * @brief Sets a global assignment for the currently active project
  * 
- * @param context The content of a qsf file, read from the fs
+ * @param context The context form where the function was ran
  * @param currentProjectPath Workspace path to current project
  * @param quartusBinPath Path to quartus binaries
  * @param name Name of the assignment to set
@@ -144,7 +144,7 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
 /**
  * @brief Get the top level file of a project
  * 
- * @param context The content of a qsf file, read from the fs
+ * @param context The context form where the function was ran
  * @param currentProjectPath Workspace path to current project
  * @param quartusBinPath Path to quartus binaries
  * 
@@ -158,7 +158,7 @@ export function getProjectTopLevel(context: vscode.ExtensionContext, currentProj
 /**
  * @brief Sets the top level file of a project
  * 
- * @param context The content of a qsf file, read from the fs
+ * @param context The context form where the function was ran
  * @param currentProjectPath Workspace path to current project
  * @param quartusBinPath Path to quartus binaries
  * @param newTopLevel The new top level entity
@@ -166,4 +166,32 @@ export function getProjectTopLevel(context: vscode.ExtensionContext, currentProj
 export function setProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newTopLevel: string)
 {
     setProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY', newTopLevel);
+}
+
+/**
+ * @brief Gets all VHDL source files from project file
+ * 
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * 
+ * @returns A array of string of all of the VHDL files in the project file
+ */
+export function getProjectVhdlSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string)
+{
+    return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'VHDL_FILE');
+}
+
+/**
+ * @brief Gets all Verilog source files from project file
+ * 
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * 
+ * @returns A array of string of all of the Verilog files in the project file
+ */
+export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string)
+{
+    return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE');
 }
