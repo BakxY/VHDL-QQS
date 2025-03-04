@@ -192,7 +192,14 @@ export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, c
     return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE');
 }
 
-// TODO: Comments
+/**
+ * @brief Checks if a provided path is part of the quartus project
+ * 
+ * @param context The context form where the function was ran
+ * @param filePath The path to the source file to check
+ * 
+ * @returns A boolean if the file is part of project
+ */
 export function checkFileInProject(context: vscode.ExtensionContext,  filePath: string): boolean | null {
     // Check if file is a VHDL or Verilog file
     if (!['.vhd', '.v'].includes(path.extname(filePath))) { return null; }
@@ -205,6 +212,7 @@ export function checkFileInProject(context: vscode.ExtensionContext,  filePath: 
     const quartusPath: string | null = pathUtils.getQuartusBinPath();
     if (quartusPath == null) { return false; }
 
+    // Resolve the path of source file
     const projectFilePath = path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject));
     const vhdlSourceFiles: string[] = pathUtils.resolveRelativePathArray(projectFilePath, getProjectVhdlSourceFiles(context, activeProject, quartusPath));
 

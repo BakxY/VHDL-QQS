@@ -118,8 +118,12 @@ export function getQuartusBinPath(): string | null {
     return path.normalize(quartusPath);
 }
 
-// TODO: Comments
-export function getTomlLocalPath() {
+/**
+ * @brief Gets the toml path from the settings file
+ * 
+ * @returns The path to the project toml file as a string
+ */
+export function getTomlLocalPath(): string | null {
     const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
 
     // Check if no toml path has been set
@@ -132,11 +136,20 @@ export function getTomlLocalPath() {
     return pathToToml;
 }
 
-// TODO: Comments
+/**
+ * @brief Resolve a array of relative paths read from the quartus project file (passed none relative paths trough)
+ * 
+ * @param basePath The path to from where to start resolving relative paths
+ * @param pathsToResolve The array of strings to resolve
+ * 
+ * @returns The resolved array of paths
+ */
 export function resolveRelativePathArray(basePath: string, pathsToResolve: string[]): string[] {
     let resolvedPaths: string[] = [];
 
+    // Runs trough all given paths
     for (let fileIndex = 0; fileIndex < pathsToResolve.length; fileIndex++) {
+        // Check if path has to be resolved
         if(path.isAbsolute(pathsToResolve[fileIndex]))
         {
             resolvedPaths.push(pathsToResolve[fileIndex]);
