@@ -215,6 +215,97 @@ export function checkFileInProject(context: vscode.ExtensionContext,  filePath: 
     // Resolve the path of source file
     const projectFilePath = path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject));
     const vhdlSourceFiles: string[] = pathUtils.resolveRelativePathArray(projectFilePath, getProjectVhdlSourceFiles(context, activeProject, quartusPath));
+    const verilogSourceFiles: string[] = pathUtils.resolveRelativePathArray(projectFilePath, getProjectVerilogSourceFiles(context, activeProject, quartusPath));
 
-    return vhdlSourceFiles.includes(filePath)
+    return vhdlSourceFiles.includes(filePath) || verilogSourceFiles.includes(filePath);
+}
+
+/**
+ * @brief Adds a VHDL source file to project
+ * 
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param newTopLevel The path to the new vhdl source file
+ */
+export function addVhdlFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newSourceFile: string) {
+    setProjectGlobal(context, currentProjectPath, quartusBinPath, 'VHDL_FILE', newSourceFile);
+}
+
+/**
+ * @brief Adds a Verilog source file to project
+ * 
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param newTopLevel The path to the new Verilog source file
+ */
+export function addVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newSourceFile: string) {
+    setProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE', newSourceFile);
+}
+
+/**
+ * @brief TODO
+ * 
+ * @param context TODO
+ * @param currentProjectPath TODO
+ * @param quartusBinPath TODO
+ * @param name TODO
+ * @param value TODO
+ */
+export function removeAllGlobals(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string) {
+    const totalProjectPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, currentProjectPath);
+    const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
+    const totalScriptPath = path.join(context.extensionPath, 'res', 'removeAllGlobal.tcl');
+
+    // Generate all command argument
+    const scriptCmdArgs = '"' + totalProjectPath + '" ' + name;
+
+    // Generate script command string and run command
+    const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
+    cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
+}
+
+/**
+ * @brief TODO
+ * 
+ * @param context TODO
+ * @param currentProjectPath TODO
+ * @param quartusBinPath TODO
+ * @param newTopLevel TODO
+ */
+export function removeVhdlFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
+    const allVhdlFile = getProjectVhdlSourceFiles(context, currentProjectPath, quartusBinPath);
+
+    delete allVhdlFile[allVhdlFile.indexOf(toRemoveFile)];
+
+    removeAllGlobals(context, currentProjectPath, quartusBinPath, 'VHDL_FILE');
+
+    for(let fileIndex = 0; fileIndex < allVhdlFile.length; fileIndex++)
+    {
+        if(allVhdlFile[fileIndex] == undefined) { continue; }
+        addVhdlFileToProject(context, currentProjectPath, quartusBinPath, allVhdlFile[fileIndex]);
+    }
+}
+
+/**
+ * @brief TODO
+ * 
+ * @param context TODO
+ * @param currentProjectPath TODO
+ * @param quartusBinPath TODO
+ * @param newTopLevel TODO
+ */
+export function removeVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
+    const allVerilogFile = getProjectVhdlSourceFiles(context, currentProjectPath, quartusBinPath);
+
+    delete allVerilogFile[allVerilogFile.indexOf(toRemoveFile)];
+
+    removeAllGlobals(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE');
+
+    for(let fileIndex = 0; fileIndex < allVerilogFile.length; fileIndex++)
+    {
+        if(allVerilogFile[fileIndex] == undefined) { continue; }
+        addVhdlFileToProject(context, currentProjectPath, quartusBinPath, allVerilogFile[fileIndex]);
+    }
 }
