@@ -150,8 +150,7 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
  * 
  * @returns String of top level project file
  */
-export function getProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string)
-{
+export function getProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
     return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY')[0];
 }
 
@@ -163,8 +162,7 @@ export function getProjectTopLevel(context: vscode.ExtensionContext, currentProj
  * @param quartusBinPath Path to quartus binaries
  * @param newTopLevel The new top level entity
  */
-export function setProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newTopLevel: string)
-{
+export function setProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newTopLevel: string) {
     setProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY', newTopLevel);
 }
 
@@ -177,8 +175,7 @@ export function setProjectTopLevel(context: vscode.ExtensionContext, currentProj
  * 
  * @returns A array of string of all of the VHDL files in the project file
  */
-export function getProjectVhdlSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string)
-{
+export function getProjectVhdlSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
     return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'VHDL_FILE');
 }
 
@@ -191,7 +188,25 @@ export function getProjectVhdlSourceFiles(context: vscode.ExtensionContext, curr
  * 
  * @returns A array of string of all of the Verilog files in the project file
  */
-export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string)
-{
+export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
     return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE');
+}
+
+// TODO: Comments
+export function checkFileInProject(context: vscode.ExtensionContext,  filePath: string): boolean | null {
+    // Check if file is a VHDL or Verilog file
+    if (!['.vhd', '.v'].includes(path.extname(filePath))) { return null; }
+
+    // Get currently active project
+    const activeProject: string | null = pathUtils.getCurrentProject(context);
+    if (activeProject == null) { return false; }
+
+    // Get  quartus install bin path
+    const quartusPath: string | null = pathUtils.getQuartusBinPath();
+    if (quartusPath == null) { return false; }
+
+    const projectFilePath = path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject));
+    const vhdlSourceFiles: string[] = pathUtils.resolveRelativePathArray(projectFilePath, getProjectVhdlSourceFiles(context, activeProject, quartusPath));
+
+    return vhdlSourceFiles.includes(filePath)
 }

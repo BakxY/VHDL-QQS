@@ -98,8 +98,8 @@ export function getWorkspacePath(): string | null {
  * 
  * @returns The path to a valid quartus installation
  */
-export async function getQuartusBinPath(): Promise<string | null> {
-    const quartusPath = await vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
+export function getQuartusBinPath(): string | null {
+    const quartusPath = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
 
     // Check if no quartus path has been set
     if (quartusPath == undefined) {
@@ -118,6 +118,7 @@ export async function getQuartusBinPath(): Promise<string | null> {
     return path.normalize(quartusPath);
 }
 
+// TODO: Comments
 export function getTomlLocalPath() {
     const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
 
@@ -129,4 +130,21 @@ export function getTomlLocalPath() {
     }
 
     return pathToToml;
+}
+
+// TODO: Comments
+export function resolveRelativePathArray(basePath: string, pathsToResolve: string[]): string[] {
+    let resolvedPaths: string[] = [];
+
+    for (let fileIndex = 0; fileIndex < pathsToResolve.length; fileIndex++) {
+        if(path.isAbsolute(pathsToResolve[fileIndex]))
+        {
+            resolvedPaths.push(pathsToResolve[fileIndex]);
+            continue;
+        }
+
+        resolvedPaths.push(path.resolve(basePath, pathsToResolve[fileIndex]));
+    }
+
+    return resolvedPaths;
 }
