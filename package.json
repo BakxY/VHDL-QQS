@@ -32,6 +32,27 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "quartusProjectExplorer",
+                    "title": "Quartus Project Explorer",
+                    "icon": "$(folder)"
+                }
+            ]
+        },
+        "views": {
+            "quartusProjectExplorer": [
+                {
+                    "id": "projectSourceFiles",
+                    "name": "Project Source Files"
+                },
+                {
+                    "id": "projectProperties",
+                    "name": "Project Properties"
+                }
+            ]
+        },
         "commands": [
             {
                 "command": "vhdl-qqs.manualActivateExtension",
@@ -66,8 +87,12 @@
                 "title": "VHDL-QQS: Change top level entity for active project"
             },
             {
-                "command": "vhdl-qqs.devCommand",
-                "title": "VHDL-QQS: devCommand"
+                "command": "vhdl-qqs.addFileToProject",
+                "title": "VHDL-QQS: Add File to Project"
+            },
+            {
+                "command": "vhdl-qqs.removeFileToProject",
+                "title": "VHDL-QQS: Remove File to Project"
             }
         ],
         "menus": {
@@ -75,6 +100,16 @@
                 {
                     "command": "vhdl-qqs.generateTestBenchSelection",
                     "when": "editorHasSelection"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "vhdl-qqs.addFileToProject",
+                    "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
+                },
+                {
+                    "command": "vhdl-qqs.removeFileToProject",
+                    "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
                 }
             ]
         },

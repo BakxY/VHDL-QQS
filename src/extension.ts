@@ -95,6 +95,17 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Update UI elements and update workspace storage
 		context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
 		currentProjectDisplay.text = 'Project: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
+
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject == null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath == null) { return; }
+
+		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+		quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 	});
 	context.subscriptions.push(disposable);
 
@@ -111,7 +122,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 		if (quartusPath == null) { return; }
 
-    // Run compile command
+		// Run compile command
 		compileCommands.compileQuartusProject(context, activeProject, path.normalize(quartusPath));
 	});
 	context.subscriptions.push(disposable);
@@ -224,6 +235,90 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
+	/**
+	 * @brief TODO
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.addFileToProject', async (uri: vscode.Uri) => {
+		const filePath: string = path.normalize(uri.fsPath);
+		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
+
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject == null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath == null) { return; }
+
+		const relativePath = path.relative(path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject)), filePath).replaceAll('\\', '/');
+
+		switch (path.extname(filePath)) {
+			case '.vhd':
+				const allVhdlFiles = quartus.getProjectVhdlSourceFiles(context, activeProject, quartusPath);
+				if (allVhdlFiles.includes(relativePath)) {
+					vscode.window.showInformationMessage('File is already part of active project!');
+					return;
+				}
+				quartus.addVhdlFileToProject(context, activeProject, quartusPath, relativePath);
+				break;
+
+			case '.v':
+				const allVerilogFiles = quartus.getProjectVerilogSourceFiles(context, activeProject, quartusPath);
+				if (allVerilogFiles.includes(relativePath)) {
+					vscode.window.showInformationMessage('File is already part of active project!');
+					return;
+				}
+				quartus.addVerilogFileToProject(context, activeProject, quartusPath, relativePath);
+				break;
+		}
+		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+		vscode.window.showInformationMessage('Added file to active project!');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
+	 * @brief TODO
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileToProject', async (uri: vscode.Uri) => {
+		const filePath: string = path.normalize(uri.fsPath);
+		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
+
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject == null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath == null) { return; }
+
+		const relativePath = path.relative(path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject)), filePath).replaceAll('\\', '/');
+
+		switch (path.extname(filePath)) {
+			case '.vhd':
+				const allVhdlFiles = quartus.getProjectVhdlSourceFiles(context, activeProject, quartusPath);
+				if (!allVhdlFiles.includes(relativePath)) {
+					vscode.window.showInformationMessage('Was\'t part of project!');
+					return;
+				}
+				quartus.removeVhdlFileToProject(context, activeProject, quartusPath, relativePath);
+				break;
+
+			case '.v':
+				const allVerilogFiles = quartus.getProjectVerilogSourceFiles(context, activeProject, quartusPath);
+				if (!allVerilogFiles.includes(relativePath)) {
+					vscode.window.showInformationMessage('Was\'t part of project!');
+					return;
+				}
+				quartus.removeVerilogFileToProject(context, activeProject, quartusPath, relativePath);
+				break;
+		}
+		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+		vscode.window.showInformationMessage('Removed file to active project!');
+	});
+	context.subscriptions.push(disposable);
+
 	let currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
 	context.subscriptions.push(currentTopLevelDisplay);
 
@@ -233,6 +328,22 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
+
+	// Get currently active project
+	const activeProject: string | null = await pathUtils.getCurrentProject(context);
+	if (activeProject == null) { return; }
+
+	// Get  quartus install bin path
+	const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+	if (quartusPath == null) { return; }
+
+	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
+	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
+	quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+
+	const quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
+	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
+	quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 }
 
 export function deactivate() {
