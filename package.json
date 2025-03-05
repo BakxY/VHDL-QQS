@@ -36,7 +36,7 @@
                 {
                     "id": "quartusProjectExplorer",
                     "title": "Quartus Project Explorer",
-                    "icon": "res/package-explorer.svg"
+                    "icon": "$(folder)"
                 }
             ]
         },
