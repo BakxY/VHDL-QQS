@@ -26,8 +26,7 @@
         "testbench-generation"
     ],
     "activationEvents": [
-        "workspaceContains:**/*.qsf",
-        "onStartupFinished"
+        "*"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -90,8 +89,10 @@
         }
     },
     "files": [
-        "out/",
-        "res/",
+        "out/**",
+        "res/**",
+        "package.json",
+        "README.md",
         "LICENSE"
     ],
     "scripts": {
