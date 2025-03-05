@@ -26,7 +26,8 @@
         "testbench-generation"
     ],
     "activationEvents": [
-        "*",
+        "workspaceContains:**/*.qsf",
+        "onStartupFinished",
         "vhdl-qqs.manualActivateExtension"
     ],
     "main": "./out/extension.js",
@@ -98,7 +99,8 @@
         "res/**",
         "package.json",
         "README.md",
-        "LICENSE"
+        "LICENSE",
+        "node_modules/**"
     ],
     "scripts": {
         "vscode:prepublish": "npm run compile",
