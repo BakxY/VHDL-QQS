@@ -95,7 +95,6 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Update UI elements and update workspace storage
 		context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
 		currentProjectDisplay.text = 'Project: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
-		fileDecorationProvider.refreshAllDecorations();
 	});
 	context.subscriptions.push(disposable);
 
@@ -263,7 +262,6 @@ export async function activate(context: vscode.ExtensionContext) {
 				break;
 		}
 		vscode.window.showInformationMessage('Added file to active project!');
-		fileDecorationProvider.refreshAllDecorations();
 	});
 	context.subscriptions.push(disposable);
 
@@ -305,7 +303,6 @@ export async function activate(context: vscode.ExtensionContext) {
 				break;
 		}
 		vscode.window.showInformationMessage('Removed file to active project!');
-		fileDecorationProvider.refreshAllDecorations();
 	});
 	context.subscriptions.push(disposable);
 
@@ -318,41 +315,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
-
-	class quartusProjectDecorator implements vscode.FileDecorationProvider {
-		provideFileDecoration(uri: vscode.Uri): vscode.FileDecoration | undefined {
-			const filePath: string = path.normalize(uri.fsPath);
-
-			switch (quartus.checkFileInProject(context, filePath)) {
-				case true:
-					return {
-						badge: 'P',
-						tooltip: 'File is part of current project'
-					};
-				case false:
-					return {
-						badge: 'N',
-						tooltip: 'File is part of current project'
-					};
-				default:
-					return;
-			}
-		}
-
-		private _onDidChangeFileDecorations = new vscode.EventEmitter<vscode.Uri | undefined>(); // Correct declaration
-		onDidChangeFileDecorations: vscode.Event<vscode.Uri | undefined> = this._onDidChangeFileDecorations.event;
-
-		public refreshAllDecorations() {
-			// Important: Use a timeout to avoid potential issues if VS Code is still processing other events.
-			setTimeout(() => {
-				this._onDidChangeFileDecorations.fire(undefined); // Trigger refresh for ALL files
-			}, 0); // A timeout of 0 is usually sufficient
-
-		}
-	}
-
-	const fileDecorationProvider = new quartusProjectDecorator();
-	vscode.window.registerFileDecorationProvider(fileDecorationProvider);
 }
 
 export function deactivate() {
