@@ -26,11 +26,16 @@
         "testbench-generation"
     ],
     "activationEvents": [
-        "*"
+        "*",
+        "vhdl-qqs.manualActivateExtension"
     ],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
+            {
+                "command": "vhdl-qqs.manualActivateExtension",
+                "title": "VHDL-QQS: Manually activate extension"
+            },
             {
                 "command": "vhdl-qqs.generateTestBenchExplorer",
                 "title": "VHDL-QQS: Generate testbench by menu selection"
