@@ -200,7 +200,7 @@ export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, c
  * 
  * @returns A boolean if the file is part of project
  */
-export function checkFileInProject(context: vscode.ExtensionContext,  filePath: string): boolean | null {
+export function checkFileInProject(context: vscode.ExtensionContext, filePath: string): boolean | null {
     // Check if file is a VHDL or Verilog file
     if (!['.vhd', '.v'].includes(path.extname(filePath))) { return null; }
 
@@ -288,4 +288,119 @@ export function removeVhdlFileToProject(context: vscode.ExtensionContext, curren
  */
 export function removeVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
     removeProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE', toRemoveFile);
+}
+
+/**
+ * @brief TODO
+ * 
+ * @param dataToConvert TODO
+ * 
+ * @returns TODO
+ */
+export function convertToQuartusSourceFileType(dataToConvert: string[]): quartusSourceFile[] {
+    let convertedData: quartusSourceFile[] = [];
+
+    for (let fileIndex = 0; fileIndex < dataToConvert.length; fileIndex++) {
+        convertedData.push({ path: dataToConvert[fileIndex] });
+    }
+
+    return convertedData;
+}
+
+/**
+ * @brief TODO
+ * 
+ * @param dataToConvert TODO
+ * 
+ * @returns TODO
+ */
+export function readProjectProperty(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, property: string, readableFormat: string): quartusProperty {
+    const readValue = getProjectGlobal(context, currentProjectPath, quartusBinPath, property);
+
+    if (readValue.length == 1) {
+        return { name: readableFormat, value: readValue[0] };
+    }
+    else {
+        let properties: quartusProperty = { name: readableFormat, value: '', children: [] }
+
+        for (let propertyIndex = 0; propertyIndex < readValue.length; propertyIndex++) {
+            properties.children?.push({ name: String(propertyIndex + 1), value: readValue[propertyIndex] })
+        }
+
+        return properties;
+    }
+
+}
+
+export interface quartusSourceFile {
+    path: string;
+    children?: quartusSourceFile[];
+}
+
+export class QuartusProjectFileTreeDataProvider implements vscode.TreeDataProvider<quartusSourceFile> {
+    private data: quartusSourceFile[] = [];
+
+    private _onDidChangeTreeData: vscode.EventEmitter<quartusSourceFile | undefined | null> = new vscode.EventEmitter<quartusSourceFile | undefined | null>();
+    readonly onDidChangeTreeData: vscode.Event<quartusSourceFile | undefined | null> = this._onDidChangeTreeData.event;
+
+    getTreeItem(element: quartusSourceFile): vscode.TreeItem {
+        const treeItem = new vscode.TreeItem(element.path, element.children ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+        treeItem.tooltip = element.path;
+        return treeItem;
+    }
+
+    getChildren(element?: quartusSourceFile): Thenable<quartusSourceFile[]> {
+        if (element) {
+            return Promise.resolve(element.children || []);
+        } else {
+            return Promise.resolve(this.data);
+        }
+    }
+
+    updateData(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
+        let allFiles: string[] = [];
+
+        allFiles = allFiles.concat(getProjectVhdlSourceFiles(context, currentProjectPath, quartusBinPath));
+        allFiles = allFiles.concat(getProjectVerilogSourceFiles(context, currentProjectPath, quartusBinPath));
+
+        this.data = convertToQuartusSourceFileType(allFiles);
+        this._onDidChangeTreeData.fire(null);
+    }
+}
+
+export interface quartusProperty {
+    name: string;
+    value: string;
+    children?: quartusProperty[];
+}
+
+export class QuartusProjectPropertiesTreeDataProvider implements vscode.TreeDataProvider<quartusProperty> {
+    private data: quartusProperty[] = [];
+
+    private _onDidChangeTreeData: vscode.EventEmitter<quartusProperty | undefined | null> = new vscode.EventEmitter<quartusProperty | undefined | null>();
+    readonly onDidChangeTreeData: vscode.Event<quartusProperty | undefined | null> = this._onDidChangeTreeData.event;
+
+    getTreeItem(element: quartusProperty): vscode.TreeItem {
+        const treeItem = new vscode.TreeItem(element.name + ': ' + element.value, element.children ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+        return treeItem;
+    }
+
+    getChildren(element?: quartusProperty): Thenable<quartusProperty[]> {
+        if (element) {
+            return Promise.resolve(element.children || []);
+        } else {
+            return Promise.resolve(this.data);
+        }
+    }
+
+    updateData(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
+        let allProperties: quartusProperty[] = [];
+
+        allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'FAMILY', 'Family'));
+        allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'DEVICE', 'Device'));
+        allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'VHDL_INPUT_VERSION', 'VHDL Version'));
+
+        this.data = allProperties;
+        this._onDidChangeTreeData.fire(null);
+    }
 }

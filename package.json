@@ -31,6 +31,27 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "quartusProjectExplorer",
+                    "title": "Quartus Project Explorer",
+                    "icon": "res/package-explorer.svg"
+                }
+            ]
+        },
+        "views": {
+            "quartusProjectExplorer": [
+                {
+                    "id": "projectSourceFiles",
+                    "name": "Project Source Files"
+                },
+                {
+                    "id": "projectProperties",
+                    "name": "Project Properties"
+                }
+            ]
+        },
         "commands": [
             {
                 "command": "vhdl-qqs.generateTestBenchExplorer",

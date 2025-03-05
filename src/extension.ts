@@ -95,6 +95,17 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Update UI elements and update workspace storage
 		context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
 		currentProjectDisplay.text = 'Project: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
+
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject == null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath == null) { return; }
+
+		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+		quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 	});
 	context.subscriptions.push(disposable);
 
@@ -261,6 +272,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				quartus.addVerilogFileToProject(context, activeProject, quartusPath, relativePath);
 				break;
 		}
+		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 		vscode.window.showInformationMessage('Added file to active project!');
 	});
 	context.subscriptions.push(disposable);
@@ -302,6 +314,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				quartus.removeVerilogFileToProject(context, activeProject, quartusPath, relativePath);
 				break;
 		}
+		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 		vscode.window.showInformationMessage('Removed file to active project!');
 	});
 	context.subscriptions.push(disposable);
@@ -315,6 +328,22 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
+
+	// Get currently active project
+	const activeProject: string | null = await pathUtils.getCurrentProject(context);
+	if (activeProject == null) { return; }
+
+	// Get  quartus install bin path
+	const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+	if (quartusPath == null) { return; }
+
+	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
+	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
+	quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+
+	const quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
+	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
+	quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 }
 
 export function deactivate() {
