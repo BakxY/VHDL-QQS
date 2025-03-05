@@ -27,6 +27,17 @@ export type qsfContent = {
     instances: instanceAssignment[];
 }
 
+export interface quartusSourceFile {
+    path: string;
+    children?: quartusSourceFile[];
+}
+
+export interface quartusProperty {
+    name: string;
+    value: string;
+    children?: quartusProperty[];
+}
+
 /**
  * @brief Gets all quartus project files (file extension .qpf) in the current workspace
  * 
@@ -245,13 +256,13 @@ export function addVerilogFileToProject(context: vscode.ExtensionContext, curren
 }
 
 /**
- * @brief TODO
+ * @brief Removed a global assignment entry from the project file
  * 
- * @param context TODO
- * @param currentProjectPath TODO
- * @param quartusBinPath TODO
- * @param name TODO
- * @param value TODO
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param name The name of the assignment to remove
+ * @param value The value of the assignment to remove, needed for identification
  */
 export function removeProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string, value: string) {
     const totalProjectPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, currentProjectPath);
@@ -267,35 +278,35 @@ export function removeProjectGlobal(context: vscode.ExtensionContext, currentPro
 }
 
 /**
- * @brief TODO
+ * @brief Remove a VHDL source file from project
  * 
- * @param context TODO
- * @param currentProjectPath TODO
- * @param quartusBinPath TODO
- * @param newTopLevel TODO
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param toRemoveFile The path to the file to remove
  */
 export function removeVhdlFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
     removeProjectGlobal(context, currentProjectPath, quartusBinPath, 'VHDL_FILE', toRemoveFile);
 }
 
 /**
- * @brief TODO
+ * @brief Remove a Verilog source file from project
  * 
- * @param context TODO
- * @param currentProjectPath TODO
- * @param quartusBinPath TODO
- * @param newTopLevel TODO
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param toRemoveFile The path to the file to remove
  */
 export function removeVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
     removeProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE', toRemoveFile);
 }
 
 /**
- * @brief TODO
+ * @brief Convert a string array to the data type used by tree view
  * 
- * @param dataToConvert TODO
+ * @param dataToConvert The string array to convert
  * 
- * @returns TODO
+ * @returns The converted data in custom data type format
  */
 export function convertToQuartusSourceFileType(dataToConvert: string[]): quartusSourceFile[] {
     let convertedData: quartusSourceFile[] = [];
@@ -308,11 +319,15 @@ export function convertToQuartusSourceFileType(dataToConvert: string[]): quartus
 }
 
 /**
- * @brief TODO
+ * @brief Reads one project property from the project file
  * 
- * @param dataToConvert TODO
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * @param property The property identifier to read from
+ * @param readableFormat A human readable format of the property to read, used for displaying
  * 
- * @returns TODO
+ * @returns Custom view data type populated with property data
  */
 export function readProjectProperty(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, property: string, readableFormat: string): quartusProperty {
     const readValue = getProjectGlobal(context, currentProjectPath, quartusBinPath, property);
@@ -332,12 +347,11 @@ export function readProjectProperty(context: vscode.ExtensionContext, currentPro
 
 }
 
-export interface quartusSourceFile {
-    path: string;
-    children?: quartusSourceFile[];
-}
-
+/**
+ * @brief Custom class implementation for quartus project files display
+ */
 export class QuartusProjectFileTreeDataProvider implements vscode.TreeDataProvider<quartusSourceFile> {
+    // Internal data storage
     private data: quartusSourceFile[] = [];
 
     private _onDidChangeTreeData: vscode.EventEmitter<quartusSourceFile | undefined | null> = new vscode.EventEmitter<quartusSourceFile | undefined | null>();
@@ -368,13 +382,11 @@ export class QuartusProjectFileTreeDataProvider implements vscode.TreeDataProvid
     }
 }
 
-export interface quartusProperty {
-    name: string;
-    value: string;
-    children?: quartusProperty[];
-}
-
+/**
+ * @brief Custom class implementation for quartus project property display
+ */
 export class QuartusProjectPropertiesTreeDataProvider implements vscode.TreeDataProvider<quartusProperty> {
+    // Internal data storage
     private data: quartusProperty[] = [];
 
     private _onDidChangeTreeData: vscode.EventEmitter<quartusProperty | undefined | null> = new vscode.EventEmitter<quartusProperty | undefined | null>();
