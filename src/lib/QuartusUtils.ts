@@ -138,7 +138,7 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
 
     // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
-    cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
+    cp.execSync(scriptCmd, { encoding: 'utf8' });
 }
 
 /**
@@ -253,17 +253,17 @@ export function addVerilogFileToProject(context: vscode.ExtensionContext, curren
  * @param name TODO
  * @param value TODO
  */
-export function removeAllGlobals(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string) {
+export function removeProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string, value: string) {
     const totalProjectPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, currentProjectPath);
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
-    const totalScriptPath = path.join(context.extensionPath, 'res', 'removeAllGlobal.tcl');
+    const totalScriptPath = path.join(context.extensionPath, 'res', 'removeGlobal.tcl');
 
     // Generate all command argument
-    const scriptCmdArgs = '"' + totalProjectPath + '" ' + name;
+    const scriptCmdArgs = '"' + totalProjectPath + '" ' + name + ' "' + value + '" -remove';
 
     // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
-    cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
+    cp.execSync(scriptCmd, { encoding: 'utf8' });
 }
 
 /**
@@ -275,17 +275,7 @@ export function removeAllGlobals(context: vscode.ExtensionContext, currentProjec
  * @param newTopLevel TODO
  */
 export function removeVhdlFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
-    const allVhdlFile = getProjectVhdlSourceFiles(context, currentProjectPath, quartusBinPath);
-
-    delete allVhdlFile[allVhdlFile.indexOf(toRemoveFile)];
-
-    removeAllGlobals(context, currentProjectPath, quartusBinPath, 'VHDL_FILE');
-
-    for(let fileIndex = 0; fileIndex < allVhdlFile.length; fileIndex++)
-    {
-        if(allVhdlFile[fileIndex] == undefined) { continue; }
-        addVhdlFileToProject(context, currentProjectPath, quartusBinPath, allVhdlFile[fileIndex]);
-    }
+    removeProjectGlobal(context, currentProjectPath, quartusBinPath, 'VHDL_FILE', toRemoveFile);
 }
 
 /**
@@ -297,15 +287,5 @@ export function removeVhdlFileToProject(context: vscode.ExtensionContext, curren
  * @param newTopLevel TODO
  */
 export function removeVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
-    const allVerilogFile = getProjectVhdlSourceFiles(context, currentProjectPath, quartusBinPath);
-
-    delete allVerilogFile[allVerilogFile.indexOf(toRemoveFile)];
-
-    removeAllGlobals(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE');
-
-    for(let fileIndex = 0; fileIndex < allVerilogFile.length; fileIndex++)
-    {
-        if(allVerilogFile[fileIndex] == undefined) { continue; }
-        addVhdlFileToProject(context, currentProjectPath, quartusBinPath, allVerilogFile[fileIndex]);
-    }
+    removeProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE', toRemoveFile);
 }
