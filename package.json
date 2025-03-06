@@ -95,11 +95,31 @@
             },
             {
                 "command": "vhdl-qqs.addFileToProjectContext",
-                "title": "VHDL-QQS: Add File to Project"
+                "title": "VHDL-QQS: Add File to Project",
+                "enablement": "resourceExtname == '.vhd' || resourceExtname == '.v'"
             },
             {
                 "command": "vhdl-qqs.removeFileToProjectContext",
-                "title": "VHDL-QQS: Remove File to Project"
+                "title": "VHDL-QQS: Remove File to Project",
+                "enablement": "resourceExtname == '.vhd' || resourceExtname == '.v'"
+            },
+            {
+                "command": "vhdl-qqs.addFileToProject",
+                "title": "vhdl-qqs.addFileToProject",
+                "icon": "$(add)",
+                "enablement": "view == projectSourceFiles"
+            },
+            {
+                "command": "vhdl-qqs.removeFileToProject",
+                "title": "vhdl-qqs.removeFileToProject",
+                "icon": "$(remove)",
+                "enablement": "view == projectSourceFiles"
+            },
+            {
+                "command": "vhdl-qqs.refreshSourceFiles",
+                "title": "vhdl-qqs.refreshSourceFiles",
+                "icon": "$(refresh)",
+                "enablement": "view == projectSourceFiles"
             }
         ],
         "menus": {
@@ -111,12 +131,29 @@
             ],
             "explorer/context": [
                 {
-                    "command": "vhdl-qqs.addFileToProject",
+                    "command": "vhdl-qqs.addFileToProjectContext",
                     "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
                 },
                 {
-                    "command": "vhdl-qqs.removeFileToProject",
+                    "command": "vhdl-qqs.removeFileToProjectContext",
                     "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "vhdl-qqs.addFileToProject",
+                    "when": "view == projectSourceFiles",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "vhdl-qqs.removeFileToProject",
+                    "when": "view == projectSourceFiles",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "vhdl-qqs.refreshSourceFiles",
+                    "when": "view == projectSourceFiles",
+                    "group": "navigation@3"
                 }
             ]
         },
