@@ -272,7 +272,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief TODO
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.addFileToProject', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.addFileToProjectContext', async (uri: vscode.Uri) => {
 		const filePath: string = path.normalize(uri.fsPath);
 		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
 
@@ -314,7 +314,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief TODO
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileToProject', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileToProjectContext', async (uri: vscode.Uri) => {
 		const filePath: string = path.normalize(uri.fsPath);
 		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
 
@@ -349,6 +349,61 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 		vscode.window.showInformationMessage('Removed file to active project!');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
+	 * @brief TODO
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileToProject', async (uri: vscode.Uri) => {
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject == null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath == null) { return; }
+
+		let allProjectFiles: string[] = [];
+
+		allProjectFiles = allProjectFiles.concat(quartus.getProjectVhdlSourceFiles(context, activeProject, quartusPath));
+		allProjectFiles = allProjectFiles.concat(quartus.getProjectVerilogSourceFiles(context, activeProject, quartusPath));
+
+		// Ask user to pick a entity
+		const fileToRemove: string | undefined = await vscode.window.showQuickPick(allProjectFiles, { title: 'Select a file to remove from project' });
+		if (fileToRemove == undefined) { return; }
+
+		switch (path.extname(fileToRemove)) {
+			case '.vhd':
+				quartus.removeVhdlFileToProject(context, activeProject, quartusPath, fileToRemove);
+				break;
+
+			case '.v':
+				quartus.removeVerilogFileToProject(context, activeProject, quartusPath, fileToRemove);
+				break;
+		}
+
+		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+		vscode.window.showInformationMessage('Removed file to active project!');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
+	 * @brief TODO
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async (uri: vscode.Uri) => {
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject == null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath == null) { return; }
+
+		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+		vscode.window.showInformationMessage('Refreshed source file list!');
 	});
 	context.subscriptions.push(disposable);
 
