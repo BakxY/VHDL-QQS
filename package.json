@@ -46,11 +46,13 @@
             "quartusProjectExplorer": [
                 {
                     "id": "projectSourceFiles",
-                    "name": "Project Source Files"
+                    "name": "Project Source Files",
+                    "icon": "$(files)"
                 },
                 {
                     "id": "projectProperties",
-                    "name": "Project Properties"
+                    "name": "Project Properties",
+                    "icon": "$(settings)"
                 }
             ]
         },
