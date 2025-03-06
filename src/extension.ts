@@ -200,6 +200,39 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	/**
+	 * @brief Command opens the quartus rtl viewer for currently active project
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.openRtlViewerActiveProject', async () => {
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject == null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath == null) { return; }
+
+		// Create full path for programming file
+		const fileToOpen = path.join(pathUtils.getWorkspacePath()!, path.dirname(activeProject), path.basename(activeProject));
+
+		// check if file exists (if project was compiled)
+		if (!fs.existsSync(fileToOpen)) {
+			vscode.window.showErrorMessage('Project file doesn\'t exits! Please open a valid project!');
+			console.error('Project file doesn\'t exits! Please open a valid project!');
+			return;
+		}
+
+		// Create full programmer binary path
+		const rtlViewerFilePath = path.join(path.normalize(quartusPath), 'qnui');
+
+		// Start programmer
+		cp.exec('"' + rtlViewerFilePath + '" "' + fileToOpen + '"');
+
+		vscode.window.showInformationMessage('Opening RTL Viewer for project "' + path.basename(activeProject).replace(path.extname(activeProject), '') + '"');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
 	 * @brief Command changes the current top level entity file of the active project.
 	 * @author BakxY
 	 */
@@ -328,6 +361,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
+	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
 
 	// Get currently active project
 	const activeProject: string | null = await pathUtils.getCurrentProject(context);
