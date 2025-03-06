@@ -85,3 +85,15 @@ export function createOpenProgrammer() {
 
     return openProgrammerButton;
 }
+
+export function createOpenRtlViewer() {
+    let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+
+    openProgrammerButton.command = 'vhdl-qqs.openRtlViewerActiveProject';
+    openProgrammerButton.text = '$(circuit-board)';
+    openProgrammerButton.tooltip = 'Open quartus RTL Viewer on active project';
+
+    openProgrammerButton.show();
+
+    return openProgrammerButton;
+}

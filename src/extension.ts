@@ -361,6 +361,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
+	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
 
 	// Get currently active project
 	const activeProject: string | null = await pathUtils.getCurrentProject(context);
