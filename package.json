@@ -123,8 +123,8 @@
             "properties": {
                 "vhdl-qqs.tomlPath": {
                     "type": "string",
-                    "default": "./vhdl_ls.toml",
-                    "description": "The path to the toml file used for the current project"
+                    "default": "vhdl_ls.toml",
+                    "description": "The name of the toml file"
                 },
                 "vhdl-qqs.quartusBinPath": {
                     "type": "string",
