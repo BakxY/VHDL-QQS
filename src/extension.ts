@@ -274,6 +274,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Update UI elements and update workspace storage
 		quartus.setProjectTopLevel(context, activeProject, quartusPath, newTopLevel);
 		currentTopLevelDisplay.text = 'Top Level: ' + newTopLevel;
+		vscode.commands.executeCommand('vhdl-qqs.cleanCompileFiles');
 	});
 	context.subscriptions.push(disposable);
 
