@@ -84,6 +84,10 @@
                 "title": "VHDL-QQS: Open programmer for active project"
             },
             {
+                "command": "vhdl-qqs.openRtlViewerActiveProject",
+                "title": "VHDL-QQS: Open RTL Viewer for active project"
+            },
+            {
                 "command": "vhdl-qqs.changeTopLevel",
                 "title": "VHDL-QQS: Change top level entity for active project"
             },
