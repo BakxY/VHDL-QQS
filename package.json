@@ -94,11 +94,11 @@
                 "title": "VHDL-QQS: Change top level entity for active project"
             },
             {
-                "command": "vhdl-qqs.addFileToProject",
+                "command": "vhdl-qqs.addFileToProjectContext",
                 "title": "VHDL-QQS: Add File to Project"
             },
             {
-                "command": "vhdl-qqs.removeFileToProject",
+                "command": "vhdl-qqs.removeFileToProjectContext",
                 "title": "VHDL-QQS: Remove File to Project"
             }
         ],

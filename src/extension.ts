@@ -272,7 +272,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief TODO
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.addFileToProject', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.addFileToProjectContext', async (uri: vscode.Uri) => {
 		const filePath: string = path.normalize(uri.fsPath);
 		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
 
@@ -314,7 +314,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief TODO
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileToProject', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileToProjectContext', async (uri: vscode.Uri) => {
 		const filePath: string = path.normalize(uri.fsPath);
 		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
 
