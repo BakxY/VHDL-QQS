@@ -12,6 +12,15 @@ import * as pathUtils from './lib/PathUtils'
 
 export async function activate(context: vscode.ExtensionContext) {
 	/**
+	 * @brief TODO
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.manualActivateExtension', () => {
+		vscode.commands.executeCommand('workbench.action.reloadWindow');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
 	 * @brief Command generates a new testbench for a entity. This commands uses the user selected expression as the entity to generate the testbench for.
 	 * @author BakxY
 	 */
