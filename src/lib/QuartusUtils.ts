@@ -81,6 +81,10 @@ export function checkForQuartusInstallation(pathToQuartus: string) {
         if (!allQuartusFiles.includes('quartus_pgmw.exe')) {
             return false;
         }
+
+        if (!allQuartusFiles.includes('qnui.exe')) {
+            return false;
+        }
     }
     else {
         // Check of required quartus files
@@ -89,6 +93,10 @@ export function checkForQuartusInstallation(pathToQuartus: string) {
         }
 
         if (!allQuartusFiles.includes('quartus_pgmw')) {
+            return false;
+        }
+
+        if (!allQuartusFiles.includes('qnui')) {
             return false;
         }
     }
