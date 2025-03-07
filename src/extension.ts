@@ -12,7 +12,7 @@ import * as pathUtils from './lib/PathUtils'
 
 export async function activate(context: vscode.ExtensionContext) {
 	/**
-	 * @brief TODO
+	 * @brief Command that reloads entire VS Code windows so the extension restarts.
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.manualActivateExtension', () => {
@@ -279,7 +279,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	/**
-	 * @brief TODO
+	 * @brief Command used in context menu to add a file to the current project.
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.addFileToProjectContext', async (uri: vscode.Uri) => {
@@ -321,7 +321,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	/**
-	 * @brief TODO
+	 * @brief Command used in context menu to remove a file from the current project.
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProjectContext', async (uri: vscode.Uri) => {
@@ -363,7 +363,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	/**
-	 * @brief TODO
+	 * @brief Command used to remove a file from the current project by a user menu selection.
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async (uri: vscode.Uri) => {
@@ -400,7 +400,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 
 	/**
-	 * @brief TODO
+	 * @brief Command used to refresh the data displayed in Quartus Source File list.
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async (uri: vscode.Uri) => {
