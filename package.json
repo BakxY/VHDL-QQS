@@ -129,13 +129,13 @@
                     "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
                 },
                 {
-                    "command": "vhdl-qqs.removeFileToProjectContext",
+                    "command": "vhdl-qqs.removeFileFromProjectContext",
                     "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
                 }
             ],
             "view/title": [
                 {
-                    "command": "vhdl-qqs.removeFileToProject",
+                    "command": "vhdl-qqs.removeFileFromProject",
                     "when": "view == projectSourceFiles",
                     "group": "navigation@2"
                 },
