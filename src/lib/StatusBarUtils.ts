@@ -11,6 +11,7 @@ export function createActiveProject(context: vscode.ExtensionContext) {
 
     let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
 
+    // Check if a project is selected in current workspace
     if (activeProjectName == undefined) {
         activeProjectName = 'None'
     }
@@ -41,8 +42,10 @@ export async function createChangeTopLevel(context: vscode.ExtensionContext) {
     const quartusPath: string | null = await pathUtils.getQuartusBinPath();
     if (quartusPath == null) { return currentTopLevelDisplay; }
 
+    // Get the top level file from project file
     const currentTopLevel: string = quartus.getProjectTopLevel(context, activeProject, quartusPath);
 
+    // Check if project top level is defined
     if(currentTopLevel == undefined) { return currentTopLevelDisplay; }
 
     currentTopLevelDisplay.text = 'Top Level: ' + currentTopLevel;
