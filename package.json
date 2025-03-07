@@ -114,6 +114,10 @@
                 "title": "vhdl-qqs.refreshSourceFiles",
                 "icon": "$(refresh)",
                 "enablement": "view == projectSourceFiles"
+            },
+            {
+                "command": "vhdl-qqs.createNewEntity",
+                "title": "VHDL-QQS: Create new entity"
             }
         ],
         "menus": {
