@@ -131,11 +131,16 @@ This section describes the buttons, menus, and views provided by the VHDL-QQS ex
 5. **Open Programmer:** (Flame icon) - Opens the Quartus programmer for the compiled project.
 6. **Open RTL Viewer:** (PCB icon) - Opens the Quartus RTL Viewer for the compiled project.
 
+![Status Bar Button Screenshot](./docs/StatusBarButtons.png)
+
 ### 5.2 Context Menus
 
 1. **Generate Testbench:** Available when right-clicking on an entity name or selected code in a VHDL file. Generates a testbench.
 2. **Add File to Project:** Available when right-clicking on a VHDL or Verilog file in the VS Code explorer. Adds the file to the project.
 3. **Remove File to Project:** Available when right-clicking on a VHDL or Verilog file in the VS Code explorer. Removes the file from the project.
+
+![Entity Context Menu Screenshot](./docs/ContextMenuEntity.png)
+![Entity Context File Screenshot](./docs/ContextMenuFile.png)
 
 ### 5.3 Quartus Project Explorer View
 
@@ -144,6 +149,8 @@ This section describes the buttons, menus, and views provided by the VHDL-QQS ex
 3. **Refresh Files Button:** Refreshes the source file list for current project.
 4. **Project Properties:** Displays properties of the active project.
 
+![Quartus Project Explorer Screenshot](./docs/QuartusProjectExplorer.png)
+
 ### 5.4 Command Palette
 
-All VHDL-QQS commands are accessible through the VS Code command palette (Ctrl+Shift+P or Cmd+Shift+P).  Just type "VHDL
+All VHDL-QQS commands are accessible through the VS Code command palette (Ctrl+Shift+P or Cmd+Shift+P).  Just type "VHDL-QQS" to see all commands.
