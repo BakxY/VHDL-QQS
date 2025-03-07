@@ -324,7 +324,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief TODO
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileToProjectContext', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProjectContext', async (uri: vscode.Uri) => {
 		const filePath: string = path.normalize(uri.fsPath);
 		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
 
@@ -358,7 +358,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				break;
 		}
 		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
-		vscode.window.showInformationMessage('Removed file to active project!');
+		vscode.window.showInformationMessage('Removed file from active project!');
 	});
 	context.subscriptions.push(disposable);
 
@@ -366,7 +366,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief TODO
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileToProject', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async (uri: vscode.Uri) => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
 		if (activeProject == null) { return; }

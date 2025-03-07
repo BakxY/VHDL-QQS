@@ -99,13 +99,13 @@
                 "enablement": "resourceExtname == '.vhd' || resourceExtname == '.v'"
             },
             {
-                "command": "vhdl-qqs.removeFileToProjectContext",
+                "command": "vhdl-qqs.removeFileFromProjectContext",
                 "title": "VHDL-QQS: Remove File to Project",
                 "enablement": "resourceExtname == '.vhd' || resourceExtname == '.v'"
             },
             {
-                "command": "vhdl-qqs.removeFileToProject",
-                "title": "vhdl-qqs.removeFileToProject",
+                "command": "vhdl-qqs.removeFileFromProject",
+                "title": "vhdl-qqs.removeFileFromProject",
                 "icon": "$(remove)",
                 "enablement": "view == projectSourceFiles"
             },
