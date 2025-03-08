@@ -1,8 +1,10 @@
 # VHDL-QQS (VHDL-Quartus Questa Simulate)
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE) [![Visual Studio Marketplace Version](https://img.shields.io/vscode-marketplace/v/BakxY.vhdl-qqs)](https://marketplace.visualstudio.com/items?itemName=BakxY.vhdl-qqs)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE) [![Visual Studio Marketplace Version](https://img.shields.io/vscode-marketplace/v/BakxY.vhdl-qqs)](https://marketplace.visualstudio.com/items?itemName=BakxY.vhdl-qqs) [![GitHub Issues](https://img.shields.io/github/issues/BakxY/VHDL-QQS)](https://img.shields.io/github/issues/BakxY/VHDL-QQS)
 
 This project aims to automate the creation of test benches and support files for FPGA designs created using Quartus from Intel. By integrating a custom extension into VS Code, users can efficiently set up simulation environments with minimal manual effort. 
+
+![Project Banner](./docs/banner.png#center)
 
 ## Table of Contents
 
