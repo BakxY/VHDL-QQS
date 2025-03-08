@@ -4,7 +4,7 @@
     "publisher": "BakxY",
     "description": "VS Code extension to automate the process of generating testbenches for vhdl entities.",
     "repository": "https://github.com/BakxY/VHDL-QQS",
-    "version": "2.4.1",
+    "version": "2.4.2",
     "engines": {
         "vscode": "^1.97.0"
     },
