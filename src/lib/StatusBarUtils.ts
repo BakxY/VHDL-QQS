@@ -3,8 +3,13 @@ import * as vscode from 'vscode'
 import * as pathUtils from './PathUtils'
 import * as quartus from './QuartusUtils'
 
-// TODO: Comment all of this code
-
+/**
+ * @brief Function initializes the status bar item/button for the active project
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns The initialized status bar item
+ */
 export function createActiveProject(context: vscode.ExtensionContext) {
     let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
     currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
@@ -27,6 +32,13 @@ export function createActiveProject(context: vscode.ExtensionContext) {
     return currentProjectDisplay;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for the top level of active project
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns The initialized status bar item
+ */
 export async function createChangeTopLevel(context: vscode.ExtensionContext) {
     let currentTopLevelDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
@@ -53,6 +65,11 @@ export async function createChangeTopLevel(context: vscode.ExtensionContext) {
     return currentTopLevelDisplay;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for compiling active project
+ * 
+ * @returns The initialized status bar item
+ */
 export function createCompileProject() {
     let compileProjectButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
@@ -65,6 +82,11 @@ export function createCompileProject() {
     return compileProjectButton;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for cleaning output files for active project.
+ * 
+ * @returns The initialized status bar item
+ */
 export function createCleanProject() {
     let cleanCompileFilesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
@@ -77,6 +99,11 @@ export function createCleanProject() {
     return cleanCompileFilesButton;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for opening the fpga programmer for active project
+ * 
+ * @returns The initialized status bar item
+ */
 export function createOpenProgrammer() {
     let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
@@ -89,6 +116,11 @@ export function createOpenProgrammer() {
     return openProgrammerButton;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for opening the rtl viewer for active project
+ * 
+ * @returns The initialized status bar item
+ */
 export function createOpenRtlViewer() {
     let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
