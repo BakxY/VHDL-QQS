@@ -8,6 +8,7 @@ import * as tomlUtils from './lib/TomlUtils';
 import * as quartus from './lib/QuartusUtils';
 import * as questa from './lib/QuestaUtils';
 import * as compileCommands from './lib/CompileCommand';
+import * as testCommands from './lib/TestCommands'
 import * as statusBarCreator from './lib/StatusBarUtils';
 import * as pathUtils from './lib/PathUtils';
 
@@ -519,6 +520,23 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Update UI elements and update workspace storage
 		context.workspaceState.update('vhdl-qqs.currentActiveQuestaProject', selectedProject);
 		currentQuestaProjectDisplay.text = 'ModelSim: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
+	 * @brief Command used to run tests for selected questa project
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.runQuestaTest', async () => {
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentQuestaProject(context);
+		if (activeProject === null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuestaBinPath();
+		if (quartusPath === null) { return; }
+
+		testCommands.runQuestaTest(context, activeProject, quartusPath);
 	});
 	context.subscriptions.push(disposable);
 
