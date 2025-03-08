@@ -70,7 +70,7 @@
                 "title": "VHDL-QQS: Generate testbench by expression selection"
             },
             {
-                "command": "vhdl-qqs.selectCurrentProject",
+                "command": "vhdl-qqs.selectQuartusProject",
                 "title": "VHDL-QQS: Select quartus project"
             },
             {

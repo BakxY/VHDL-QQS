@@ -88,7 +88,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief Command sets the currently selected project for the current workspace.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectCurrentProject', async () => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectQuartusProject', async () => {
 		const allProjectFiles: string[] = quartus.getAllProjectFiles();
 
 		// Check if there are any quartus project file are in current workspace

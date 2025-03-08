@@ -12,7 +12,7 @@ import * as quartus from './QuartusUtils';
  */
 export function createActiveQuartusProject(context: vscode.ExtensionContext) {
     let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
-    currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
+    currentProjectDisplay.command = 'vhdl-qqs.selectQuartusProject';
 
     let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveQuartusProject', undefined);
 
