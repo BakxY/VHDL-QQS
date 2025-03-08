@@ -1,18 +1,24 @@
 import * as path from 'path';
-import * as vscode from 'vscode'
-import * as pathUtils from './PathUtils'
-import * as quartus from './QuartusUtils'
+import * as vscode from 'vscode';
+import * as pathUtils from './PathUtils';
+import * as quartus from './QuartusUtils';
 
-// TODO: Comment all of this code
-
+/**
+ * @brief Function initializes the status bar item/button for the active project
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns The initialized status bar item
+ */
 export function createActiveProject(context: vscode.ExtensionContext) {
     let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
     currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
 
     let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
 
-    if (activeProjectName == undefined) {
-        activeProjectName = 'None'
+    // Check if a project is selected in current workspace
+    if (activeProjectName === undefined) {
+        activeProjectName = 'None';
     }
     else {
         activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
@@ -26,6 +32,13 @@ export function createActiveProject(context: vscode.ExtensionContext) {
     return currentProjectDisplay;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for the top level of active project
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns The initialized status bar item
+ */
 export async function createChangeTopLevel(context: vscode.ExtensionContext) {
     let currentTopLevelDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
@@ -36,20 +49,27 @@ export async function createChangeTopLevel(context: vscode.ExtensionContext) {
     currentTopLevelDisplay.show();
 
     const activeProject: string | null = await pathUtils.getCurrentProject(context);
-    if (activeProject == null) { return currentTopLevelDisplay; }
+    if (activeProject === null) { return currentTopLevelDisplay; }
 
     const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-    if (quartusPath == null) { return currentTopLevelDisplay; }
+    if (quartusPath === null) { return currentTopLevelDisplay; }
 
+    // Get the top level file from project file
     const currentTopLevel: string = quartus.getProjectTopLevel(context, activeProject, quartusPath);
 
-    if(currentTopLevel == undefined) { return currentTopLevelDisplay; }
+    // Check if project top level is defined
+    if(currentTopLevel === undefined) { return currentTopLevelDisplay; }
 
     currentTopLevelDisplay.text = 'Top Level: ' + currentTopLevel;
 
     return currentTopLevelDisplay;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for compiling active project
+ * 
+ * @returns The initialized status bar item
+ */
 export function createCompileProject() {
     let compileProjectButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
@@ -62,6 +82,11 @@ export function createCompileProject() {
     return compileProjectButton;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for cleaning output files for active project.
+ * 
+ * @returns The initialized status bar item
+ */
 export function createCleanProject() {
     let cleanCompileFilesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
@@ -74,6 +99,11 @@ export function createCleanProject() {
     return cleanCompileFilesButton;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for opening the fpga programmer for active project
+ * 
+ * @returns The initialized status bar item
+ */
 export function createOpenProgrammer() {
     let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
@@ -86,6 +116,11 @@ export function createOpenProgrammer() {
     return openProgrammerButton;
 }
 
+/**
+ * @brief Function initializes the status bar item/button for opening the rtl viewer for active project
+ * 
+ * @returns The initialized status bar item
+ */
 export function createOpenRtlViewer() {
     let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 

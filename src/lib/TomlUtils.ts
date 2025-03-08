@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path'
+import * as path from 'path';
 import * as toml from '@iarna/toml';
 import * as pathUtils from './PathUtils';
 
@@ -27,7 +27,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
     if(!fs.existsSync(pathToToml))
     {
         vscode.window.showErrorMessage('No file at "' + pathToToml + '"!');
-        console.error('No file at "' + pathToToml + '"!')
+        console.error('No file at "' + pathToToml + '"!');
         return null;
     }
 
@@ -35,7 +35,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
 
     if (!tomlString) {
         vscode.window.showErrorMessage('Unable to read toml file at "' + pathToToml + '"!');
-        console.error('Unable to read toml file at "' + pathToToml + '"!')
+        console.error('Unable to read toml file at "' + pathToToml + '"!');
         return null;
     }
 

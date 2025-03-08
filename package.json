@@ -4,7 +4,7 @@
     "publisher": "BakxY",
     "description": "VS Code extension to automate the process of generating testbenches for vhdl entities.",
     "repository": "https://github.com/BakxY/VHDL-QQS",
-    "version": "2.3.3",
+    "version": "2.3.5",
     "engines": {
         "vscode": "^1.97.0"
     },
@@ -99,13 +99,13 @@
                 "enablement": "resourceExtname == '.vhd' || resourceExtname == '.v'"
             },
             {
-                "command": "vhdl-qqs.removeFileToProjectContext",
+                "command": "vhdl-qqs.removeFileFromProjectContext",
                 "title": "VHDL-QQS: Remove File to Project",
                 "enablement": "resourceExtname == '.vhd' || resourceExtname == '.v'"
             },
             {
-                "command": "vhdl-qqs.removeFileToProject",
-                "title": "vhdl-qqs.removeFileToProject",
+                "command": "vhdl-qqs.removeFileFromProject",
+                "title": "vhdl-qqs.removeFileFromProject",
                 "icon": "$(remove)",
                 "enablement": "view == projectSourceFiles"
             },
@@ -133,13 +133,13 @@
                     "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
                 },
                 {
-                    "command": "vhdl-qqs.removeFileToProjectContext",
+                    "command": "vhdl-qqs.removeFileFromProjectContext",
                     "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
                 }
             ],
             "view/title": [
                 {
-                    "command": "vhdl-qqs.removeFileToProject",
+                    "command": "vhdl-qqs.removeFileFromProject",
                     "when": "view == projectSourceFiles",
                     "group": "navigation@2"
                 },
