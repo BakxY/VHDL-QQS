@@ -536,6 +536,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
 	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
 
+	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
+	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
+
+	const quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
+	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
+
 	// Get currently active project
 	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 	if (activeProject === null) { return; }
@@ -544,12 +550,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 	if (quartusPath === null) { return; }
 
-	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
-	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
 	quartusProjectFilesView.updateData(context, activeProject, quartusPath);
-
-	const quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
-	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
 	quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 }
 
