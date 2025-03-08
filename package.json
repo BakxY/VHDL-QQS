@@ -171,6 +171,11 @@
                     "default": "C:\\Program Files\\intelFPGA_lite\\23.1std\\quartus\\bin64",
                     "description": "The path to your quartus installations bin folder"
                 },
+                "vhdl-qqs.questaFeatureFlag": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable/Disable Questa features of the extension"
+                },
                 "vhdl-qqs.questaBinPath": {
                     "type": "string",
                     "default": "C:\\Program Files\\intelFPGA_pro\\24.2\\questa_fse\\win64",
