@@ -86,15 +86,15 @@ export function getGenericContent(entityContent: string) {
 
     // Separate generic part of entity definition from definition
     for (let index = entityContent.indexOf('generic'); index < entityContent.length; index++) {
-        if (entityContent[index] == '(') {
+        if (entityContent[index] === '(') {
             parenthesesCount++;
         }
 
-        if (entityContent[index] == ')') {
+        if (entityContent[index] === ')') {
             parenthesesCount--;
         }
 
-        if (entityContent[index] == ';' && parenthesesCount == 0) {
+        if (entityContent[index] === ';' && parenthesesCount === 0) {
             break;
         }
 
@@ -107,7 +107,7 @@ export function getGenericContent(entityContent: string) {
     genericContent = genericContent.replace('(', '').trim();
 
     // Check if any parenthesis blocks were matched
-    if (parenthesesCount != 0) {
+    if (parenthesesCount !== 0) {
         vscode.window.showErrorMessage('Entity generic definition didn\'t match expected format!');
         return null;
     }
@@ -131,15 +131,15 @@ export function getPortContent(entityContent: string) {
 
     // Separate port part of entity definition from definition
     for (let index = entityContent.indexOf('port'); index < entityContent.length; index++) {
-        if (entityContent[index] == '(') {
+        if (entityContent[index] === '(') {
             parenthesesCount++;
         }
 
-        if (entityContent[index] == ')') {
+        if (entityContent[index] === ')') {
             parenthesesCount--;
         }
 
-        if (entityContent[index] == ';' && parenthesesCount == 0) {
+        if (entityContent[index] === ';' && parenthesesCount === 0) {
             break;
         }
 
@@ -152,7 +152,7 @@ export function getPortContent(entityContent: string) {
     portContent = portContent.replace('(', '').trim();
 
     // Check if any parenthesis blocks were matched
-    if (parenthesesCount != 0) {
+    if (parenthesesCount !== 0) {
         vscode.window.showErrorMessage('Entity port definition didn\'t match expected format!');
         return null;
     }
@@ -181,10 +181,10 @@ export function getPortPropertiesFromContent(entityContent: string | null) {
         const currentPropertyNamesSplit: string[] = currentPropertySplit[0].split(',');
 
         // Match part of property for port direction
-        const currentPropertyDir = currentPropertySplit[1].match(MATCH_PROPERTY_DIR);
+        const currentPropertyDir: RegExpMatchArray | null = currentPropertySplit[1].match(MATCH_PROPERTY_DIR);
 
         // Check if regex succeeded
-        if (!currentPropertyDir) {
+        if (currentPropertyDir === null) {
             vscode.window.showErrorMessage('Entity port definition didn\'t match expected format!');
             console.error('Entity port definition didn\'t match expected format!');
             return null;
@@ -199,7 +199,7 @@ export function getPortPropertiesFromContent(entityContent: string | null) {
                 propertyName: currentPropertyNamesSplit[nameIndex].trim(),
                 propertySignalDir: currentPropertyDir[0].trim(),
                 propertyType: currentPropertyType.trim()
-            })
+            });
         }
     }
 
@@ -215,7 +215,7 @@ export function getPortPropertiesFromContent(entityContent: string | null) {
  */
 export function getGenericPropertiesFromContent(entityContent: string | null) {
     // Check if there is no generic content
-    if(!entityContent) { return null; }
+    if(entityContent === null) { return null; }
     
     let entityProperties: entityProperty[] = [];
 
@@ -230,7 +230,7 @@ export function getGenericPropertiesFromContent(entityContent: string | null) {
             propertyName: currentPropertySplit[0].trim(),
             propertySignalDir: undefined,
             propertyType: currentPropertySplit[1].trim()
-        })
+        });
     }
 
     return entityProperties;
