@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as pathUtils from './PathUtils'
+import * as pathUtils from './PathUtils';
 
 /**
  * @brief Runs all support function to compile a quartus project and start a terminal with running compilation
@@ -14,9 +14,9 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
     const totalScriptPath = path.join(context.extensionPath, 'res', 'compile.tcl');
 
-    const scriptCmdArgs = '"' + totalProjectPath + '"'
+    const scriptCmdArgs = '"' + totalProjectPath + '"';
 
-    const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;;
+    const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
 
     // Get all active terminals opened in editor
     let openTerminals = vscode.window.terminals;
@@ -24,7 +24,7 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
 
     // Filter for quartus terminal
     for (let index = 0; index < openTerminals.length; index++) {
-        if (openTerminals[index].name == 'Quartus Compilation') {
+        if (openTerminals[index].name === 'Quartus Compilation') {
             quartusCompileShell = openTerminals[index];
         }
     }
