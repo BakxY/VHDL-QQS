@@ -4,11 +4,11 @@ import * as fs from 'fs';
 import * as cp from 'child_process';
 import * as entityUtils from './lib/EntityUtils';
 import * as testbenchCommands from './lib/TestbenchCommand';
-import * as tomlUtils from './lib/TomlUtils'
-import * as quartus from './lib/QuartusUtils'
+import * as tomlUtils from './lib/TomlUtils';
+import * as quartus from './lib/QuartusUtils';
 import * as compileCommands from './lib/CompileCommand';
 import * as statusBarCreator from './lib/StatusBarUtils';
-import * as pathUtils from './lib/PathUtils'
+import * as pathUtils from './lib/PathUtils';
 
 export async function activate(context: vscode.ExtensionContext) {
 	/**
@@ -28,7 +28,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 
 		// Check if editor is opened
-		if (editor == undefined) {
+		if (editor === undefined) {
 			vscode.window.showErrorMessage('No editor opened!');
 			console.error('No editor opened!');
 			return;
@@ -37,7 +37,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		console.log('Found current open file "' + editor.document.fileName + '"');
 
 		const selectedExpression: string | null = entityUtils.getSelectedExpression(editor);
-		if (selectedExpression == null) { return; }
+		if (selectedExpression === null) { return; }
 
 		testbenchCommands.createNewTestbench(context, selectedExpression);
 	});
@@ -49,12 +49,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.generateTestBenchExplorer', async () => {
 		// Get toml file path set in vs code setting
-		const pathToToml = pathUtils.getTomlLocalPath()
-		if (pathToToml == null) { return; }
+		const pathToToml = pathUtils.getTomlLocalPath();
+		if (pathToToml === null) { return; }
 
 		// Get all entities listed in toml file
 		const allEntities = tomlUtils.getAllEntities(pathUtils.getWorkspacePath()!, pathToToml);
-		if (allEntities == null) { return; }
+		if (allEntities === null) { return; }
 
 		// Remove file extensions
 		for (let entity = 0; entity < allEntities.length; entity++) {
@@ -63,7 +63,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Ask user to pick a entity
 		const selectedEntity: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select a entity to create a testbench' });
-		if (selectedEntity == undefined) { return; }
+		if (selectedEntity === undefined) { return; }
 
 		// Check if a testbench was selected to create a testbench
 		if (selectedEntity.endsWith('_tb')) {
@@ -91,7 +91,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const allProjectFiles: string[] = quartus.getAllProjectFiles();
 
 		// Check if there are any quartus project file are in current workspace
-		if (allProjectFiles.length == 0) {
+		if (allProjectFiles.length === 0) {
 			vscode.window.showErrorMessage('There are no project in your workfolder!');
 			console.error('There are no project in your workfolder!');
 			return;
@@ -99,7 +99,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Ask user to select a project
 		const selectedProject: string | undefined = await vscode.window.showQuickPick(allProjectFiles, { title: 'Select a project' });
-		if (selectedProject == undefined) { return; }
+		if (selectedProject === undefined) { return; }
 
 		// Update UI elements and update workspace storage
 		context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
@@ -107,11 +107,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 		quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
@@ -125,11 +125,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.compileCurrentProject', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		// Run compile command
 		compileCommands.compileQuartusProject(context, activeProject, path.normalize(quartusPath));
@@ -143,31 +143,31 @@ export async function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.cleanCompileFiles', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Create full folder path
 		const folderToClean = path.join(pathUtils.getWorkspacePath()!, path.dirname(activeProject));
 
 		// Try to delete folders
 		try {
-			fs.rmSync(path.join(folderToClean, 'output_files'), { recursive: true })
+			fs.rmSync(path.join(folderToClean, 'output_files'), { recursive: true });
 		}
 		catch (err) {
-			console.warn(err)
+			console.warn(err);
 		}
 
 		try {
-			fs.rmSync(path.join(folderToClean, 'db'), { recursive: true })
+			fs.rmSync(path.join(folderToClean, 'db'), { recursive: true });
 		}
 		catch (err) {
-			console.warn(err)
+			console.warn(err);
 		}
 
 		try {
-			fs.rmSync(path.join(folderToClean, 'incremental_db'), { recursive: true })
+			fs.rmSync(path.join(folderToClean, 'incremental_db'), { recursive: true });
 		}
 		catch (err) {
-			console.warn(err)
+			console.warn(err);
 		}
 
 		vscode.window.showInformationMessage('Finished cleaning project output files!');
@@ -182,11 +182,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.openProgrammerActiveProject', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		// Create full path for programming file
 		const fileToUpload = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, path.dirname(activeProject), 'output_files', path.basename(activeProject).replace(path.extname(activeProject), '') + '.sof');
@@ -215,11 +215,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.openRtlViewerActiveProject', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		// Create full path for programming file
 		const fileToOpen = path.join(pathUtils.getWorkspacePath()!, path.dirname(activeProject), path.basename(activeProject));
@@ -248,19 +248,19 @@ export async function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.changeTopLevel', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		// Get toml file path set in vs code setting
-		const pathToToml = pathUtils.getTomlLocalPath()
-		if (pathToToml == null) { return; }
+		const pathToToml = pathUtils.getTomlLocalPath();
+		if (pathToToml === null) { return; }
 
 		// Get all entities listed in toml file
 		const allEntities = tomlUtils.getAllEntities(pathUtils.getWorkspacePath()!, pathToToml);
-		if (allEntities == null) { return; }
+		if (allEntities === null) { return; }
 
 		// Remove file extensions
 		for (let entity = 0; entity < allEntities.length; entity++) {
@@ -269,7 +269,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Ask user to pick a entity
 		const newTopLevel: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select new top level entity' });
-		if (newTopLevel == undefined) { return; }
+		if (newTopLevel === undefined) { return; }
 
 		// Update UI elements and update workspace storage
 		quartus.setProjectTopLevel(context, activeProject, quartusPath, newTopLevel);
@@ -288,11 +288,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		const relativePath = path.relative(path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject)), filePath).replaceAll('\\', '/');
 
@@ -330,11 +330,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		const relativePath = path.relative(path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject)), filePath).replaceAll('\\', '/');
 
@@ -369,11 +369,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async (uri: vscode.Uri) => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		let allProjectFiles: string[] = [];
 
@@ -382,7 +382,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Ask user to pick a entity
 		const fileToRemove: string | undefined = await vscode.window.showQuickPick(allProjectFiles, { title: 'Select a file to remove from project' });
-		if (fileToRemove == undefined) { return; }
+		if (fileToRemove === undefined) { return; }
 
 		switch (path.extname(fileToRemove)) {
 			case '.vhd':
@@ -406,11 +406,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async (uri: vscode.Uri) => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
-		if (activeProject == null) { return; }
+		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath == null) { return; }
+		if (quartusPath === null) { return; }
 
 		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 		vscode.window.showInformationMessage('Refreshed source file list!');
@@ -430,11 +430,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Get currently active project
 	const activeProject: string | null = await pathUtils.getCurrentProject(context);
-	if (activeProject == null) { return; }
+	if (activeProject === null) { return; }
 
 	// Get  quartus install bin path
 	const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-	if (quartusPath == null) { return; }
+	if (quartusPath === null) { return; }
 
 	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
 	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
