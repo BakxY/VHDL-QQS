@@ -41,7 +41,13 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
 
     const parsedToml: TomlConfig = toml.parse(tomlString) as unknown as TomlConfig;
 
-    const filesFromToml = parsedToml['libraries']['lib']['files'];
+    let filesFromToml: string[] = [];
+
+    for(let lib in parsedToml['libraries'])
+    {
+        filesFromToml = filesFromToml.concat(parsedToml['libraries'][lib]['files']);
+    }
+
     let filteredFiles: string[] = [];
 
     console.log('Found ' + filesFromToml.length + ' number of raw paths');
