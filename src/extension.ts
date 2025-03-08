@@ -366,7 +366,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief Command used to remove a file from the current project by a user menu selection.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
 		if (activeProject === null) { return; }
@@ -403,7 +403,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief Command used to refresh the data displayed in Quartus Source File list.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
 		if (activeProject === null) { return; }
@@ -414,6 +414,86 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 		vscode.window.showInformationMessage('Refreshed source file list!');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
+	 * @brief Command used to create a new entity from a template file
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.createNewEntity', async () => {
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject === null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath === null) { return; }
+
+
+
+		const entityName: string | undefined = await vscode.window.showInputBox({ title: 'Enter the identifier for the new entity' });
+		if (entityName === undefined) { return; }
+
+		if (entityName.endsWith('_tb')) {
+			vscode.window.showErrorMessage('Entity name can\'t end in "_tp"! Suffix "_tp" is reserved for testbenches!');
+			console.error('Entity name can\'t end in "_tp"! Suffix "_tp" is reserved for testbenches!');
+			return;
+		}
+
+		// Get all files included in the current project
+		let allProjectFiles: string[] = [];
+		allProjectFiles = allProjectFiles.concat(quartus.getProjectVhdlSourceFiles(context, activeProject, quartusPath));
+		allProjectFiles = allProjectFiles.concat(quartus.getProjectVerilogSourceFiles(context, activeProject, quartusPath));
+
+		// Check if there already exits a entity with user specified name
+		for (let fileIndex = 0; fileIndex < allProjectFiles.length; fileIndex++) {
+			if (path.basename(allProjectFiles[fileIndex]).replace(path.extname(allProjectFiles[fileIndex]), '') === entityName) {
+				vscode.window.showErrorMessage('There already exists a entity with the name "' + entityName + '" in current project!');
+				console.error('There already exists a entity with the name "' + entityName + '" in current project!');
+				return;
+			}
+		}
+
+		// Ask user where to save the new entity to
+		const targetFolder: vscode.Uri[] | undefined = await vscode.window.showOpenDialog({
+			canSelectFolders: true,
+			canSelectFiles: false,
+			canSelectMany: false,
+			openLabel: 'Select Folder',
+			title: 'Select folder to store the new entity in'
+		});
+		if (targetFolder === undefined) { return; }
+
+		const targetFilePath = path.join(targetFolder[0].fsPath, entityName + '.vhd');
+
+		// Check if file already exists
+		if (fs.existsSync(targetFilePath)) {
+			vscode.window.showErrorMessage('Target file already exists at "' + targetFilePath + '"');
+			console.error('Target file already exists at "' + targetFilePath + '"');
+			return;
+		}
+
+		// Generate entire path for template file
+		const PATH_TO_ENTITY_TEMPLATE: string = path.join(context.extensionPath, 'res', 'entity_template.vhd');
+		console.log('Loading template file from "' + PATH_TO_ENTITY_TEMPLATE + '"');
+
+		let generatedEntity: string = fs.readFileSync(PATH_TO_ENTITY_TEMPLATE, 'utf-8');
+
+		// Populate template
+		generatedEntity = generatedEntity.replaceAll('ENTITY_NAME', entityName);
+		generatedEntity = generatedEntity.replaceAll('DATE_CREATED', new Date().toLocaleDateString('de-CH'));
+
+		// Write template to fs
+		console.log('Writing template to "' + generatedEntity + '"');
+		fs.writeFileSync(targetFilePath, generatedEntity);
+
+		// Add file to project as source file
+		const relativePath = path.relative(path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject)), targetFilePath).replaceAll('\\', '/');
+		quartus.addVhdlFileToProject(context, activeProject, quartusPath, relativePath)
+
+		console.log('Finished creation of entity and added to active project as source file!');
+		vscode.window.showInformationMessage('Finished creation of entity and added to active project as source file!');
 	});
 	context.subscriptions.push(disposable);
 
