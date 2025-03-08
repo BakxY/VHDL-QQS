@@ -21,11 +21,10 @@ interface TomlConfig {
  */
 export function getAllEntities(workspacePath: string, pathToToml: string) {
     pathToToml = path.join(workspacePath, pathToToml);
-    
+
     console.log('Using toml file at "' + pathToToml + '"');
 
-    if(!fs.existsSync(pathToToml))
-    {
+    if (!fs.existsSync(pathToToml)) {
         vscode.window.showErrorMessage('No file at "' + pathToToml + '"!');
         console.error('No file at "' + pathToToml + '"!');
         return null;
@@ -43,8 +42,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
 
     let filesFromToml: string[] = [];
 
-    for(let lib in parsedToml['libraries'])
-    {
+    for (let lib in parsedToml['libraries']) {
         filesFromToml = filesFromToml.concat(parsedToml['libraries'][lib]['files']);
     }
 
