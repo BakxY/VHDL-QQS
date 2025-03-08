@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path'
-import * as quartus from './QuartusUtils'
+import * as path from 'path';
+import * as quartus from './QuartusUtils';
 
 /**
  * @brief Resolves a path with wildcard syntax to an array of all possible paths
@@ -75,7 +75,7 @@ export function getCurrentProject(context: vscode.ExtensionContext): string | nu
     const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
 
     // Check if no project is set in current worksapce
-    if (activeProject == undefined) {
+    if (activeProject === undefined) {
         vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
         console.error('No project selected! Select a project before compiling!');
         return null;
@@ -102,7 +102,7 @@ export function getQuartusBinPath(): string | null {
     const quartusPath = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('quartusBinPath');
 
     // Check if no quartus path has been set
-    if (quartusPath == undefined) {
+    if (quartusPath === undefined) {
         vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
         console.error('No quartus installation folder defined in settings!');
         return null;
@@ -127,7 +127,7 @@ export function getTomlLocalPath(): string | null {
     const pathToToml = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('tomlPath');
 
     // Check if no toml path has been set
-    if (pathToToml == undefined) {
+    if (pathToToml === undefined) {
         vscode.window.showErrorMessage('No path for toml file set! Please change in settings!');
         console.error('No path for toml file set! Please change in settings!');
         return null;

@@ -26,7 +26,7 @@ export function generateTestbenchComponent(genericProperties: entityUtils.entity
         }
 
         // End generic part
-        componentContent += '\n);\n'
+        componentContent += '\n);\n';
     }
 
     // Add port header
@@ -42,7 +42,7 @@ export function generateTestbenchComponent(genericProperties: entityUtils.entity
     }
 
     // End port part
-    componentContent += '\n);'
+    componentContent += '\n);';
 
     return componentContent;
 }
@@ -82,7 +82,7 @@ export function generateSignalMapping(portProperties: entityUtils.entityProperty
             testbenchSignals += ',\n';
         }
 
-        testbenchSignals += portProperties![signalIndex].propertyName + ' => ' + portProperties![signalIndex].propertyName
+        testbenchSignals += portProperties![signalIndex].propertyName + ' => ' + portProperties![signalIndex].propertyName;
     }
 
     return testbenchSignals;

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import * as path from 'path'
+import * as path from 'path';
 import * as fs from 'fs';
 import * as cp from 'child_process';
 import * as pathUtils from './PathUtils';
@@ -49,7 +49,7 @@ export function getAllProjectFiles() {
 
     // Check all files for project file extension
     for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {
-        if (path.extname(allFiles[fileIndex]) == '.qpf') {
+        if (path.extname(allFiles[fileIndex]) === '.qpf') {
             allProjectFiles.push(allFiles[fileIndex].replace(vscode.workspace.workspaceFolders![0].uri.fsPath, '').replaceAll('\\', '/'));
         }
     }
@@ -72,7 +72,7 @@ export function checkForQuartusInstallation(pathToQuartus: string) {
     const allQuartusFiles: string[] = fs.readdirSync(pathToQuartus);
 
     // Check what platform is running
-    if (process.platform == 'win32') {
+    if (process.platform === 'win32') {
         // Check of required quartus files
         if (!allQuartusFiles.includes('quartus_sh.exe')) {
             return false;
@@ -126,12 +126,12 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
     const commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
 
-    let filteredCommandOutput: string[] = []
+    let filteredCommandOutput: string[] = [];
 
     // Filter output to not include info statements
     for (let currentLine = 0; currentLine < commandOutput.length; currentLine++) {
-        if (!commandOutput[currentLine].trim().startsWith('Info') && commandOutput[currentLine].trim() != '') {
-            filteredCommandOutput.push(commandOutput[currentLine].trim())
+        if (!commandOutput[currentLine].trim().startsWith('Info') && commandOutput[currentLine].trim() !== '') {
+            filteredCommandOutput.push(commandOutput[currentLine].trim());
         }
     }
 
@@ -225,11 +225,11 @@ export function checkFileInProject(context: vscode.ExtensionContext, filePath: s
 
     // Get currently active project
     const activeProject: string | null = pathUtils.getCurrentProject(context);
-    if (activeProject == null) { return false; }
+    if (activeProject === null) { return false; }
 
     // Get  quartus install bin path
     const quartusPath: string | null = pathUtils.getQuartusBinPath();
-    if (quartusPath == null) { return false; }
+    if (quartusPath === null) { return false; }
 
     // Resolve the path of source file
     const projectFilePath = path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject));
@@ -340,14 +340,14 @@ export function convertToQuartusSourceFileType(dataToConvert: string[]): quartus
 export function readProjectProperty(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, property: string, readableFormat: string): quartusProperty {
     const readValue = getProjectGlobal(context, currentProjectPath, quartusBinPath, property);
 
-    if (readValue.length == 1) {
+    if (readValue.length === 1) {
         return { name: readableFormat, value: readValue[0] };
     }
     else {
-        let properties: quartusProperty = { name: readableFormat, value: '', children: [] }
+        let properties: quartusProperty = { name: readableFormat, value: '', children: [] };
 
         for (let propertyIndex = 0; propertyIndex < readValue.length; propertyIndex++) {
-            properties.children?.push({ name: String(propertyIndex + 1), value: readValue[propertyIndex] })
+            properties.children?.push({ name: String(propertyIndex + 1), value: readValue[propertyIndex] });
         }
 
         return properties;
