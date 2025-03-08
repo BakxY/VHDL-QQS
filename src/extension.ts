@@ -366,7 +366,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief Command used to remove a file from the current project by a user menu selection.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
 		if (activeProject === null) { return; }
@@ -403,7 +403,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief Command used to refresh the data displayed in Quartus Source File list.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async (uri: vscode.Uri) => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async () => {
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentProject(context);
 		if (activeProject === null) { return; }
@@ -414,6 +414,35 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 		vscode.window.showInformationMessage('Refreshed source file list!');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
+	 * @brief Command used to create a new entity from a template file
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.createNewEntity', async () => {
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		if (activeProject === null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath === null) { return; }
+
+
+
+		const entityName: string | undefined = await vscode.window.showInputBox({ title: 'Enter the identifier for the new entity' });
+		if (entityName === undefined) { return; }
+
+		const targetFolder = await vscode.window.showOpenDialog({ 
+			canSelectFolders: true, 
+			canSelectFiles: false, 
+			canSelectMany: false, 
+			openLabel: 'Select Folder', 
+			title: 'Select folder to store the new entity to'
+		});
+		if (targetFolder === undefined) { return; }
 	});
 	context.subscriptions.push(disposable);
 
