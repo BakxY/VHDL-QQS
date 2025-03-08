@@ -1,7 +1,7 @@
 import * as path from 'path';
-import * as vscode from 'vscode'
-import * as pathUtils from './PathUtils'
-import * as quartus from './QuartusUtils'
+import * as vscode from 'vscode';
+import * as pathUtils from './PathUtils';
+import * as quartus from './QuartusUtils';
 
 /**
  * @brief Function initializes the status bar item/button for the active project
@@ -17,8 +17,8 @@ export function createActiveProject(context: vscode.ExtensionContext) {
     let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
 
     // Check if a project is selected in current workspace
-    if (activeProjectName == undefined) {
-        activeProjectName = 'None'
+    if (activeProjectName === undefined) {
+        activeProjectName = 'None';
     }
     else {
         activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
@@ -49,16 +49,16 @@ export async function createChangeTopLevel(context: vscode.ExtensionContext) {
     currentTopLevelDisplay.show();
 
     const activeProject: string | null = await pathUtils.getCurrentProject(context);
-    if (activeProject == null) { return currentTopLevelDisplay; }
+    if (activeProject === null) { return currentTopLevelDisplay; }
 
     const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-    if (quartusPath == null) { return currentTopLevelDisplay; }
+    if (quartusPath === null) { return currentTopLevelDisplay; }
 
     // Get the top level file from project file
     const currentTopLevel: string = quartus.getProjectTopLevel(context, activeProject, quartusPath);
 
     // Check if project top level is defined
-    if(currentTopLevel == undefined) { return currentTopLevelDisplay; }
+    if(currentTopLevel === undefined) { return currentTopLevelDisplay; }
 
     currentTopLevelDisplay.text = 'Top Level: ' + currentTopLevel;
 
