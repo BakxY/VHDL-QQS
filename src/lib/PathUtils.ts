@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as quartus from './QuartusUtils';
+import * as questa from './QuestaUtils';
 
 /**
  * @brief Resolves a path with wildcard syntax to an array of all possible paths
@@ -116,6 +117,31 @@ export function getQuartusBinPath(): string | null {
     }
 
     return path.normalize(quartusPath);
+}
+
+/**
+ * @brief Gets the questa binary path from the vs code settings and checks for an installation
+ * 
+ * @returns The path to a valid questa installation
+ */
+export function getQuestaBinPath(): string | null {
+    const questaPath = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('questaBinPath');
+
+    // Check if no questa path has been set
+    if (questaPath === undefined) {
+        vscode.window.showErrorMessage('No questa installation folder defined in settings!');
+        console.error('No questa installation folder defined in settings!');
+        return null;
+    }
+
+    // Check if path is a valid quartus install path
+    if (!questa.checkForQuestaInstallation(path.normalize(questaPath))) {
+        vscode.window.showErrorMessage('No questa installation at provided path! Check your settings!');
+        console.error('No questa installation at provided path! Check your settings!');
+        return null;
+    }
+
+    return path.normalize(questaPath);
 }
 
 /**
