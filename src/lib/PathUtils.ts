@@ -66,19 +66,39 @@ export function resolvePathWithWildcards(wildcardPath: string, baseDir: string =
 }
 
 /**
- * @brief Gets the currently selected project from the workspace storage
+ * @brief Gets the currently selected quartus project from the workspace storage
  * 
  * @param context Context from where the command was ran
  * 
  * @returns The workstation path to the current project
  */
-export function getCurrentProject(context: vscode.ExtensionContext): string | null {
-    const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+export function getCurrentQuartusProject(context: vscode.ExtensionContext): string | null {
+    const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveQuartusProject', undefined);
 
-    // Check if no project is set in current worksapce
+    // Check if no project is set in current workspace
     if (activeProject === undefined) {
-        vscode.window.showErrorMessage('No project selected! Select a project before compiling!');
-        console.error('No project selected! Select a project before compiling!');
+        vscode.window.showErrorMessage('No quartus project selected!');
+        console.error('No quartus project selected!');
+        return null;
+    }
+
+    return activeProject;
+}
+
+/**
+ * @brief Gets the currently selected questa project from the workspace storage
+ * 
+ * @param context Context from where the command was ran
+ * 
+ * @returns The workstation path to the current project
+ */
+export function getCurrentQuestaProject(context: vscode.ExtensionContext): string | null {
+    const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveQuestaProject', undefined);
+
+    // Check if no project is set in current workspace
+    if (activeProject === undefined) {
+        vscode.window.showErrorMessage('No questa project selected!');
+        console.error('No questa project selected!');
         return null;
     }
 

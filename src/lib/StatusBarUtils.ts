@@ -4,17 +4,17 @@ import * as pathUtils from './PathUtils';
 import * as quartus from './QuartusUtils';
 
 /**
- * @brief Function initializes the status bar item/button for the active project
+ * @brief Function initializes the status bar item/button for the active quartus project
  * 
  * @param context The context form where the function was ran
  * 
  * @returns The initialized status bar item
  */
-export function createActiveProject(context: vscode.ExtensionContext) {
+export function createActiveQuartusProject(context: vscode.ExtensionContext) {
     let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
     currentProjectDisplay.command = 'vhdl-qqs.selectCurrentProject';
 
-    let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveProject', undefined);
+    let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveQuartusProject', undefined);
 
     // Check if a project is selected in current workspace
     if (activeProjectName === undefined) {
@@ -26,6 +26,35 @@ export function createActiveProject(context: vscode.ExtensionContext) {
 
     currentProjectDisplay.text = 'Project: ' + activeProjectName;
     currentProjectDisplay.tooltip = 'Change current active quartus project';
+
+    currentProjectDisplay.show();
+
+    return currentProjectDisplay;
+}
+
+/**
+ * @brief Function initializes the status bar item/button for the active questa project
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns The initialized status bar item
+ */
+export function createActiveQuestaProject(context: vscode.ExtensionContext) {
+    let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
+    currentProjectDisplay.command = 'vhdl-qqs.selectQuestaProject';
+
+    let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveQuestaProject', undefined);
+
+    // Check if a project is selected in current workspace
+    if (activeProjectName === undefined) {
+        activeProjectName = 'None';
+    }
+    else {
+        activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
+    }
+
+    currentProjectDisplay.text = 'ModelSim: ' + activeProjectName;
+    currentProjectDisplay.tooltip = 'Change current active questa project';
 
     currentProjectDisplay.show();
 
@@ -48,7 +77,7 @@ export async function createChangeTopLevel(context: vscode.ExtensionContext) {
 
     currentTopLevelDisplay.show();
 
-    const activeProject: string | null = await pathUtils.getCurrentProject(context);
+    const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
     if (activeProject === null) { return currentTopLevelDisplay; }
 
     const quartusPath: string | null = await pathUtils.getQuartusBinPath();
