@@ -118,6 +118,14 @@
             {
                 "command": "vhdl-qqs.createNewEntity",
                 "title": "VHDL-QQS: Create new entity"
+            },
+            {
+                "command": "vhdl-qqs.selectQuestaProject",
+                "title": "VHDL-QQS: Select Questa Project"
+            },
+            {
+                "command": "vhdl-qqs.runQuestaTest",
+                "title": "VHDL-QQS: Run Questa Tests"
             }
         ],
         "menus": {
@@ -161,7 +169,12 @@
                 "vhdl-qqs.quartusBinPath": {
                     "type": "string",
                     "default": "C:\\Program Files\\intelFPGA_lite\\23.1std\\quartus\\bin64",
-                    "description": "The path to your quartus installations bin64 folder"
+                    "description": "The path to your quartus installations bin folder"
+                },
+                "vhdl-qqs.questaBinPath": {
+                    "type": "string",
+                    "default": "C:\\Program Files\\intelFPGA_pro\\24.2\\questa_fse\\win64",
+                    "description": "The path to your questa installations bin folder"
                 }
             }
         }
