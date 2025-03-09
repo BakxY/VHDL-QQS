@@ -52,19 +52,13 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
 
     // Go trough all files in toml file
     for (let fileIndex = 0; fileIndex < filesFromToml.length; fileIndex++) {
-        // Check for none wildcard paths
-        if (!filesFromToml[fileIndex].includes('*')) {
-            filteredFiles.push(path.normalize(filesFromToml[fileIndex]));
-            continue;
-        }
-
         // Resolve wildcard paths
         const resolvedPath = pathUtils.resolvePathWithWildcards(path.normalize(filesFromToml[fileIndex]));
 
         // Add all resolved paths to the file array
         for (let pathIndex = 0; pathIndex < resolvedPath.length; pathIndex++) {
             filteredFiles.push(resolvedPath[pathIndex]);
-            console.log('Expanded wildcard path "' + filesFromToml[fileIndex] + '" to file "' + resolvedPath[pathIndex] + '"');
+            console.log('Expanded path "' + filesFromToml[fileIndex] + '" to file "' + resolvedPath[pathIndex] + '"');
         }
     }
 
