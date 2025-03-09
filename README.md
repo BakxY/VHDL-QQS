@@ -27,8 +27,12 @@ During my studies, I took a course on FPGAs that heavily relied on Intel Quartus
 
 * **Seamless Quartus Project Compilation:** Compile your Quartus projects directly within VS Code, eliminating the need to switch between applications.
 * **Project Configuration within VS Code:** Manage essential project settings, such as top-level entities and include files, directly from VS Code, streamlining the configuration process.
-* **Direct Access to Quartus Programmer and RTL Viewer:** Easily open the Quartus programmer or RTL Viewer for compiled projects directly from VS Code, simplifying the programming and reviewing workflow.
+* **Direct Access to Quartus Programmer:** Easily open the Quartus programmer for compiled projects directly from VS Code, simplifying the programming workflow.
 * **Automated Testbench Generation:** Generate entity testbenches for use with QuestaSim, automating a crucial step in the verification process and saving valuable development time.
+* **QuestaSim Integration (Optional):** Enable QuestaSim features to run simulations directly from VS Code. This includes running your QuestaSim test scripts and viewing the results. *(Requires configuration - see "Initial Setup")*
+* **Direct Access to Quartus RTL Viewer:** Open the RTL Viewer for the active project directly from VS Code to easily view your design's RTL representation.
+* **Manage Project Files:** Add and remove files from your project through VS Code, keeping your project files organized.
+* **Change Top Level Entity:** Easily change the top-level entity for your Quartus project directly from VS Code.
 
 ## Installation
 
