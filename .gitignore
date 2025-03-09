@@ -2,3 +2,5 @@ node_modules/
 out/
 .vscode/extensions.json
 .vscode/settings.json
+res/vhdl_lang
+res/vhdl_lang.exe

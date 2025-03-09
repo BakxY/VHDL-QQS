@@ -11,6 +11,7 @@ import * as compileCommands from './lib/CompileCommand';
 import * as testCommands from './lib/TestCommands'
 import * as statusBarCreator from './lib/StatusBarUtils';
 import * as pathUtils from './lib/PathUtils';
+import * as vhdlLang from './lib/VhdlLang'
 
 export async function activate(context: vscode.ExtensionContext) {
 	/**
@@ -598,6 +599,8 @@ export async function activate(context: vscode.ExtensionContext) {
 			quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 		}
 	}
+
+	vhdlLang.checkDownloadVhdlLang(context);
 }
 
 export function deactivate() {
