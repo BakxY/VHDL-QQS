@@ -8,10 +8,10 @@ import * as tomlUtils from './lib/TomlUtils';
 import * as quartus from './lib/QuartusUtils';
 import * as questa from './lib/QuestaUtils';
 import * as compileCommands from './lib/CompileCommand';
-import * as testCommands from './lib/TestCommands'
+import * as testCommands from './lib/TestCommands';
 import * as statusBarCreator from './lib/StatusBarUtils';
 import * as pathUtils from './lib/PathUtils';
-import * as vhdlLang from './lib/VhdlLang'
+import * as vhdlLang from './lib/VhdlLang';
 
 export async function activate(context: vscode.ExtensionContext) {
 	/**
@@ -493,7 +493,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Add file to project as source file
 		const relativePath = path.relative(path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject)), targetFilePath).replaceAll('\\', '/');
-		quartus.addVhdlFileToProject(context, activeProject, quartusPath, relativePath)
+		quartus.addVhdlFileToProject(context, activeProject, quartusPath, relativePath);
 
 		console.log('Finished creation of entity and added to active project as source file!');
 		vscode.window.showInformationMessage('Finished creation of entity and added to active project as source file!');
