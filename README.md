@@ -27,8 +27,12 @@ During my studies, I took a course on FPGAs that heavily relied on Intel Quartus
 
 * **Seamless Quartus Project Compilation:** Compile your Quartus projects directly within VS Code, eliminating the need to switch between applications.
 * **Project Configuration within VS Code:** Manage essential project settings, such as top-level entities and include files, directly from VS Code, streamlining the configuration process.
-* **Direct Access to Quartus Programmer and RTL Viewer:** Easily open the Quartus programmer or RTL Viewer for compiled projects directly from VS Code, simplifying the programming and reviewing workflow.
+* **Direct Access to Quartus Programmer:** Easily open the Quartus programmer for compiled projects directly from VS Code, simplifying the programming workflow.
 * **Automated Testbench Generation:** Generate entity testbenches for use with QuestaSim, automating a crucial step in the verification process and saving valuable development time.
+* **QuestaSim Integration (Optional):** Enable QuestaSim features to run simulations directly from VS Code. This includes running your QuestaSim test scripts and viewing the results. *(Requires configuration - see "Initial Setup")*
+* **Direct Access to Quartus RTL Viewer:** Open the RTL Viewer for the active project directly from VS Code to easily view your design's RTL representation.
+* **Manage Project Files:** Add and remove files from your project through VS Code, keeping your project files organized.
+* **Change Top Level Entity:** Easily change the top-level entity for your Quartus project directly from VS Code.
 
 ## Installation
 
@@ -50,22 +54,40 @@ This extension requires VS Code, Quartus Prime and Questa Prime. It can be insta
 
 ## Initial setup
 
-Before you can start using the VHDL-QQS extension, you'll need to perform a few initial setup steps. This ensures that the extension can correctly interact with your Quartus and QuestaSim installations.
+Before you can start using the VHDL-QQS extension, you'll need to perform a few initial setup steps. This ensures that the extension can correctly interact with your Quartus and, optionally, your QuestaSim installations.
 
-### 1. Setting paths
+### 1. Configuring VHDL-QQS Settings
 
-The extension needs to know the locations of your Quartus installation and the QuestaSim executable. You can configure these paths in the VS Code settings.
+The VHDL-QQS extension's behavior can be customized through VS Code settings.
 
 * Open VS Code settings:
-    *   File > Preferences > Settings (or Code > Preferences > Settings on macOS)
-    *   Alternatively, use the keyboard shortcut: Ctrl + , (or Cmd + , on macOS)
+    * File > Preferences > Settings (or Code > Preferences > Settings on macOS)
+    * Alternatively, use the keyboard shortcut: Ctrl + , (or Cmd + , on macOS)
 
-* Search for "VHDL-QQS" in the settings search bar.  This will filter the settings to show only those related to the extension.
+* Search for "VHDL-QQS" in the settings search bar. This will filter the settings to show only those related to the extension.
 
-* Locate the following setting:
-    * `vhdl-qqs.quartusBinPath`: Enter the path to your Quartus installation directory. This is usually the directory where `quartus` or `quartus_sh` (on Linux) is located. [Example: `/path/to/intelFPGA_lite/23.1/quartus/bin` or `C:\intelFPGA_lite\23.1\quartus\bin`]
+* Configure the following settings as needed:
 
-* Make sure to enter the *full paths* to the directories or executables.
+#### 1.1 General Settings
+
+* `vhdl-qqs.tomlPath`: (Optional) The name of the TOML file used for project configuration. The default is `vhdl_ls.toml`. If you are using a different filename, change this setting.
+
+#### 1.2 Quartus Settings
+
+* `vhdl-qqs.quartusBinPath`: (Required) Enter the *full path* to your Quartus installation's `bin` (or `bin64` on Windows) directory. This is usually the directory where `quartus` and `quartus_sh` is located.  [Example: `/path/to/intelFPGA_lite/23.1/quartus/bin` or `C:\intelFPGA_lite\23.1\quartus\bin64`]
+
+#### 1.3 QuestaSim Settings
+
+* `vhdl-qqs.questaFeatureFlag`: (Optional, but recommended if using QuestaSim) Set this to `true` to enable QuestaSim features within the extension.
+
+* `vhdl-qqs.questaBinPath`: (Required if `vhdl-qqs.questaFeatureFlag` is true) Enter the *full path* to your QuestaSim installation's `win64` (or equivalent for your OS) directory. This is where `vsim` is located. [Example: `C:\Program Files\intelFPGA_pro\24.2\questa_fse\win64`]
+
+* `vhdl-qqs.questaTestsPath`: (Required if `vhdl-qqs.questaFeatureFlag` is true) Enter the *relative path* from your Questa project file (`.mpf`) to the do file that runs all the simulations. This path is used to locate the test files.  [Example: `..\compile.do`]
+
+#### 1.4 Important Notes about Paths
+
+* Make sure to enter the *full paths* to the directories or executables for Quartus and QuestaSim (if applicable). Relative paths are not supported for these settings.
+* If you are not using QuestaSim, you can leave the `vhdl-qqs.questaFeatureFlag`, `vhdl-qqs.questaBinPath`, and `vhdl-qqs.questaTestsPath` settings at their default values.
 
 ## Project Setup
 

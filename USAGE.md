@@ -6,7 +6,8 @@ This section provides practical examples of how to use the VHDL-QQS extension to
 
 * [1. Project Management](#1-project-management)
     * [1.1 Selecting a Quartus Project](#11-selecting-a-quartus-project)
-    * [1.2 Adding/Removing Files from Project](#12-addingremoving-files-from-project)
+    * [1.2 Selecting a Questa Project](#12-selecting-a-questa-project)
+    * [1.3 Adding/Removing Files from Project](#13-addingremoving-files-from-project)
 * [2. Compilation and Programming](#2-compilation-and-programming)
     * [2.1 Compiling a Quartus Project](#21-compiling-a-quartus-project)
     * [2.2 Cleaning Compile Files](#22-cleaning-compile-files)
@@ -16,12 +17,13 @@ This section provides practical examples of how to use the VHDL-QQS extension to
 * [3. Testbench Generation](#3-testbench-generation)
     * [3.1 Generating a Testbench](#31-generating-a-testbench)
     * [3.2 Generating a Testbench from Selection](#32-generating-a-testbench-from-selection)
-* [4. Manual Activation](#4-manual-activation)
-* [5. VHDL-QQS Interface Elements](#5-vhdl-qqs-interface-elements)
-    * [5.1 Status Bar Buttons](#51-status-bar-buttons)
-    * [5.2 Context Menus](#52-context-menus)
-    * [5.3 Quartus Project Explorer View](#53-quartus-project-explorer-view)
-    * [5.4 Command Palette](#54-command-palette)
+* [4. Running Tests](#4-running-tests)
+* [5. Manual Activation](#5-manual-activation)
+* [6. VHDL-QQS Interface Elements](#6-vhdl-qqs-interface-elements)
+    * [6.1 Status Bar Buttons](#61-status-bar-buttons)
+    * [6.2 Context Menus](#62-context-menus)
+    * [6.3 Quartus Project Explorer View](#63-quartus-project-explorer-view)
+    * [6.4 Command Palette](#64-command-palette)
 
 
 ## 1. Project Management
@@ -36,7 +38,17 @@ This example shows how to select a Quartus project for use with the extension.
     * **Status Bar Button:** Click the project button in the status bar.
     * **Command Palette:** Use the "VHDL-QQS: Select quartus project" command in the command palette.
 
-### 1.2 Adding/Removing Files from Project
+### 1.2 Selecting a Questa Project
+
+This example shows how to select a Questa project for use with the extension.
+
+* **Step 1: Open the Project Folder:** Open your Questa project folder in VS Code.
+
+* **Step 2: Select Project:** You have two options:
+    * **Status Bar Button:** Click the project button in the status bar.
+    * **Command Palette:** Use the "VHDL-QQS: Select questa project" command in the command palette.
+
+### 1.3 Adding/Removing Files from Project
 
 These commands allow you to manage the files included in your project.
 
@@ -114,26 +126,38 @@ This command allows you to generate a testbench based on a selected piece of cod
     * **Context Menu:** Right-click within the selected code and choose "Generate Testbench".
     * **Command Palette:** Use the "VHDL-QQS: Generate testbench by expression selection" command.
 
-## 4. Manual Activation
+## 4. Running Tests
 
-This command allows you to manually activate the extension.  It's typically not needed as the extension should activate automatically based on the activation events. Use the "VHDL-QQS: Manually activate extension" command in the command palette.
+This example shows how to run QuestaSim test script directly in VS Code.
 
-## 5.  VHDL-QQS Interface Elements
+* **Step 1: Select Project:** Ensure that you have a QuestaSim Project selected (see Section 1.2)
+
+* **Step 2: Run Tests:** You have two options:
+    * **Command Palette:** Use the "VHDL-QQS: Run Questa Tests" command.
+    * **Status Bar Button:** Click the "Run questa tests" button (beaker icon) in the status bar.
+
+## 5. Manual Activation
+
+This command allows you to manually activate the extension. It's typically not needed as the extension should activate automatically based on the activation events. Use the "VHDL-QQS: Manually activate extension" command in the command palette.
+
+## 6. VHDL-QQS Interface Elements
 
 This section describes the buttons, menus, and views provided by the VHDL-QQS extension.
 
-### 5.1 Status Bar Buttons
+### 6.1 Status Bar Buttons
 
-1. **Project Selection:** Allows you to select the active Quartus project.
+1. **Quartus Project Selection:** Allows you to select the active Quartus project.
 2. **Top Level Selection:** Allows you to select the top level entity for current project.
 3. **Clean Output Files:** (Trash icon) - Cleans the output files for the currently selected Quartus project.
 4. **Compile:** (Play icon) - Compiles the currently selected Quartus project.
 5. **Open Programmer:** (Flame icon) - Opens the Quartus programmer for the compiled project.
 6. **Open RTL Viewer:** (PCB icon) - Opens the Quartus RTL Viewer for the compiled project.
+5. **Questa Project Selection:** Allows you to select the active Questa project.
+6. **Run Tests:** (Beaker icon) - Runs tests for the active questa project.
 
 ![Status Bar Button Screenshot](./docs/StatusBarButtons.png)
 
-### 5.2 Context Menus
+### 6.2 Context Menus
 
 1. **Generate Testbench:** Available when right-clicking on an entity name or selected code in a VHDL file. Generates a testbench.
 2. **Add File to Project:** Available when right-clicking on a VHDL or Verilog file in the VS Code explorer. Adds the file to the project.
@@ -142,7 +166,7 @@ This section describes the buttons, menus, and views provided by the VHDL-QQS ex
 ![Entity Context Menu Screenshot](./docs/ContextMenuEntity.png)
 ![Entity Context File Screenshot](./docs/ContextMenuFile.png)
 
-### 5.3 Quartus Project Explorer View
+### 6.3 Quartus Project Explorer View
 
 1. **Project Source Files:** Displays the source files included in the current project. 
 2. **Remove File Button:** Opens a selection to remove file from the current project.
@@ -151,6 +175,6 @@ This section describes the buttons, menus, and views provided by the VHDL-QQS ex
 
 ![Quartus Project Explorer Screenshot](./docs/QuartusProjectExplorer.png)
 
-### 5.4 Command Palette
+### 6.4 Command Palette
 
 All VHDL-QQS commands are accessible through the VS Code command palette (Ctrl+Shift+P or Cmd+Shift+P).  Just type "VHDL-QQS" to see all commands.
