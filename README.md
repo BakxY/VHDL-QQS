@@ -52,9 +52,9 @@ This extension requires VS Code, Quartus Prime and Questa Prime. It can be insta
 
 Before you can start using the VHDL-QQS extension, you'll need to perform a few initial setup steps. This ensures that the extension can correctly interact with your Quartus and QuestaSim installations.
 
-### 1. Setting paths
+### 1. Setting quartus path
 
-The extension needs to know the locations of your Quartus installation and the QuestaSim executable. You can configure these paths in the VS Code settings.
+The extension needs to know the locations of your Quartus installation executable. You can configure these paths in the VS Code settings.
 
 * Open VS Code settings:
     *   File > Preferences > Settings (or Code > Preferences > Settings on macOS)
@@ -63,7 +63,22 @@ The extension needs to know the locations of your Quartus installation and the Q
 * Search for "VHDL-QQS" in the settings search bar.  This will filter the settings to show only those related to the extension.
 
 * Locate the following setting:
-    * `vhdl-qqs.quartusBinPath`: Enter the path to your Quartus installation directory. This is usually the directory where `quartus` or `quartus_sh` (on Linux) is located. [Example: `/path/to/intelFPGA_lite/23.1/quartus/bin` or `C:\intelFPGA_lite\23.1\quartus\bin`]
+    * `vhdl-qqs.quartusBinPath`: Enter the path to your Quartus installation directory. This is usually the directory where `quartus` and `quartus_sh` is located. [Example: `/path/to/intelFPGA_lite/23.1/quartus/bin` or `C:\intelFPGA_lite\23.1\quartus\bin`]
+
+* Make sure to enter the *full paths* to the directories or executables.
+
+### 2. Setting questa path
+
+The extension needs to know the locations of your Questa executable. You can configure these paths in the VS Code settings.
+
+* Open VS Code settings:
+    *   File > Preferences > Settings (or Code > Preferences > Settings on macOS)
+    *   Alternatively, use the keyboard shortcut: Ctrl + , (or Cmd + , on macOS)
+
+* Search for "VHDL-QQS" in the settings search bar.  This will filter the settings to show only those related to the extension.
+
+* Locate the following setting:
+    * `vhdl-qqs.questaBinPath`: Enter the path to your Quartus installation directory. This is usually the directory where `vsim` is located. [Example: `/path/to/intelFPGA_pro/24.2/questa_fse/win64` or `C:\intelFPGA_pro\24.2\questa_fse\win64`]
 
 * Make sure to enter the *full paths* to the directories or executables.
 
