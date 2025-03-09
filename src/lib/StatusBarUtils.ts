@@ -11,7 +11,7 @@ import * as quartus from './QuartusUtils';
  * @returns The initialized status bar item
  */
 export function createActiveQuartusProject(context: vscode.ExtensionContext) {
-    let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
+    let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
     currentProjectDisplay.command = 'vhdl-qqs.selectQuartusProject';
 
     let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveQuartusProject', undefined);
@@ -24,7 +24,7 @@ export function createActiveQuartusProject(context: vscode.ExtensionContext) {
         activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
     }
 
-    currentProjectDisplay.text = 'Project: ' + activeProjectName;
+    currentProjectDisplay.text = 'Quartus: ' + activeProjectName;
     currentProjectDisplay.tooltip = 'Change current active quartus project';
 
     currentProjectDisplay.show();
@@ -40,7 +40,7 @@ export function createActiveQuartusProject(context: vscode.ExtensionContext) {
  * @returns The initialized status bar item
  */
 export function createActiveQuestaProject(context: vscode.ExtensionContext) {
-    let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 11);
+    let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
     currentProjectDisplay.command = 'vhdl-qqs.selectQuestaProject';
 
     let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveQuestaProject', undefined);
@@ -53,7 +53,7 @@ export function createActiveQuestaProject(context: vscode.ExtensionContext) {
         activeProjectName = path.basename(activeProjectName).replace(path.extname(activeProjectName), '');
     }
 
-    currentProjectDisplay.text = 'ModelSim: ' + activeProjectName;
+    currentProjectDisplay.text = 'Questa: ' + activeProjectName;
     currentProjectDisplay.tooltip = 'Change current active questa project';
 
     currentProjectDisplay.show();

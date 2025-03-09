@@ -105,7 +105,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Update UI elements and update workspace storage
 		context.workspaceState.update('vhdl-qqs.currentActiveQuartusProject', selectedProject);
-		currentQuartusProjectDisplay.text = 'Project: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
+		currentQuartusProjectDisplay.text = 'Quartus: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
 
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
@@ -519,7 +519,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Update UI elements and update workspace storage
 		context.workspaceState.update('vhdl-qqs.currentActiveQuestaProject', selectedProject);
-		currentQuestaProjectDisplay.text = 'ModelSim: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
+		currentQuestaProjectDisplay.text = 'Questa: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
 	});
 	context.subscriptions.push(disposable);
 
@@ -540,19 +540,19 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
-	let currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
-	context.subscriptions.push(currentTopLevelDisplay);
-
 	let currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
 	context.subscriptions.push(currentQuartusProjectDisplay);
 
-	let currentQuestaProjectDisplay = statusBarCreator.createActiveQuestaProject(context);
-	context.subscriptions.push(currentQuestaProjectDisplay);
+	let currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
+	context.subscriptions.push(currentTopLevelDisplay);
 
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
 	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
+
+	let currentQuestaProjectDisplay = statusBarCreator.createActiveQuestaProject(context);
+	context.subscriptions.push(currentQuestaProjectDisplay);
 
 	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
 	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
