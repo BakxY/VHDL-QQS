@@ -590,14 +590,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Get currently active project
 	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
-	if (activeProject === null) { return; }
-
-	// Get  quartus install bin path
-	const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-	if (quartusPath === null) { return; }
-
-	quartusProjectFilesView.updateData(context, activeProject, quartusPath);
-	quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
+	if (activeProject !== null) {
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath !== null) {
+			quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+			quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
+		}
+	}
 }
 
 export function deactivate() {
