@@ -6,7 +6,9 @@ import * as entityUtils from './lib/EntityUtils';
 import * as testbenchCommands from './lib/TestbenchCommand';
 import * as tomlUtils from './lib/TomlUtils';
 import * as quartus from './lib/QuartusUtils';
+import * as questa from './lib/QuestaUtils';
 import * as compileCommands from './lib/CompileCommand';
+import * as testCommands from './lib/TestCommands'
 import * as statusBarCreator from './lib/StatusBarUtils';
 import * as pathUtils from './lib/PathUtils';
 
@@ -87,7 +89,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @brief Command sets the currently selected project for the current workspace.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectCurrentProject', async () => {
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectQuartusProject', async () => {
 		const allProjectFiles: string[] = quartus.getAllProjectFiles();
 
 		// Check if there are any quartus project file are in current workspace
@@ -102,11 +104,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (selectedProject === undefined) { return; }
 
 		// Update UI elements and update workspace storage
-		context.workspaceState.update('vhdl-qqs.currentActiveProject', selectedProject);
-		currentProjectDisplay.text = 'Project: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
+		context.workspaceState.update('vhdl-qqs.currentActiveQuartusProject', selectedProject);
+		currentQuartusProjectDisplay.text = 'Quartus: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
 
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -124,7 +126,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.compileCurrentProject', async () => {
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -142,7 +144,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.cleanCompileFiles', async () => {
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Create full folder path
@@ -181,7 +183,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.openProgrammerActiveProject', async () => {
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -214,7 +216,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.openRtlViewerActiveProject', async () => {
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -247,7 +249,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.changeTopLevel', async () => {
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -287,7 +289,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
 
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -329,7 +331,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
 
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -368,7 +370,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async () => {
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -405,7 +407,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async () => {
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -423,7 +425,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.createNewEntity', async () => {
 		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentProject(context);
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
@@ -497,31 +499,104 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
+	/**
+	 * @brief Command used to select questa project to run tests for
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectQuestaProject', async () => {
+		if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
+			vscode.window.showErrorMessage('Feature isn\'t enabled!');
+			console.error('Feature isn\'t enabled!');
+			return;
+		}
+
+		const availableProjects: string[] = questa.getAllProjectFiles();
+
+		// Check if there are any quartus project file are in current workspace
+		if (availableProjects.length === 0) {
+			vscode.window.showErrorMessage('There are no project in your workfolder!');
+			console.error('There are no project in your workfolder!');
+			return;
+		}
+
+		// Ask user to select a project
+		const selectedProject: string | undefined = await vscode.window.showQuickPick(availableProjects, { title: 'Select a project' });
+		if (selectedProject === undefined) { return; }
+
+		// Update UI elements and update workspace storage
+		context.workspaceState.update('vhdl-qqs.currentActiveQuestaProject', selectedProject);
+		currentQuestaProjectDisplay.text = 'Questa: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
+	});
+	context.subscriptions.push(disposable);
+
+	/**
+	 * @brief Command used to run tests for selected questa project
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.runQuestaTest', async () => {
+		if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
+			vscode.window.showErrorMessage('Feature isn\'t enabled!');
+			console.error('Feature isn\'t enabled!');
+			return;
+		}
+
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentQuestaProject(context);
+		if (activeProject === null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuestaBinPath();
+		if (quartusPath === null) { return; }
+
+		testCommands.runQuestaTest(context, activeProject, quartusPath);
+	});
+	context.subscriptions.push(disposable);
+
+	let currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
+	context.subscriptions.push(currentQuartusProjectDisplay);
+
 	let currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
 	context.subscriptions.push(currentTopLevelDisplay);
-
-	let currentProjectDisplay = statusBarCreator.createActiveProject(context);
-	context.subscriptions.push(currentProjectDisplay);
 
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
 	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
 
+	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(event => {
+		if (event.affectsConfiguration('vhdl-qqs.questaFeatureFlag')) {
+			if (vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
+				currentQuestaProjectDisplay.show();
+				runQuestaTestsButton.show();
+			}
+			else {
+				currentQuestaProjectDisplay.hide();
+				runQuestaTestsButton.hide();
+			}
+		}
+	}));
+
+	let currentQuestaProjectDisplay: vscode.StatusBarItem = statusBarCreator.createActiveQuestaProject(context);
+	context.subscriptions.push(currentQuestaProjectDisplay);
+
+	let runQuestaTestsButton: vscode.StatusBarItem = statusBarCreator.createRunTests();
+	context.subscriptions.push(runQuestaTestsButton);
+
+	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
+	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
+
+	const quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
+	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
+
 	// Get currently active project
-	const activeProject: string | null = await pathUtils.getCurrentProject(context);
+	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 	if (activeProject === null) { return; }
 
 	// Get  quartus install bin path
 	const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 	if (quartusPath === null) { return; }
 
-	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
-	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
 	quartusProjectFilesView.updateData(context, activeProject, quartusPath);
-
-	const quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
-	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
 	quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 }
 

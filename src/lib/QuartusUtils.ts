@@ -224,7 +224,7 @@ export function checkFileInProject(context: vscode.ExtensionContext, filePath: s
     if (!['.vhd', '.v'].includes(path.extname(filePath))) { return null; }
 
     // Get currently active project
-    const activeProject: string | null = pathUtils.getCurrentProject(context);
+    const activeProject: string | null = pathUtils.getCurrentQuartusProject(context);
     if (activeProject === null) { return false; }
 
     // Get  quartus install bin path
