@@ -504,6 +504,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectQuestaProject', async () => {
+		if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
+			vscode.window.showErrorMessage('Feature isn\'t enabled!');
+			console.error('Feature isn\'t enabled!');
+			return;
+		}
+
 		const availableProjects: string[] = questa.getAllProjectFiles();
 
 		// Check if there are any quartus project file are in current workspace
@@ -528,6 +534,12 @@ export async function activate(context: vscode.ExtensionContext) {
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.runQuestaTest', async () => {
+		if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
+			vscode.window.showErrorMessage('Feature isn\'t enabled!');
+			console.error('Feature isn\'t enabled!');
+			return;
+		}
+
 		// Get currently active project
 		const activeProject: string | null = await pathUtils.getCurrentQuestaProject(context);
 		if (activeProject === null) { return; }
@@ -551,7 +563,18 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
 	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
 
-	let currentQuestaProjectDisplay = statusBarCreator.createActiveQuestaProject(context);
+	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(event => {
+		if (event.affectsConfiguration('vhdl-qqs.questaFeatureFlag')) {
+			if (vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
+				currentQuestaProjectDisplay.show();
+			}
+			else {
+				currentQuestaProjectDisplay.hide();
+			}
+		}
+	}));
+
+	let currentQuestaProjectDisplay: vscode.StatusBarItem = statusBarCreator.createActiveQuestaProject(context);
 	context.subscriptions.push(currentQuestaProjectDisplay);
 
 	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();

@@ -56,8 +56,11 @@ export function createActiveQuestaProject(context: vscode.ExtensionContext) {
     currentProjectDisplay.text = 'Questa: ' + activeProjectName;
     currentProjectDisplay.tooltip = 'Change current active questa project';
 
-    currentProjectDisplay.show();
-
+    if(vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag'))
+    {
+        currentProjectDisplay.show();
+    }
+    
     return currentProjectDisplay;
 }
 
