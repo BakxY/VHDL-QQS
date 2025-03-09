@@ -12,7 +12,15 @@ import * as pathUtils from './PathUtils';
 export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPath: string, pathToQuesta: string) {
     const pathToProject = path.dirname(path.join(pathUtils.getWorkspacePath()!, currentProjectPath));
 
-    const scriptCmd = 'vsim -c -do ../compile.do -do exit';
+    const pathToTests: string | undefined = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('questaTestsPath');
+
+    if (pathToTests === undefined) {
+        console.error('No path to do tests file defined! Check your settings!');
+        vscode.window.showErrorMessage('No path to do tests file defined! Check your settings!');
+        return;
+    }
+
+    const scriptCmd = 'vsim -c -do ' + pathToTests.replaceAll('\\', '/') + ' -do exit';
 
     // Get all active terminals opened in editor
     let openTerminals = vscode.window.terminals;

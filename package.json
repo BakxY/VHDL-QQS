@@ -180,6 +180,11 @@
                     "type": "string",
                     "default": "C:\\Program Files\\intelFPGA_pro\\24.2\\questa_fse\\win64",
                     "description": "The path to your questa installations bin folder"
+                },
+                "vhdl-qqs.questaTestsPath": {
+                    "type": "string",
+                    "default": "..\\compile.do",
+                    "description": "The relative path from the questa project file (.mpf) to the do file that runs all tests"
                 }
             }
         }
