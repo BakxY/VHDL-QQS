@@ -567,15 +567,20 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (event.affectsConfiguration('vhdl-qqs.questaFeatureFlag')) {
 			if (vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
 				currentQuestaProjectDisplay.show();
+				runQuestaTestsButton.show();
 			}
 			else {
 				currentQuestaProjectDisplay.hide();
+				runQuestaTestsButton.hide();
 			}
 		}
 	}));
 
 	let currentQuestaProjectDisplay: vscode.StatusBarItem = statusBarCreator.createActiveQuestaProject(context);
 	context.subscriptions.push(currentQuestaProjectDisplay);
+
+	let runQuestaTestsButton: vscode.StatusBarItem = statusBarCreator.createRunTests();
+	context.subscriptions.push(runQuestaTestsButton);
 
 	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
 	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });

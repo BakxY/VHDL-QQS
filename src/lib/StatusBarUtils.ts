@@ -65,6 +65,26 @@ export function createActiveQuestaProject(context: vscode.ExtensionContext) {
 }
 
 /**
+ * @brief Function initializes the status bar item/button for compiling active project
+ * 
+ * @returns The initialized status bar item
+ */
+export function createRunTests() {
+    let runTestsButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+
+    runTestsButton.command = 'vhdl-qqs.runQuestaTest';
+    runTestsButton.text = '$(beaker)';
+    runTestsButton.tooltip = 'Run questa tests for active questa project';
+
+    if(vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag'))
+    {
+        runTestsButton.show();
+    }
+
+    return runTestsButton;
+}
+
+/**
  * @brief Function initializes the status bar item/button for the top level of active project
  * 
  * @param context The context form where the function was ran
