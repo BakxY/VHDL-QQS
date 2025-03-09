@@ -26,7 +26,7 @@ export function checkForVhdlLang(context: vscode.ExtensionContext) {
         default:
             vscode.window.showErrorMessage('Your platform isn\'t supported by this extension!');
             console.error('Your platform isn\'t supported by this extension!');
-            return;
+            return false;
     }
 
     pathToVhdlLang = path.join(pathToVhdlLang, binaryName);
@@ -77,9 +77,12 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
             return;
     }
 
+    vscode.window.showInformationMessage('Downloading VHDL_lang!');
+    console.log('Downloading VHDL_lang!');
+
     pathToVhdlLang = path.join(pathToVhdlLang, binaryName);
 
-    if (fs.existsSync(pathToVhdlLang)) { return; }
+    if (fs.existsSync(pathToVhdlLang)) { fs.rmSync(pathToVhdlLang); }
 
     const pathToZip: string = path.join(pathToVhdlLang).replace(path.extname(pathToVhdlLang), '.zip');
 
@@ -112,13 +115,16 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
 
     fs.cpSync(pathToBin, targetBinPath);
     fs.rmSync(path.join(context.extensionPath, 'res', binaryName), { recursive: true });
+
+    vscode.window.showInformationMessage('Finished downloading VHDL_lang!');
+    console.log('Finished downloading VHDL_lang!');
 }
 
 export async function checkDownloadVhdlLang(context: vscode.ExtensionContext) {
     const localVersion: string = getVhdlLangVersion(context);
     const remoteVersion: string | null = await getLatestReleaseFromGithub();
 
-    if(localVersion === remoteVersion) { return; }
+    if (localVersion === remoteVersion) { return; }
 
     getVhdlLangExecutable(context);
 }

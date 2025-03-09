@@ -601,6 +601,30 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	vhdlLang.checkDownloadVhdlLang(context);
+
+	context.subscriptions.push(
+		vscode.languages.registerDocumentFormattingEditProvider('vhdl', {
+			provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
+				const edits: vscode.TextEdit[] = [];
+
+				const pathToBin = path.join(context.extensionPath, 'res', 'vhdl_lang');
+
+				if (!vhdlLang.checkForVhdlLang(context)) {
+					vscode.window.showErrorMessage('No VHDL_lang executable found! Trying to download VHDL_lang!');
+					console.error('No VHDL_lang executable found! Trying to download VHDL_lang!');
+					vhdlLang.checkDownloadVhdlLang(context);
+					return edits;
+				}
+
+				const fullRange = new vscode.Range(0, 0, document.lineCount, 0);
+				const formattedFile: string = cp.execSync('"' + pathToBin + '" --format "' + document.uri.fsPath + '"').toString();
+
+				edits.push(vscode.TextEdit.replace(fullRange, formattedFile));
+
+				return edits;
+			}
+		})
+	);
 }
 
 export function deactivate() {
