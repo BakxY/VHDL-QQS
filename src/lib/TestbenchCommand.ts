@@ -39,8 +39,6 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
         return;
     }
 
-    pathToEntityFile = path.join(pathUtils.getWorkspacePath()!, pathToEntityFile);
-
     // Get content of entity definition
     const entityContent: string | undefined = entityUtils.getEntityContents(pathToEntityFile)?.replaceAll('\r', '');
     if (entityContent === undefined) { return; }
