@@ -143,10 +143,13 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
 }
 
 export async function checkDownloadVhdlLang(context: vscode.ExtensionContext) {
+    // Get local and remote version numbers
     const localVersion: string = getVhdlLangVersion(context);
     const remoteVersion: string | null = await getLatestReleaseFromGithub();
 
+    // Check if vhdl_lang version matched with remote version
     if (localVersion === remoteVersion) { return; }
 
+    // Download new vhdl_lang version
     getVhdlLangExecutable(context);
 }
