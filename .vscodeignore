@@ -1,0 +1,7 @@
+**/*
+!out/**
+!res/**
+!docs/banner.png
+!package.json
+!README.md
+!LICENSE

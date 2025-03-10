@@ -188,16 +188,9 @@
                 }
             }
         }
-    },
-    "files": [
-        "res/**",
-        "docs/banner.png",
-        "package.json",
-        "README.md",
-        "LICENSE"
-    ],
+    }, 
     "scripts": {
-        "clean": "shx rm -rf out",
+        "clean": "shx rm -rf out && shx rm -f res/vhdl_lang.exe res/vhdl_lang",
         "compile": "npm run clean && tsc -p ./",
         "watch": "npm run build-prepare & tsc -watch -p ./",
         "lint": "eslint src --ext ts",
