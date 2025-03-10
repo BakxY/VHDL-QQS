@@ -10,7 +10,8 @@
     },
     "icon": "res/icon.png",
     "categories": [
-        "Other"
+        "Other",
+        "Formatters"
     ],
     "keywords": [
         "open-source",
@@ -24,7 +25,11 @@
         "questasim",
         "quartus",
         "intel-fpga",
-        "testbench-generation"
+        "testbench-generation",
+        "formatter",
+        "vhdl_ls",
+        "vhdl_lang",
+        "rust_hdl"
     ],
     "activationEvents": [
         "workspaceContains:**/*.qsf",
