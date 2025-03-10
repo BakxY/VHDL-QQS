@@ -9,6 +9,13 @@ import extract from 'extract-zip';
 const WIN32_FILE_NAME = 'vhdl_lang-x86_64-pc-windows-msvc.zip';
 const LINUX_FILE_NAME = 'vhdl_lang-x86_64-unknown-linux-gnu.zip';
 
+/**
+ * @brief Function checks if a vhdl_lang binary is present in extension path
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns Boolean based on if binary is present
+ */
 export function checkForVhdlLang(context: vscode.ExtensionContext) {
     let pathToVhdlLang = path.join(context.extensionPath, 'res');
     const currentPlatform: string = process.platform;
@@ -36,6 +43,13 @@ export function checkForVhdlLang(context: vscode.ExtensionContext) {
     return fs.existsSync(pathToVhdlLang);
 }
 
+/**
+ * @brief Function that get the version of the local vhdl_lang binary
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns Version number of vhdl_lang
+ */
 export function getVhdlLangVersion(context: vscode.ExtensionContext): string {
     let pathToVhdlLang = path.join(context.extensionPath, 'res', 'vhdl_lang');
 
@@ -45,6 +59,11 @@ export function getVhdlLangVersion(context: vscode.ExtensionContext): string {
     return cliOutput.replace('vhdl_lang ', '').replace('\n', '');
 }
 
+/**
+ * @brief Function that get the version of the most current vhdl_lang binary from GitHub
+ * 
+ * @returns Version number of vhdl_lang
+ */
 export async function getLatestReleaseFromGithub(): Promise<string | null> {
     // Get latest tag from GitHub API
     const response = await fetch('https://api.github.com/repos/VHDL-LS/rust_hdl/releases/latest');
@@ -59,6 +78,13 @@ export async function getLatestReleaseFromGithub(): Promise<string | null> {
     return data.tag_name.replace('v', '');
 }
 
+/**
+ * @brief Downloads, unpacks and overwrites the vhdl_lang binary stored in extension path
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns Version number of vhdl_lang
+ */
 export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
     let pathToVhdlLang = path.join(context.extensionPath, 'res');
 
@@ -142,6 +168,11 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
     console.log('Finished downloading VHDL_lang!');
 }
 
+/**
+ * @brief Checks the local and remote version of vhdl_lang and updates binary is needed
+ * 
+ * @param context The context form where the function was ran
+ */
 export async function checkDownloadVhdlLang(context: vscode.ExtensionContext) {
     // Get local and remote version numbers
     const localVersion: string = getVhdlLangVersion(context);
