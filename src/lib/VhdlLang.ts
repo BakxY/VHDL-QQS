@@ -162,7 +162,7 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
 
     // Copy binary and remove no longer used unpacked folder
     fs.cpSync(pathToBin, targetBinPath);
-    fs.rmSync(path.join(context.extensionPath, 'res', binaryName), { recursive: true });
+    fs.rmSync(path.join(context.extensionPath, 'res', 'vhdl_lang'), { recursive: true });
 
     vscode.window.showInformationMessage('Finished downloading VHDL_lang!');
     console.log('Finished downloading VHDL_lang!');
@@ -174,6 +174,12 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
  * @param context The context form where the function was ran
  */
 export async function checkDownloadVhdlLang(context: vscode.ExtensionContext) {
+    if (!checkForVhdlLang(context)) {
+        // Download vhdl_lang version
+        getVhdlLangExecutable(context);
+        return;
+    }
+
     // Get local and remote version numbers
     const localVersion: string = getVhdlLangVersion(context);
     const remoteVersion: string | null = await getLatestReleaseFromGithub();
