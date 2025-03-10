@@ -10,7 +10,8 @@
     },
     "icon": "res/icon.png",
     "categories": [
-        "Other",
+        "Programming Languages",
+        "Snippets",
         "Formatters"
     ],
     "keywords": [
