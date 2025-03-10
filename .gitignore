@@ -1,4 +1,7 @@
 node_modules/
 out/
+dist/
 .vscode/extensions.json
 .vscode/settings.json
+res/vhdl_lang
+res/vhdl_lang.exe

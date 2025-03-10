@@ -188,23 +188,17 @@
                 }
             }
         }
-    },
-    "files": [
-        "out/**",
-        "res/**",
-        "docs/banner.png",
-        "package.json",
-        "README.md",
-        "LICENSE",
-        "node_modules/**"
-    ],
+    }, 
     "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
+        "clean": "shx rm -rf out && shx rm -f res/vhdl_lang.exe res/vhdl_lang",
+        "compile": "npm run clean && tsc -p ./",
+        "watch": "npm run build-prepare & tsc -watch -p ./",
+        "lint": "eslint src --ext ts",
         "pretest": "npm run compile && npm run lint",
-        "lint": "eslint src",
-        "test": "vscode-test"
+        "test": "node ./out/test/run_test.js",
+        "esbuild-base": "npm run clean && esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+        "vscode:prepublish": "npm run esbuild-base -- --sourcemap",
+        "deploy": "vsce publish && npx ovsx publish"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.10",
@@ -214,10 +208,13 @@
         "@typescript-eslint/parser": "^8.22.0",
         "@vscode/test-cli": "^0.0.10",
         "@vscode/test-electron": "^2.4.1",
+        "esbuild": "^0.25.1",
         "eslint": "^9.19.0",
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@iarna/toml": "^2.2.5"
+        "@iarna/toml": "^2.2.5",
+        "extract-zip": "^2.0.1",
+        "node-fetch": "^3.3.2"
     }
 }

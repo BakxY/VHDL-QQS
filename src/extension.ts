@@ -8,9 +8,10 @@ import * as tomlUtils from './lib/TomlUtils';
 import * as quartus from './lib/QuartusUtils';
 import * as questa from './lib/QuestaUtils';
 import * as compileCommands from './lib/CompileCommand';
-import * as testCommands from './lib/TestCommands'
+import * as testCommands from './lib/TestCommands';
 import * as statusBarCreator from './lib/StatusBarUtils';
 import * as pathUtils from './lib/PathUtils';
+import * as vhdlLang from './lib/VhdlLang';
 
 export async function activate(context: vscode.ExtensionContext) {
 	/**
@@ -492,7 +493,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Add file to project as source file
 		const relativePath = path.relative(path.dirname(path.join(pathUtils.getWorkspacePath()!, activeProject)), targetFilePath).replaceAll('\\', '/');
-		quartus.addVhdlFileToProject(context, activeProject, quartusPath, relativePath)
+		quartus.addVhdlFileToProject(context, activeProject, quartusPath, relativePath);
 
 		console.log('Finished creation of entity and added to active project as source file!');
 		vscode.window.showInformationMessage('Finished creation of entity and added to active project as source file!');
@@ -590,14 +591,40 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Get currently active project
 	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
-	if (activeProject === null) { return; }
+	if (activeProject !== null) {
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath !== null) {
+			quartusProjectFilesView.updateData(context, activeProject, quartusPath);
+			quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
+		}
+	}
 
-	// Get  quartus install bin path
-	const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-	if (quartusPath === null) { return; }
+	vhdlLang.checkDownloadVhdlLang(context);
 
-	quartusProjectFilesView.updateData(context, activeProject, quartusPath);
-	quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
+	context.subscriptions.push(
+		vscode.languages.registerDocumentFormattingEditProvider('vhdl', {
+			provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
+				const edits: vscode.TextEdit[] = [];
+
+				const pathToBin = path.join(context.extensionPath, 'res', 'vhdl_lang');
+
+				if (!vhdlLang.checkForVhdlLang(context)) {
+					vscode.window.showErrorMessage('No VHDL_lang executable found! Trying to download VHDL_lang!');
+					console.error('No VHDL_lang executable found! Trying to download VHDL_lang!');
+					vhdlLang.checkDownloadVhdlLang(context);
+					return edits;
+				}
+
+				const fullRange = new vscode.Range(0, 0, document.lineCount, 0);
+				const formattedFile: string = cp.execSync('"' + pathToBin + '" --format "' + document.uri.fsPath + '"').toString();
+
+				edits.push(vscode.TextEdit.replace(fullRange, formattedFile));
+
+				return edits;
+			}
+		})
+	);
 }
 
 export function deactivate() {
