@@ -190,21 +190,22 @@
         }
     },
     "files": [
-        "out/**",
         "res/**",
         "docs/banner.png",
         "package.json",
         "README.md",
-        "LICENSE",
-        "node_modules/**"
+        "LICENSE"
     ],
     "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./ && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
-        "watch": "tsc -w -p ./ && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --watch",
-        "pretest": "npm run compile && npm run lint",
+        "clean": "shx rm -rf out",
+        "compile": "npm run clean && tsc -p ./",
+        "watch": "npm run build-prepare & tsc -watch -p ./",
         "lint": "eslint src --ext ts",
-        "test": "node ./out/test/runTest.js"
+        "pretest": "npm run compile && npm run lint",
+        "test": "node ./out/test/run_test.js",
+        "esbuild-base": "npm run clean && esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+        "vscode:prepublish": "npm run esbuild-base -- --sourcemap",
+        "deploy": "vsce publish && npx ovsx publish"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.10",
