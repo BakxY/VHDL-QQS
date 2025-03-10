@@ -7,8 +7,8 @@ export type entityProperty = {
     propertySignalDir: string | undefined;
 }
 
-const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end\s+\1\s*;/;
-const MATCH_PROPERTY_DIR: RegExp = /\s+(in|out)\s+/;
+const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end\s+(\1\s*|entity);/;
+const MATCH_PROPERTY_DIR: RegExp = /\s+(in|out|inout)\s+/;
 
 /**
  * @brief Gets the expression the user has currently selected
