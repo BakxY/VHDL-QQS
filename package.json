@@ -200,11 +200,11 @@
     ],
     "scripts": {
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
+        "compile": "tsc -p ./ && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+        "watch": "tsc -w -p ./ && esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --watch",
         "pretest": "npm run compile && npm run lint",
-        "lint": "eslint src",
-        "test": "vscode-test"
+        "lint": "eslint src --ext ts",
+        "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.10",
@@ -214,6 +214,7 @@
         "@typescript-eslint/parser": "^8.22.0",
         "@vscode/test-cli": "^0.0.10",
         "@vscode/test-electron": "^2.4.1",
+        "esbuild": "^0.25.1",
         "eslint": "^9.19.0",
         "typescript": "^5.7.3"
     },
