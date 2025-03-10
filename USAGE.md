@@ -24,6 +24,7 @@ This section provides practical examples of how to use the VHDL-QQS extension to
     * [6.2 Context Menus](#62-context-menus)
     * [6.3 Quartus Project Explorer View](#63-quartus-project-explorer-view)
     * [6.4 Command Palette](#64-command-palette)
+* [7. Use the formatter](#7-use-the-formatter)
 
 
 ## 1. Project Management
@@ -178,3 +179,14 @@ This section describes the buttons, menus, and views provided by the VHDL-QQS ex
 ### 6.4 Command Palette
 
 All VHDL-QQS commands are accessible through the VS Code command palette (Ctrl+Shift+P or Cmd+Shift+P).  Just type "VHDL-QQS" to see all commands.
+
+## 7. Use the formatter
+
+This example shows how to format your VHDL source code using the extension.
+
+* **Step 1: Open the File:** Open the VHDL file you want to format.
+
+* **Step 2: Trigger Formatting:**
+    * **Command Palette:** Open the command palette (Ctrl+Shift+P or Cmd+Shift+P) and run the "Format Document" command.
+
+* **Step 3: Observe Formatting:** The file will be formatted according to VS Code's formatting settings.

@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE) [![Visual Studio Marketplace Version](https://img.shields.io/vscode-marketplace/v/BakxY.vhdl-qqs)](https://marketplace.visualstudio.com/items?itemName=BakxY.vhdl-qqs) [![GitHub Issues](https://img.shields.io/github/issues/BakxY/VHDL-QQS)](https://img.shields.io/github/issues/BakxY/VHDL-QQS)
 
-This project aims to automate the creation of test benches and support files for FPGA designs created using Quartus from Intel. By integrating a custom extension into VS Code, users can efficiently set up simulation environments with minimal manual effort. 
+This project enhances FPGA design workflows within VS Code by providing a suite of tools for Intel Quartus projects. Features include seamless project compilation, direct access to the Quartus programmer and RTL viewer, automated testbench generation for QuestaSim, integrated QuestaSim simulation capabilities, streamlined project configuration, direct file management, top-level entity changes, and on-demand source file formatting. This extension minimizes manual effort and accelerates the development and verification process.
 
 ![Project Banner](./docs/banner.png#center)
 
@@ -33,6 +33,7 @@ During my studies, I took a course on FPGAs that heavily relied on Intel Quartus
 * **Direct Access to Quartus RTL Viewer:** Open the RTL Viewer for the active project directly from VS Code to easily view your design's RTL representation.
 * **Manage Project Files:** Add and remove files from your project through VS Code, keeping your project files organized.
 * **Change Top Level Entity:** Easily change the top-level entity for your Quartus project directly from VS Code.
+* **Formatting Source Files:** Effortlessly format your VHDL code, maintaining a clean and consistent codebase.
 
 ## Installation
 
