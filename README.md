@@ -33,6 +33,7 @@ During my studies, I took a course on FPGAs that heavily relied on Intel Quartus
 * **Direct Access to Quartus RTL Viewer:** Open the RTL Viewer for the active project directly from VS Code to easily view your design's RTL representation.
 * **Manage Project Files:** Add and remove files from your project through VS Code, keeping your project files organized.
 * **Change Top Level Entity:** Easily change the top-level entity for your Quartus project directly from VS Code.
+* **Formatting Source Files:** Effortlessly format your VHDL code, maintaining a clean and consistent codebase.
 
 ## Installation
 
