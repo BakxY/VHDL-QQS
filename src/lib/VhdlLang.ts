@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as cp from 'child_process';
 import { pipeline } from 'stream/promises';
 import extract from 'extract-zip';
+import { outputChannel } from '../extension';
 
 // Names of releases
 const WIN32_FILE_NAME = 'vhdl_lang-x86_64-pc-windows-msvc.zip';
@@ -34,6 +35,7 @@ export function checkForVhdlLang(context: vscode.ExtensionContext) {
         default:
             vscode.window.showErrorMessage('Your platform isn\'t supported by this extension!');
             console.error('Your platform isn\'t supported by this extension!');
+            outputChannel.append('Your platform isn\'t supported by this extension!');
             return false;
     }
 
@@ -54,7 +56,16 @@ export function getVhdlLangVersion(context: vscode.ExtensionContext): string {
     let pathToVhdlLang = path.join(context.extensionPath, 'res', 'vhdl_lang');
 
     // Get version from binary
-    const cliOutput: string = cp.execSync('"' + pathToVhdlLang + '" --version').toString();
+    let cliOutput: string = '';
+    
+        try {
+            cliOutput = cp.execSync('"' + pathToVhdlLang + '" --version').toString();
+        }
+        catch {
+            console.error('Error while executing "' + '"' + pathToVhdlLang + '" --version' + '"!\nstdout dump:\n' + cliOutput);
+            vscode.window.showErrorMessage('Error while executing "' + '"' + pathToVhdlLang + '" --version' + '"!\nstdout dump:\n' + cliOutput);
+            outputChannel.append('Error while executing "' + '"' + pathToVhdlLang + '" --version' + '"!\nstdout dump:\n' + cliOutput);
+        }
 
     return cliOutput.replace('vhdl_lang ', '').replace('\n', '');
 }
@@ -112,11 +123,13 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
         default:
             vscode.window.showErrorMessage('Your platform isn\'t supported by this extension!');
             console.error('Your platform isn\'t supported by this extension!');
+            outputChannel.append('Your platform isn\'t supported by this extension!');
             return;
     }
 
     vscode.window.showInformationMessage('Downloading VHDL_lang!');
     console.log('Downloading VHDL_lang!');
+    outputChannel.append('Downloading VHDL_lang!');
 
     pathToVhdlLang = path.join(pathToVhdlLang, binaryName);
 
@@ -138,6 +151,7 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
     if (response.status !== 200) {
         vscode.window.showErrorMessage('Error while downloading VHDL_lang! Try again later!');
         console.error('Error while downloading VHDL_lang! Try again later!');
+        outputChannel.append('Error while downloading VHDL_lang! Try again later!');
         return;
     }
 
@@ -166,6 +180,7 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
 
     vscode.window.showInformationMessage('Finished downloading VHDL_lang!');
     console.log('Finished downloading VHDL_lang!');
+    outputChannel.append('Finished downloading VHDL_lang!');
 }
 
 /**

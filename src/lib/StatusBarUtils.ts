@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import * as pathUtils from './PathUtils';
 import * as quartus from './QuartusUtils';
+import { outputChannel } from '../extension';
 
 /**
  * @brief Function initializes the status bar item/button for the active quartus project

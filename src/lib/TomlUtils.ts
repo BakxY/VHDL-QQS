@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as toml from '@iarna/toml';
 import * as pathUtils from './PathUtils';
+import { outputChannel } from '../extension';
 
 interface TomlConfig {
     libraries: {
@@ -23,10 +24,12 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
     pathToToml = path.join(workspacePath, pathToToml);
 
     console.log('Using toml file at "' + pathToToml + '"');
+    outputChannel.append('Using toml file at "' + pathToToml + '"');
 
     if (!fs.existsSync(pathToToml)) {
         vscode.window.showErrorMessage('No file at "' + pathToToml + '"!');
         console.error('No file at "' + pathToToml + '"!');
+        outputChannel.append('No file at "' + pathToToml + '"!');
         return null;
     }
 
@@ -35,6 +38,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
     if (!tomlString) {
         vscode.window.showErrorMessage('Unable to read toml file at "' + pathToToml + '"!');
         console.error('Unable to read toml file at "' + pathToToml + '"!');
+        outputChannel.append('Unable to read toml file at "' + pathToToml + '"!');
         return null;
     }
 
@@ -49,6 +53,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
     let filteredFiles: string[] = [];
 
     console.log('Found ' + filesFromToml.length + ' number of raw paths');
+    outputChannel.append('Found ' + filesFromToml.length + ' number of raw paths');
 
     // Go trough all files in toml file
     for (let fileIndex = 0; fileIndex < filesFromToml.length; fileIndex++) {
@@ -59,6 +64,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
         for (let pathIndex = 0; pathIndex < resolvedPath.length; pathIndex++) {
             filteredFiles.push(resolvedPath[pathIndex]);
             console.log('Expanded path "' + filesFromToml[fileIndex] + '" to file "' + resolvedPath[pathIndex] + '"');
+            outputChannel.append('Expanded path "' + filesFromToml[fileIndex] + '" to file "' + resolvedPath[pathIndex] + '"');
         }
     }
 

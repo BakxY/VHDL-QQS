@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as pathUtils from './PathUtils';
+import { outputChannel } from '../extension';
 
 /**
  * @brief Runs all support function to compile a quartus project and start a terminal with running compilation
@@ -39,4 +40,5 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
 
     console.log('Started compilation in terminal!');
     vscode.window.showInformationMessage('Started compilation in terminal!');
+    outputChannel.append('Started compilation in terminal!');
 }

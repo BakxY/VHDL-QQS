@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as cp from 'child_process';
 import * as pathUtils from './PathUtils';
+import { outputChannel } from '../extension';
 
 export type globalAssignment = {
     name: string;
@@ -124,7 +125,16 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
 
     // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
-    const commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
+    let commandOutput: string[] = [];
+
+    try {
+        commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' }).split('\n');
+    }
+    catch {
+        console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+    }
 
     let filteredCommandOutput: string[] = [];
 
@@ -157,7 +167,16 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
 
     // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
-    cp.execSync(scriptCmd, { encoding: 'utf8' });
+    let commandOutput: string = '';
+
+    try {
+        commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' });
+    }
+    catch {
+        console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+    }
 }
 
 /**
@@ -282,7 +301,16 @@ export function removeProjectGlobal(context: vscode.ExtensionContext, currentPro
 
     // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
-    cp.execSync(scriptCmd, { encoding: 'utf8' });
+    let commandOutput: string = '';
+
+    try {
+        commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' });
+    }
+    catch {
+        console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+    }
 }
 
 /**
