@@ -49,7 +49,7 @@ export function getAllProjectFiles() {
 
     // Check all files for project file extension
     for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {
-        if (path.extname(allFiles[fileIndex]) === '.qpf') {
+        if (path.extname(allFiles[fileIndex]) === '.qsf') {
             allProjectFiles.push(allFiles[fileIndex].replace(vscode.workspace.workspaceFolders![0].uri.fsPath, '').replaceAll('\\', '/'));
         }
     }
