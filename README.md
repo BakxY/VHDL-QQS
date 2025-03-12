@@ -69,15 +69,11 @@ The VHDL-QQS extension's behavior can be customized through VS Code settings.
 
 * Configure the following settings as needed:
 
-#### 1.1 General Settings
-
-* `vhdl-qqs.tomlPath`: (Optional) The name of the TOML file used for project configuration. The default is `vhdl_ls.toml`. If you are using a different filename, change this setting.
-
-#### 1.2 Quartus Settings
+#### 1.1 Quartus Settings
 
 * `vhdl-qqs.quartusBinPath`: (Required) Enter the *full path* to your Quartus installation's `bin` (or `bin64` on Windows) directory. This is usually the directory where `quartus` and `quartus_sh` is located.  [Example: `/path/to/intelFPGA_lite/23.1/quartus/bin` or `C:\intelFPGA_lite\23.1\quartus\bin64`]
 
-#### 1.3 QuestaSim Settings
+#### 1.2 QuestaSim Settings
 
 * `vhdl-qqs.questaFeatureFlag`: (Optional, but recommended if using QuestaSim) Set this to `true` to enable QuestaSim features within the extension.
 
@@ -85,7 +81,7 @@ The VHDL-QQS extension's behavior can be customized through VS Code settings.
 
 * `vhdl-qqs.questaTestsPath`: (Required if `vhdl-qqs.questaFeatureFlag` is true) Enter the *relative path* from your Questa project file (`.mpf`) to the do file that runs all the simulations. This path is used to locate the test files.  [Example: `..\compile.do`]
 
-#### 1.4 Important Notes about Paths
+#### 1.3 Important Notes about Paths
 
 * Make sure to enter the *full paths* to the directories or executables for Quartus and QuestaSim (if applicable). Relative paths are not supported for these settings.
 * If you are not using QuestaSim, you can leave the `vhdl-qqs.questaFeatureFlag`, `vhdl-qqs.questaBinPath`, and `vhdl-qqs.questaTestsPath` settings at their default values.
