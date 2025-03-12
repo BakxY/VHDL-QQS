@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as pathUtils from './PathUtils';
+import { outputChannel } from '../extension';
 
 /**
  * @brief TODO
@@ -17,6 +18,7 @@ export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPa
     if (pathToTests === undefined) {
         console.error('No path to do tests file defined! Check your settings!');
         vscode.window.showErrorMessage('No path to do tests file defined! Check your settings!');
+        outputChannel.append('No path to do tests file defined! Check your settings!');
         return;
     }
 
@@ -44,4 +46,5 @@ export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPa
 
     console.log('Started test run in terminal!');
     vscode.window.showInformationMessage('Started test run in terminal!');
+    outputChannel.append('Started test run in terminal!');
 }

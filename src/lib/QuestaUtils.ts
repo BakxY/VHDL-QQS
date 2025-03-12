@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as pathUtils from './PathUtils';
+import { outputChannel } from '../extension';
 
 /**
  * @brief Gets all questa project files (file extension .qpf) in the current workspace

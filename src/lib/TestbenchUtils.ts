@@ -1,4 +1,5 @@
 import * as entityUtils from './EntityUtils';
+import { outputChannel } from '../extension';
 
 /**
  * @brief Generates the testbench component string to apply to the testbench template
