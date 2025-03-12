@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as pathUtils from './PathUtils';
 import { outputChannel } from '../extension';
 
+const PATH_TO_CMD: string = '/Windows/System32/cmd.exe'
+
 /**
  * @brief Runs all support function to compile a quartus project and start a terminal with running compilation
  * 
@@ -32,7 +34,13 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
 
     // Check if a quartus shell was found
     if (!quartusCompileShell) {
-        quartusCompileShell = vscode.window.createTerminal('Quartus Compilation');
+        switch (process.platform) {
+            case 'win32':
+                quartusCompileShell = vscode.window.createTerminal('Quartus Compilation', PATH_TO_CMD);
+                break;
+            default:
+                quartusCompileShell = vscode.window.createTerminal('Quartus Compilation');
+        }
     }
 
     quartusCompileShell.show();
