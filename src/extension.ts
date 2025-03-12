@@ -616,6 +616,9 @@ export async function activate(context: vscode.ExtensionContext) {
 					return edits;
 				}
 
+				// Save document before formatting it
+				document.save();
+
 				const fullRange = new vscode.Range(0, 0, document.lineCount, 0);
 				const formattedFile: string = cp.execSync('"' + pathToBin + '" --format "' + document.uri.fsPath + '"').toString();
 
