@@ -225,7 +225,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (quartusPath === null) { return; }
 
 		// Create full path for programming file
-		const fileToOpen = path.join(pathUtils.getWorkspacePath()!, path.dirname(activeProject), path.basename(activeProject));
+		const fileToOpen = path.join(pathUtils.getWorkspacePath()!, path.dirname(activeProject), path.basename(activeProject)).replace('.qsf', '.qpf');
 
 		// check if file exists (if project was compiled)
 		if (!fs.existsSync(fileToOpen)) {
