@@ -2,7 +2,7 @@
 name: Quality of Life Improvement Request
 about: Help us improve the extension's quality of life
 title: ''
-labels: enhancement
+labels: quality of life
 assignees: ''
 
 ---
