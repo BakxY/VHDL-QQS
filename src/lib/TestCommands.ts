@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as pathUtils from './PathUtils';
 import { outputChannel } from '../extension';
 
-const PATH_TO_CMD: string = '/Windows/System32/cmd.exe'
+const PATH_TO_CMD: string = '/Windows/System32/cmd.exe';
 
 /**
  * @brief TODO

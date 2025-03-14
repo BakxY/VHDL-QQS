@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as pathUtils from './PathUtils';
 import { outputChannel } from '../extension';
 
-const PATH_TO_CMD: string = '/Windows/System32/cmd.exe'
+const PATH_TO_CMD: string = '/Windows/System32/cmd.exe';
 
 /**
  * @brief Runs all support function to compile a quartus project and start a terminal with running compilation
