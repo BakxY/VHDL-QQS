@@ -643,20 +643,33 @@ export async function activate(context: vscode.ExtensionContext) {
 
 				const fullRange: vscode.Range = new vscode.Range(0, 0, document.lineCount, 0);
 				const execString: string = '"' + pathToBin + '" --format "' + document.uri.fsPath + '"';
-				let formattedFile: string = '';
+				let formattedFile: Buffer<ArrayBufferLike> = Buffer.from([]);
 
 				try {
-					formattedFile = cp.execSync(execString).toString();
+					formattedFile = cp.execSync(execString);
 				}
-				catch {
-					console.error('Error while executing "' + execString + '"!\nstdout dump:\n' + formattedFile);
-					vscode.window.showErrorMessage('Error while executing "' + execString + '"!\nstdout dump:\n' + formattedFile);
-					outputChannel.append('Error while executing "' + execString + '"!\nstdout dump:\n' + formattedFile);
+				catch (err) {
+					if(err instanceof Error)
+					{
+						const processError = err as (Error & { stderr?: Buffer; stdout?: Buffer });
 
+						console.error('Error while executing "' + execString + '"!\nerror dump:\n' + processError.stdout?.toString());
+						outputChannel.append('Error while executing "' + execString + '"!\nerror dump:\n' + processError.stdout?.toString());
+
+						vscode.window.showErrorMessage('You can\'t format a file with broken syntax! Fix syntax before formatting file! Check output to see error!');
+						outputChannel.show();
+					}
+					else
+					{
+						console.error('Error while executing "' + execString + '"!\nerror dump:\n' + err);
+						outputChannel.append('Error while executing "' + execString + '"!\nerror dump:\n' + err);
+						vscode.window.showErrorMessage('Error while executing "' + execString + '"!\nerror dump:\n' + err);
+					}
+					
 					return edits;
 				}
 
-				edits.push(vscode.TextEdit.replace(fullRange, formattedFile));
+				edits.push(vscode.TextEdit.replace(fullRange, formattedFile.toString()));
 
 				return edits;
 			}
