@@ -652,6 +652,8 @@ export async function activate(context: vscode.ExtensionContext) {
 					console.error('Error while executing "' + execString + '"!\nstdout dump:\n' + formattedFile);
 					vscode.window.showErrorMessage('Error while executing "' + execString + '"!\nstdout dump:\n' + formattedFile);
 					outputChannel.append('Error while executing "' + execString + '"!\nstdout dump:\n' + formattedFile);
+
+					return edits;
 				}
 
 				edits.push(vscode.TextEdit.replace(fullRange, formattedFile));
