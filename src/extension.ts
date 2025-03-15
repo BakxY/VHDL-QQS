@@ -585,7 +585,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
 	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
 
-	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(event => {
+	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async event => {
 		if (event.affectsConfiguration('vhdl-qqs.questaFeatureFlag')) {
 			if (vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
 				currentQuestaProjectDisplay.show();
@@ -594,6 +594,13 @@ export async function activate(context: vscode.ExtensionContext) {
 			else {
 				currentQuestaProjectDisplay.hide();
 				runQuestaTestsButton.hide();
+			}
+		}
+		if (event.affectsConfiguration('vhdl-qqs.quartusBinPath')) {
+			const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+
+			if (quartusPath !== null) {
+				quartus.checkQuartusVersion(quartusPath);
 			}
 		}
 	}));
@@ -617,7 +624,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 		if (quartusPath !== null) {
 			quartus.checkQuartusVersion(quartusPath);
-			
+
 			quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 			quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 		}
