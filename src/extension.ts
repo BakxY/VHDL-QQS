@@ -616,6 +616,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 		if (quartusPath !== null) {
+			quartus.checkQuartusVersion(quartusPath);
+			
 			quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 			quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 		}
