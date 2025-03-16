@@ -38,7 +38,7 @@ During my studies, I took a course on FPGAs that heavily relied on Intel Quartus
 ## Installation
 
 > [!IMPORTANT]
-> The versions features are only tested for Quartus Prime versions 23.0 and 23.1. Functionality is not guaranteed for other versions.
+> Check the [version docs](QUARTUS_VERSIONS) if your quartus version is supported. Functionality is not guaranteed for other versions.
 
 This extension requires VS Code, Quartus Prime and Questa Prime. It can be installed directly from the VS Code Marketplace or build the extension from source. It is also recommended that you use the [VHDL LS](https://github.com/VHDL-LS/rust_hdl_vscode) extension for code completion and language support.
 
