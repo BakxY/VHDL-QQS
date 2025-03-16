@@ -5,6 +5,8 @@ import * as cp from 'child_process';
 import * as pathUtils from './PathUtils';
 import { outputChannel } from '../extension';
 
+const SUPPORTED_QUARTUS_VERSIONS: string[] = ['23.1std'];
+
 export type globalAssignment = {
     name: string;
     value: string;
@@ -56,6 +58,23 @@ export function getAllProjectFiles() {
     }
 
     return allProjectFiles;
+}
+
+export function checkQuartusVersion(pathToQuartus: string): boolean {
+    const pathToQuartusShell = path.join(pathToQuartus, 'quartus_sh');
+    const quartusVersionOutput: string = cp.execSync('"' + pathToQuartusShell + '" -v').toString();
+
+    for (let versionIndex = 0; versionIndex < SUPPORTED_QUARTUS_VERSIONS.length; versionIndex++) {
+        if (quartusVersionOutput.includes(SUPPORTED_QUARTUS_VERSIONS[versionIndex])) {
+            return true;
+        }
+    }
+
+    vscode.window.showWarningMessage('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
+    console.warn('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
+    outputChannel.append('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
+
+    return false;
 }
 
 /**
