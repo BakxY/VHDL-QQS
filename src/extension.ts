@@ -570,18 +570,46 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuestaBinPath();
-		if (quartusPath === null) { return; }
+		const questaPath: string | null = await pathUtils.getQuestaBinPath();
+		if (questaPath === null) { return; }
 
-		testCommands.runQuestaTest(context, activeProject, quartusPath);
+		testCommands.runQuestaTest(context, activeProject, questaPath);
 	});
 	context.subscriptions.push(disposable);
 
 	/**
-	 * @brief TODO
+	 * @brief Command is called once user clicks on a project property
 	 * @author BakxY
 	 */
 	var disposable = vscode.commands.registerCommand('vhdl-qqs.changeQuartusProjectProperty', async (element) => {
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
+		if (activeProject === null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath === null) { return; }
+
+		switch (element.name) {
+			case 'DEVICE':
+			case 'FAMILY':
+				break;
+
+			case 'VHDL Version':
+				const availableVersions = quartus.getAvailableVhdlVersions();
+
+				// Ask user to select a vhdl version
+				const selectedVersion: string | undefined = await vscode.window.showQuickPick(availableVersions, { title: 'Select a VHDL version' });
+				if (selectedVersion === undefined) { return; }
+
+				quartus.setProjectGlobal(context, activeProject, quartusPath, 'VHDL_INPUT_VERSION', selectedVersion);
+
+				quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
+				break;
+
+			default:
+				break;
+		}
 	});
 	context.subscriptions.push(disposable);
 
@@ -669,8 +697,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					formattedFile = cp.execSync(execString);
 				}
 				catch (err) {
-					if(err instanceof Error)
-					{
+					if (err instanceof Error) {
 						const processError = err as (Error & { stderr?: Buffer; stdout?: Buffer });
 
 						console.error('Error while executing "' + execString + '"!\nerror dump:\n' + processError.stdout?.toString());
@@ -679,13 +706,12 @@ export async function activate(context: vscode.ExtensionContext) {
 						vscode.window.showErrorMessage('You can\'t format a file with broken syntax! Fix syntax before formatting file! Check output to see error!');
 						outputChannel.show();
 					}
-					else
-					{
+					else {
 						console.error('Error while executing "' + execString + '"!\nerror dump:\n' + err);
 						outputChannel.append('Error while executing "' + execString + '"!\nerror dump:\n' + err);
 						vscode.window.showErrorMessage('Error while executing "' + execString + '"!\nerror dump:\n' + err);
 					}
-					
+
 					return edits;
 				}
 

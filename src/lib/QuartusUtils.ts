@@ -191,7 +191,7 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
     try {
         commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' });
     }
-    catch {
+    catch (err) {
         console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
         vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
         outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
@@ -478,4 +478,13 @@ export class QuartusProjectPropertiesTreeDataProvider implements vscode.TreeData
         this.data = allProperties;
         this._onDidChangeTreeData.fire(null);
     }
+}
+
+/**
+ * @brief Returns the available vhdl versions for the user to select from.
+ * @link https://www.intel.com/content/www/us/en/docs/programmable/683084/current/vhdl-input-version.html
+ */
+export function getAvailableVhdlVersions() : string[]
+{
+    return [ 'VHDL_2008', 'VHDL_1993', 'VHDL_1987' ];
 }
