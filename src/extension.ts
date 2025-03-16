@@ -591,8 +591,19 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (quartusPath === null) { return; }
 
 		switch (element.name) {
-			case 'DEVICE':
-			case 'FAMILY':
+			case 'Device':
+			case 'Family':
+				const availableFamilies: string[] | null = quartus.getAvailableChipFamilies(context, quartusPath);
+				if (availableFamilies === null) { return; }
+
+				const selectedFamily: string | undefined = await vscode.window.showQuickPick(availableFamilies, { title: 'Select a chip family' });
+				if (selectedFamily === undefined) { return; }
+
+				const availableChips = quartus.getAvailableChips(context, quartusPath, selectedFamily);
+				if (availableChips === null) { return; }
+
+				const selectedChip: string | undefined = await vscode.window.showQuickPick(availableChips, { title: 'Select a chip' });
+				if (selectedChip === undefined) { return; }
 				break;
 
 			case 'VHDL Version':
