@@ -1,6 +1,6 @@
 # VHDL-QQS (VHDL-Quartus Questa Simulate)
 
-[![License: GPL v3](https://badges.sespra.ch/badge/License-GPLv3-blue.svg)](LICENSE) [![Visual Studio Marketplace Version](https://badges.sespra.ch/vscode-marketplace/v/BakxY.vhdl-qqs)](https://marketplace.visualstudio.com/items?itemName=BakxY.vhdl-qqs) [![GitHub Issues](https://img.shields.io/github/issues/BakxY/VHDL-QQS)](https://img.shields.io/github/issues/BakxY/VHDL-QQS)
+[![License: GPL v3](https://badges.sespra.ch/badge/License-GPLv3-blue)](LICENSE) [![Visual Studio Marketplace Version](https://badges.sespra.ch/vscode-marketplace/v/BakxY.vhdl-qqs)](https://marketplace.visualstudio.com/items?itemName=BakxY.vhdl-qqs) [![GitHub Issues](https://img.shields.io/github/issues/BakxY/VHDL-QQS)](https://img.shields.io/github/issues/BakxY/VHDL-QQS)
 
 This project enhances FPGA design workflows within VS Code by providing a suite of tools for Intel Quartus projects. Features include seamless project compilation, direct access to the Quartus programmer and RTL viewer, automated testbench generation for QuestaSim, integrated QuestaSim simulation capabilities, streamlined project configuration, direct file management, top-level entity changes, and on-demand source file formatting. This extension minimizes manual effort and accelerates the development and verification process.
 
