@@ -127,6 +127,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
 		quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
+
+		const projectTopLevel: string = quartus.getProjectTopLevel(context, activeProject, quartusPath);
+		currentTopLevelDisplay.text = 'Top Level: ' + projectTopLevel;
 	});
 	context.subscriptions.push(disposable);
 
