@@ -449,6 +449,14 @@ export class QuartusProjectPropertiesTreeDataProvider implements vscode.TreeData
 
     getTreeItem(element: quartusProperty): vscode.TreeItem {
         const treeItem = new vscode.TreeItem(element.name + ': ' + element.value, element.children ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+        
+        // Add the command and decoration for the "Copy" button
+        treeItem.command = {
+            command: 'vhdl-qqs.changeQuartusProjectProperty',
+            title: 'Change',
+            arguments: [element] // Pass the property object to the command
+        };
+        
         return treeItem;
     }
 

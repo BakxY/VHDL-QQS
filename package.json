@@ -133,8 +133,19 @@
                 "command": "vhdl-qqs.runQuestaTest",
                 "title": "VHDL-QQS: Run Questa Tests"
             }
+            ,
+            {
+                "command": "vhdl-qqs.changeQuartusProjectProperty",
+                "title": "VHDL-QQS: Change quartus project property"
+            }
         ],
         "menus": {
+            "commandPalette": [
+                {
+                    "command": "vhdl-qqs.changeQuartusProjectProperty",
+                    "when": "false"
+                }
+            ],
             "editor/context": [
                 {
                     "command": "vhdl-qqs.generateTestBenchSelection",

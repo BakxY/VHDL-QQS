@@ -577,6 +577,14 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
+	/**
+	 * @brief TODO
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.changeQuartusProjectProperty', async (element) => {
+	});
+	context.subscriptions.push(disposable);
+
 	let currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
 	context.subscriptions.push(currentQuartusProjectDisplay);
 
