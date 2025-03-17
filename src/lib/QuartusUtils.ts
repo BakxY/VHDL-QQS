@@ -476,6 +476,7 @@ export class QuartusProjectPropertiesTreeDataProvider implements vscode.TreeData
         allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'FAMILY', 'Family'));
         allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'DEVICE', 'Device'));
         allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'VHDL_INPUT_VERSION', 'VHDL Version'));
+        allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'VERILOG_INPUT_VERSION', 'Verilog Version'));
 
         this.data = allProperties;
         this._onDidChangeTreeData.fire(null);
