@@ -48,9 +48,9 @@ export interface quartusProperty {
  * 
  * @returns An array of all quartus project files
  */
-export function getAllProjectFiles() {
+export function getAllProjectFiles(): string[] {
     const allFiles: string[] = pathUtils.resolvePathWithWildcards(path.normalize('**/*'));
-    let allProjectFiles: string[] = [];
+    const allProjectFiles: string[] = [];
 
     // Check all files for project file extension
     for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {
@@ -86,7 +86,7 @@ export function checkQuartusVersion(pathToQuartus: string): boolean {
  * 
  * @returns A boolean type, true if common files are present, else false
  */
-export function checkForQuartusInstallation(pathToQuartus: string) {
+export function checkForQuartusInstallation(pathToQuartus: string): boolean {
     // Check if bin path exists
     if (!fs.existsSync(pathToQuartus)) { return false; }
 
@@ -136,7 +136,7 @@ export function checkForQuartusInstallation(pathToQuartus: string) {
  * 
  * @returns An array of all assignments set
  */
-export function getProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string) {
+export function getProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string): string[] {
     const totalProjectPath = path.join(pathUtils.getWorkspacePath()!, currentProjectPath);
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
     const totalScriptPath = path.join(context.extensionPath, 'res', 'getGlobal.tcl');
@@ -157,7 +157,7 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
         outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
     }
 
-    let filteredCommandOutput: string[] = [];
+    const filteredCommandOutput: string[] = [];
 
     // Filter output to not include info statements
     for (let currentLine = 0; currentLine < commandOutput.length; currentLine++) {
@@ -178,7 +178,7 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
  * @param name Name of the assignment to set
  * @param value Value to assign to the assignment
  */
-export function setProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string, value: string) {
+export function setProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string, value: string): void {
     const totalProjectPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, currentProjectPath);
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
     const totalScriptPath = path.join(context.extensionPath, 'res', 'setGlobal.tcl');
@@ -188,15 +188,14 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
 
     // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
-    let commandOutput: string = '';
 
     try {
-        commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' });
+        cp.execSync(scriptCmd, { encoding: 'utf8' });
     }
     catch (err) {
-        console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
-        vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
-        outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        console.error('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
+        vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
+        outputChannel.append('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
     }
 }
 
@@ -209,7 +208,7 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
  * 
  * @returns String of top level project file
  */
-export function getProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
+export function getProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string): string {
     return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY')[0];
 }
 
@@ -221,7 +220,7 @@ export function getProjectTopLevel(context: vscode.ExtensionContext, currentProj
  * @param quartusBinPath Path to quartus binaries
  * @param newTopLevel The new top level entity
  */
-export function setProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newTopLevel: string) {
+export function setProjectTopLevel(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newTopLevel: string): void {
     setProjectGlobal(context, currentProjectPath, quartusBinPath, 'TOP_LEVEL_ENTITY', newTopLevel);
 }
 
@@ -234,7 +233,7 @@ export function setProjectTopLevel(context: vscode.ExtensionContext, currentProj
  * 
  * @returns A array of string of all of the VHDL files in the project file
  */
-export function getProjectVhdlSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
+export function getProjectVhdlSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string): string[] {
     return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'VHDL_FILE');
 }
 
@@ -247,7 +246,7 @@ export function getProjectVhdlSourceFiles(context: vscode.ExtensionContext, curr
  * 
  * @returns A array of string of all of the Verilog files in the project file
  */
-export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
+export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string): string[] {
     return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE');
 }
 
@@ -287,7 +286,7 @@ export function checkFileInProject(context: vscode.ExtensionContext, filePath: s
  * @param quartusBinPath Path to quartus binaries
  * @param newTopLevel The path to the new vhdl source file
  */
-export function addVhdlFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newSourceFile: string) {
+export function addVhdlFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newSourceFile: string): void {
     setProjectGlobal(context, currentProjectPath, quartusBinPath, 'VHDL_FILE', newSourceFile);
 }
 
@@ -299,7 +298,7 @@ export function addVhdlFileToProject(context: vscode.ExtensionContext, currentPr
  * @param quartusBinPath Path to quartus binaries
  * @param newTopLevel The path to the new Verilog source file
  */
-export function addVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newSourceFile: string) {
+export function addVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, newSourceFile: string): void {
     setProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE', newSourceFile);
 }
 
@@ -312,7 +311,7 @@ export function addVerilogFileToProject(context: vscode.ExtensionContext, curren
  * @param name The name of the assignment to remove
  * @param value The value of the assignment to remove, needed for identification
  */
-export function removeProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string, value: string) {
+export function removeProjectGlobal(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, name: string, value: string): void {
     const totalProjectPath = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, currentProjectPath);
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
     const totalScriptPath = path.join(context.extensionPath, 'res', 'removeGlobal.tcl');
@@ -342,7 +341,7 @@ export function removeProjectGlobal(context: vscode.ExtensionContext, currentPro
  * @param quartusBinPath Path to quartus binaries
  * @param toRemoveFile The path to the file to remove
  */
-export function removeVhdlFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
+export function removeVhdlFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string): void {
     removeProjectGlobal(context, currentProjectPath, quartusBinPath, 'VHDL_FILE', toRemoveFile);
 }
 
@@ -354,7 +353,7 @@ export function removeVhdlFileToProject(context: vscode.ExtensionContext, curren
  * @param quartusBinPath Path to quartus binaries
  * @param toRemoveFile The path to the file to remove
  */
-export function removeVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string) {
+export function removeVerilogFileToProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string, toRemoveFile: string): void {
     removeProjectGlobal(context, currentProjectPath, quartusBinPath, 'VERILOG_FILE', toRemoveFile);
 }
 
@@ -366,7 +365,7 @@ export function removeVerilogFileToProject(context: vscode.ExtensionContext, cur
  * @returns The converted data in custom data type format
  */
 export function convertToQuartusSourceFileType(dataToConvert: string[]): quartusSourceFile[] {
-    let convertedData: quartusSourceFile[] = [];
+    const convertedData: quartusSourceFile[] = [];
 
     for (let fileIndex = 0; fileIndex < dataToConvert.length; fileIndex++) {
         convertedData.push({ path: dataToConvert[fileIndex] });
@@ -393,7 +392,7 @@ export function readProjectProperty(context: vscode.ExtensionContext, currentPro
         return { name: readableFormat, value: readValue[0] };
     }
     else {
-        let properties: quartusProperty = { name: readableFormat, value: '', children: [] };
+        const properties: quartusProperty = { name: readableFormat, value: '', children: [] };
 
         for (let propertyIndex = 0; propertyIndex < readValue.length; propertyIndex++) {
             properties.children?.push({ name: String(propertyIndex + 1), value: readValue[propertyIndex] });
@@ -428,7 +427,7 @@ export class QuartusProjectFileTreeDataProvider implements vscode.TreeDataProvid
         }
     }
 
-    updateData(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
+    updateData(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string): void {
         let allFiles: string[] = [];
 
         allFiles = allFiles.concat(getProjectVhdlSourceFiles(context, currentProjectPath, quartusBinPath));
@@ -470,8 +469,8 @@ export class QuartusProjectPropertiesTreeDataProvider implements vscode.TreeData
         }
     }
 
-    updateData(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
-        let allProperties: quartusProperty[] = [];
+    updateData(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string): void {
+        const allProperties: quartusProperty[] = [];
 
         allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'FAMILY', 'Family'));
         allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'DEVICE', 'Device'));
@@ -504,7 +503,6 @@ export function getAvailableVerilogVersions(): string[] {
  */
 export function evalTclCmd(context: vscode.ExtensionContext, quartusBinPath: string, tclCmd: string): string | null {
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
-    const totalScriptPath = path.join(context.extensionPath, 'res', 'removeGlobal.tcl');
 
     // Generate script command string and run command
     const scriptCmd = '"' + totalQuartusBinPath + '" --tcl_eval ' + tclCmd;
@@ -514,9 +512,9 @@ export function evalTclCmd(context: vscode.ExtensionContext, quartusBinPath: str
         commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' });
     }
     catch (err) {
-        console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
-        vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
-        outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        console.error('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
+        vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
+        outputChannel.append('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
 
         return null;
     }
@@ -541,7 +539,7 @@ export function getAvailableChipFamilies(context: vscode.ExtensionContext, quart
         return null;
     }
 
-    let filteredFamilies: string[] = [];
+    const filteredFamilies: string[] = [];
 
     for (let familyIndex = 0; familyIndex < families.length; familyIndex++) {
         if (families[familyIndex].startsWith('{') && families[familyIndex].endsWith('}')) {

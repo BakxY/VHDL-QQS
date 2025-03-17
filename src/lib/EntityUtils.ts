@@ -18,7 +18,7 @@ const MATCH_PROPERTY_DIR: RegExp = /\s+(in|out|inout)\s+/;
  * 
  * @returns The selected expression as a string
  */
-export function getSelectedExpression(editor: vscode.TextEditor | undefined) {
+export function getSelectedExpression(editor: vscode.TextEditor | undefined): string | null {
     const selection = editor?.selection;
 
     // Check if user has selected any text
@@ -47,7 +47,7 @@ export function getSelectedExpression(editor: vscode.TextEditor | undefined) {
  * 
  * @returns The content of the entities declaration as a string
  */
-export function getEntityContents(pathToEntityFile: string) {
+export function getEntityContents(pathToEntityFile: string): string | null {
     const entityFile: string = fs.readFileSync(pathToEntityFile, 'utf-8');
 
     // Check if file could be read
@@ -79,7 +79,7 @@ export function getEntityContents(pathToEntityFile: string) {
  * 
  * @returns The separated generic content as a string
  */
-export function getGenericContent(entityContent: string) {
+export function getGenericContent(entityContent: string): string | null {
     // Remove comments from content
     entityContent = entityContent.replace(/--.*$/gm, '').replaceAll('\n', '');
 
@@ -127,7 +127,7 @@ export function getGenericContent(entityContent: string) {
  * 
  * @returns The separated port content as a string
  */
-export function getPortContent(entityContent: string) {
+export function getPortContent(entityContent: string): string | null {
     // Remove comments from content
     entityContent = entityContent.replace(/--.*$/gm, '').replaceAll('\n', '');
 
@@ -172,8 +172,8 @@ export function getPortContent(entityContent: string) {
  * 
  * @returns An array of all entity port properties
  */
-export function getPortPropertiesFromContent(entityContent: string | null) {
-    let entityProperties: entityProperty[] = [];
+export function getPortPropertiesFromContent(entityContent: string | null): entityProperty[] | null {
+    const entityProperties: entityProperty[] = [];
 
     // Split content with using separator
     const splitContent: string[] = entityContent!.split(';');
@@ -219,11 +219,11 @@ export function getPortPropertiesFromContent(entityContent: string | null) {
  * 
  * @returns An array of all entity generic properties
  */
-export function getGenericPropertiesFromContent(entityContent: string | null) {
+export function getGenericPropertiesFromContent(entityContent: string | null): entityProperty[] | null {
     // Check if there is no generic content
     if(entityContent === null) { return null; }
     
-    let entityProperties: entityProperty[] = [];
+    const entityProperties: entityProperty[] = [];
 
     // Split content with using separator
     const splitContent: string[] = entityContent!.split(';');

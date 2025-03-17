@@ -199,7 +199,7 @@ export function getTomlLocalPath(): string | null {
  * @returns The resolved array of paths
  */
 export function resolveRelativePathArray(basePath: string, pathsToResolve: string[]): string[] {
-    let resolvedPaths: string[] = [];
+    const resolvedPaths: string[] = [];
 
     // Runs trough all given paths
     for (let fileIndex = 0; fileIndex < pathsToResolve.length; fileIndex++) {

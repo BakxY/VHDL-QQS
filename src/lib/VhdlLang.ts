@@ -10,6 +10,10 @@ import { outputChannel } from '../extension';
 const WIN32_FILE_NAME = 'vhdl_lang-x86_64-pc-windows-msvc.zip';
 const LINUX_FILE_NAME = 'vhdl_lang-x86_64-unknown-linux-gnu.zip';
 
+type GitHubReleaseJson = {
+    tag_name: string;
+}
+
 /**
  * @brief Function checks if a vhdl_lang binary is present in extension path
  * 
@@ -17,7 +21,7 @@ const LINUX_FILE_NAME = 'vhdl_lang-x86_64-unknown-linux-gnu.zip';
  * 
  * @returns Boolean based on if binary is present
  */
-export function checkForVhdlLang(context: vscode.ExtensionContext) {
+export function checkForVhdlLang(context: vscode.ExtensionContext): boolean {
     let pathToVhdlLang = path.join(context.extensionPath, 'res');
     const currentPlatform: string = process.platform;
     let binaryName: string = '';
@@ -53,7 +57,7 @@ export function checkForVhdlLang(context: vscode.ExtensionContext) {
  * @returns Version number of vhdl_lang
  */
 export function getVhdlLangVersion(context: vscode.ExtensionContext): string {
-    let pathToVhdlLang = path.join(context.extensionPath, 'res', 'vhdl_lang');
+    const pathToVhdlLang = path.join(context.extensionPath, 'res', 'vhdl_lang');
 
     // Get version from binary
     let cliOutput: string = '';
@@ -85,7 +89,7 @@ export async function getLatestReleaseFromGithub(): Promise<string | null> {
     }
 
     // Parse data and return tag name
-    const data: any = await response.json();
+    const data: GitHubReleaseJson = (await response.json()) as GitHubReleaseJson;
     return data.tag_name.replace('v', '');
 }
 
@@ -96,7 +100,7 @@ export async function getLatestReleaseFromGithub(): Promise<string | null> {
  * 
  * @returns Version number of vhdl_lang
  */
-export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
+export async function getVhdlLangExecutable(context: vscode.ExtensionContext): Promise<void> {
     let pathToVhdlLang = path.join(context.extensionPath, 'res');
 
     // Current platform
@@ -188,7 +192,7 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext) {
  * 
  * @param context The context form where the function was ran
  */
-export async function checkDownloadVhdlLang(context: vscode.ExtensionContext) {
+export async function checkDownloadVhdlLang(context: vscode.ExtensionContext): Promise<void> {
     if (!checkForVhdlLang(context)) {
         // Download vhdl_lang version
         getVhdlLangExecutable(context);

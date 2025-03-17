@@ -15,7 +15,7 @@ import * as vhdlLang from './lib/VhdlLang';
 
 export let outputChannel: vscode.OutputChannel;
 
-export async function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext): Promise<void> {
 	outputChannel = vscode.window.createOutputChannel("VHDL-QQS");
 
 	/**
@@ -637,10 +637,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 	context.subscriptions.push(disposable);
 
-	let currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
+	const currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
 	context.subscriptions.push(currentQuartusProjectDisplay);
 
-	let currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
+	const currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
 	context.subscriptions.push(currentTopLevelDisplay);
 
 	context.subscriptions.push(statusBarCreator.createCleanProject());
@@ -668,10 +668,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 	}));
 
-	let currentQuestaProjectDisplay: vscode.StatusBarItem = statusBarCreator.createActiveQuestaProject(context);
+	const currentQuestaProjectDisplay: vscode.StatusBarItem = statusBarCreator.createActiveQuestaProject(context);
 	context.subscriptions.push(currentQuestaProjectDisplay);
 
-	let runQuestaTestsButton: vscode.StatusBarItem = statusBarCreator.createRunTests();
+	const runQuestaTestsButton: vscode.StatusBarItem = statusBarCreator.createRunTests();
 	context.subscriptions.push(runQuestaTestsButton);
 
 	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
@@ -747,6 +747,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	);
 }
 
-export function deactivate() {
+export function deactivate(): void {
 
 }
