@@ -570,10 +570,70 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (activeProject === null) { return; }
 
 		// Get  quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuestaBinPath();
+		const questaPath: string | null = await pathUtils.getQuestaBinPath();
+		if (questaPath === null) { return; }
+
+		testCommands.runQuestaTest(context, activeProject, questaPath);
+	});
+	context.subscriptions.push(disposable);
+
+	/**
+	 * @brief Command is called once user clicks on a project property
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.changeQuartusProjectProperty', async (element) => {
+		// Get currently active project
+		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
+		if (activeProject === null) { return; }
+
+		// Get  quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 		if (quartusPath === null) { return; }
 
-		testCommands.runQuestaTest(context, activeProject, quartusPath);
+		switch (element.name) {
+			case 'Device':
+			case 'Family':
+				const availableFamilies: string[] | null = quartus.getAvailableChipFamilies(context, quartusPath);
+				if (availableFamilies === null) { return; }
+
+				const selectedFamily: string | undefined = await vscode.window.showQuickPick(availableFamilies, { title: 'Select a chip family' });
+				if (selectedFamily === undefined) { return; }
+
+				const availableChips = quartus.getAvailableChips(context, quartusPath, selectedFamily);
+				if (availableChips === null) { return; }
+
+				const selectedChip: string | undefined = await vscode.window.showQuickPick(availableChips, { title: 'Select a chip' });
+				if (selectedChip === undefined) { return; }
+
+				quartus.setProjectGlobal(context, activeProject, quartusPath, 'FAMILY', selectedFamily);
+				quartus.setProjectGlobal(context, activeProject, quartusPath, 'DEVICE', selectedChip);
+				break;
+
+			case 'VHDL Version':
+				const availableVhdlVersions = quartus.getAvailableVhdlVersions();
+
+				// Ask user to select a vhdl version
+				const selectedVhdlVersion: string | undefined = await vscode.window.showQuickPick(availableVhdlVersions, { title: 'Select a VHDL version' });
+				if (selectedVhdlVersion === undefined) { return; }
+
+				quartus.setProjectGlobal(context, activeProject, quartusPath, 'VHDL_INPUT_VERSION', selectedVhdlVersion);
+				break;
+
+			case 'Verilog Version':
+					const availableVerilogVersions = quartus.getAvailableVerilogVersions();
+	
+					// Ask user to select a vhdl version
+					const selectedVerilogVersion: string | undefined = await vscode.window.showQuickPick(availableVerilogVersions, { title: 'Select a VHDL version' });
+					if (selectedVerilogVersion === undefined) { return; }
+	
+					quartus.setProjectGlobal(context, activeProject, quartusPath, 'VERILOG_INPUT_VERSION', selectedVerilogVersion);
+					break;
+
+			default:
+				break;
+		}
+
+		quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 	});
 	context.subscriptions.push(disposable);
 
@@ -661,8 +721,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					formattedFile = cp.execSync(execString);
 				}
 				catch (err) {
-					if(err instanceof Error)
-					{
+					if (err instanceof Error) {
 						const processError = err as (Error & { stderr?: Buffer; stdout?: Buffer });
 
 						console.error('Error while executing "' + execString + '"!\nerror dump:\n' + processError.stdout?.toString());
@@ -671,13 +730,12 @@ export async function activate(context: vscode.ExtensionContext) {
 						vscode.window.showErrorMessage('You can\'t format a file with broken syntax! Fix syntax before formatting file! Check output to see error!');
 						outputChannel.show();
 					}
-					else
-					{
+					else {
 						console.error('Error while executing "' + execString + '"!\nerror dump:\n' + err);
 						outputChannel.append('Error while executing "' + execString + '"!\nerror dump:\n' + err);
 						vscode.window.showErrorMessage('Error while executing "' + execString + '"!\nerror dump:\n' + err);
 					}
-					
+
 					return edits;
 				}
 

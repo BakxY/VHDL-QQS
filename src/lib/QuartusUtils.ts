@@ -7,6 +7,8 @@ import { outputChannel } from '../extension';
 
 const SUPPORTED_QUARTUS_VERSIONS: string[] = ['23.1std'];
 
+const TCL_RETURN_FORMAT_REGEX: RegExp = /(?:\{(.*?)\}|(\S+))/g;
+
 export type globalAssignment = {
     name: string;
     value: string;
@@ -191,7 +193,7 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
     try {
         commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' });
     }
-    catch {
+    catch (err) {
         console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
         vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
         outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
@@ -449,6 +451,14 @@ export class QuartusProjectPropertiesTreeDataProvider implements vscode.TreeData
 
     getTreeItem(element: quartusProperty): vscode.TreeItem {
         const treeItem = new vscode.TreeItem(element.name + ': ' + element.value, element.children ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+
+        // Add the command and decoration for the "Copy" button
+        treeItem.command = {
+            command: 'vhdl-qqs.changeQuartusProjectProperty',
+            title: 'Change',
+            arguments: [element] // Pass the property object to the command
+        };
+
         return treeItem;
     }
 
@@ -466,8 +476,99 @@ export class QuartusProjectPropertiesTreeDataProvider implements vscode.TreeData
         allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'FAMILY', 'Family'));
         allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'DEVICE', 'Device'));
         allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'VHDL_INPUT_VERSION', 'VHDL Version'));
+        allProperties.push(readProjectProperty(context, currentProjectPath, quartusBinPath, 'VERILOG_INPUT_VERSION', 'Verilog Version'));
 
         this.data = allProperties;
         this._onDidChangeTreeData.fire(null);
     }
+}
+
+/**
+ * @brief Returns the available vhdl versions for the user to select from.
+ * @link https://www.intel.com/content/www/us/en/docs/programmable/683084/current/vhdl-input-version.html
+ */
+export function getAvailableVhdlVersions(): string[] {
+    return ['VHDL_2008', 'VHDL_1993', 'VHDL_1987'];
+}
+
+/**
+ * @brief Returns the available verilog versions for the user to select from.
+ * @link https://www.intel.com/content/www/us/en/docs/programmable/683084/current/verilog-input-version.html
+ */
+export function getAvailableVerilogVersions(): string[] {
+    return ['SystemVerilog_2005', 'Verilog_1995', 'Verilog_2001'];
+}
+
+/**
+ * @brief Evaluates a tcl command in the quartus shell
+ */
+export function evalTclCmd(context: vscode.ExtensionContext, quartusBinPath: string, tclCmd: string): string | null {
+    const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
+    const totalScriptPath = path.join(context.extensionPath, 'res', 'removeGlobal.tcl');
+
+    // Generate script command string and run command
+    const scriptCmd = '"' + totalQuartusBinPath + '" --tcl_eval ' + tclCmd;
+    let commandOutput: string = '';
+
+    try {
+        commandOutput = cp.execSync(scriptCmd, { encoding: 'utf8' });
+    }
+    catch (err) {
+        console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+
+        return null;
+    }
+
+    return commandOutput.toString();
+}
+
+/**
+ * @brief Gets all of the available families of chips
+ */
+export function getAvailableChipFamilies(context: vscode.ExtensionContext, quartusBinPath: string): string[] | null {
+    const cmdReturn: string | null = evalTclCmd(context, quartusBinPath, 'get_family_list');
+    if (cmdReturn === null) { return null; }
+
+    const families: string[] | null = cmdReturn.match(TCL_RETURN_FORMAT_REGEX);
+
+    if (families === null) {
+        console.error('Tcl evaluated return value didn\'t match expected format!');
+        vscode.window.showErrorMessage('Tcl evaluated return value didn\'t match expected format!');
+        outputChannel.append('Tcl evaluated return value didn\'t match expected format!');
+
+        return null;
+    }
+
+    let filteredFamilies: string[] = [];
+
+    for (let familyIndex = 0; familyIndex < families.length; familyIndex++) {
+        if (families[familyIndex].startsWith('{') && families[familyIndex].endsWith('}')) {
+            filteredFamilies.push(families[familyIndex].substring(1, families[familyIndex].length - 1));
+        }
+        else {
+            filteredFamilies.push(families[familyIndex]);
+        }
+    }
+
+    return filteredFamilies;
+}
+
+/**
+ * @brief Gets all of the available chips in a family
+ */
+export function getAvailableChips(context: vscode.ExtensionContext, quartusBinPath: string, family: string): string[] | null {
+    const cmdReturn: string | null = evalTclCmd(context, quartusBinPath, 'get_part_list -family "' + family + '"');
+    if (cmdReturn === null) { return null; }
+
+    const families: string[] | null = cmdReturn.match(TCL_RETURN_FORMAT_REGEX);
+
+    if (families === null) {
+        console.error('Tcl evaluated return value didn\'t match expected format!');
+        vscode.window.showErrorMessage('Tcl evaluated return value didn\'t match expected format!');
+        outputChannel.append('Tcl evaluated return value didn\'t match expected format!');
+    }
+
+    return families;
 }
