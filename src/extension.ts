@@ -610,14 +610,24 @@ export async function activate(context: vscode.ExtensionContext) {
 				break;
 
 			case 'VHDL Version':
-				const availableVersions = quartus.getAvailableVhdlVersions();
+				const availableVhdlVersions = quartus.getAvailableVhdlVersions();
 
 				// Ask user to select a vhdl version
-				const selectedVersion: string | undefined = await vscode.window.showQuickPick(availableVersions, { title: 'Select a VHDL version' });
-				if (selectedVersion === undefined) { return; }
+				const selectedVhdlVersion: string | undefined = await vscode.window.showQuickPick(availableVhdlVersions, { title: 'Select a VHDL version' });
+				if (selectedVhdlVersion === undefined) { return; }
 
-				quartus.setProjectGlobal(context, activeProject, quartusPath, 'VHDL_INPUT_VERSION', selectedVersion);
+				quartus.setProjectGlobal(context, activeProject, quartusPath, 'VHDL_INPUT_VERSION', selectedVhdlVersion);
 				break;
+
+			case 'Verilog Version':
+					const availableVerilogVersions = quartus.getAvailableVerilogVersions();
+	
+					// Ask user to select a vhdl version
+					const selectedVerilogVersion: string | undefined = await vscode.window.showQuickPick(availableVerilogVersions, { title: 'Select a VHDL version' });
+					if (selectedVerilogVersion === undefined) { return; }
+	
+					quartus.setProjectGlobal(context, activeProject, quartusPath, 'VERILOG_INPUT_VERSION', selectedVerilogVersion);
+					break;
 
 			default:
 				break;

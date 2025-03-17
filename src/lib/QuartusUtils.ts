@@ -492,6 +492,14 @@ export function getAvailableVhdlVersions(): string[] {
 }
 
 /**
+ * @brief Returns the available verilog versions for the user to select from.
+ * @link https://www.intel.com/content/www/us/en/docs/programmable/683084/current/verilog-input-version.html
+ */
+export function getAvailableVerilogVersions(): string[] {
+    return ['SystemVerilog_2005', 'Verilog_1995', 'Verilog_2001'];
+}
+
+/**
  * @brief Evaluates a tcl command in the quartus shell
  */
 export function evalTclCmd(context: vscode.ExtensionContext, quartusBinPath: string, tclCmd: string): string | null {
