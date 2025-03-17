@@ -10,6 +10,10 @@ import { outputChannel } from '../extension';
 const WIN32_FILE_NAME = 'vhdl_lang-x86_64-pc-windows-msvc.zip';
 const LINUX_FILE_NAME = 'vhdl_lang-x86_64-unknown-linux-gnu.zip';
 
+type GitHubReleaseJson = {
+    tag_name: string;
+}
+
 /**
  * @brief Function checks if a vhdl_lang binary is present in extension path
  * 
@@ -85,7 +89,7 @@ export async function getLatestReleaseFromGithub(): Promise<string | null> {
     }
 
     // Parse data and return tag name
-    const data: any = await response.json();
+    const data: GitHubReleaseJson = (await response.json()) as GitHubReleaseJson;
     return data.tag_name.replace('v', '');
 }
 
