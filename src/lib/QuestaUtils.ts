@@ -2,16 +2,15 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as pathUtils from './PathUtils';
-import { outputChannel } from '../extension';
 
 /**
  * @brief Gets all questa project files (file extension .qpf) in the current workspace
  * 
  * @returns An array of all questa project files
  */
-export function getAllProjectFiles() {
+export function getAllProjectFiles(): string[] {
     const allFiles: string[] = pathUtils.resolvePathWithWildcards(path.normalize('**/*'));
-    let allProjectFiles: string[] = [];
+    const allProjectFiles: string[] = [];
 
     // Check all files for project file extension
     for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {
@@ -30,7 +29,7 @@ export function getAllProjectFiles() {
  * 
  * @returns A boolean type, true if common files are present, else false
  */
-export function checkForQuestaInstallation(pathToQuesta: string) {
+export function checkForQuestaInstallation(pathToQuesta: string): boolean {
     // Check if bin path exists
     if (!fs.existsSync(pathToQuesta)) { return false; }
 

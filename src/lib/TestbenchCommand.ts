@@ -13,7 +13,7 @@ import { outputChannel } from '../extension';
  * @param context Context from where the command was ran
  * @param entityName Name of the entity that the testbench should be generated for
  */
-export function createNewTestbench(context: vscode.ExtensionContext, entityName: string) {
+export function createNewTestbench(context: vscode.ExtensionContext, entityName: string): void {
     // Get toml file path set in vs code setting
     const pathToToml = pathUtils.getTomlLocalPath();
     if (pathToToml === null) { return; }
@@ -25,7 +25,7 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
     let pathToEntityFile: string = '';
 
     // Check if selected entity has a entity file
-    for (let entity in allEntities) {
+    for (const entity in allEntities) {
         if (allEntities[entity].endsWith(entityName + '.vhd')) {
             pathToEntityFile = allEntities[entity];
             console.log('Found file associated with selected entity at "' + allEntities[entity] + '"');
@@ -67,13 +67,13 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
     const portProperties: entityUtils.entityProperty[] | null = entityUtils.getPortPropertiesFromContent(portContent);
     const genericProperties: entityUtils.entityProperty[] | null = entityUtils.getGenericPropertiesFromContent(genericContent);
 
-    let componentContent = testbenchUtils.generateTestbenchComponent(genericProperties, portProperties);
+    const componentContent = testbenchUtils.generateTestbenchComponent(genericProperties, portProperties);
     generatedTestbench = generatedTestbench.replaceAll('ENTITY_CONTENT', componentContent);
 
-    let testbenchSignals = testbenchUtils.generateTestbenchSignals(portProperties);
+    const testbenchSignals = testbenchUtils.generateTestbenchSignals(portProperties);
     generatedTestbench = generatedTestbench.replaceAll('TESTBENCH_INTERNAL_SIGNALS', testbenchSignals);
 
-    let testbenchSignalMapping = testbenchUtils.generateSignalMapping(portProperties);
+    const testbenchSignalMapping = testbenchUtils.generateSignalMapping(portProperties);
     generatedTestbench = generatedTestbench.replaceAll('ENTITY_INTERAL_MAPPING', testbenchSignalMapping);
 
     // Check if new template file exists already

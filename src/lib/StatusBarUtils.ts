@@ -2,7 +2,6 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import * as pathUtils from './PathUtils';
 import * as quartus from './QuartusUtils';
-import { outputChannel } from '../extension';
 
 /**
  * @brief Function initializes the status bar item/button for the active quartus project
@@ -11,8 +10,8 @@ import { outputChannel } from '../extension';
  * 
  * @returns The initialized status bar item
  */
-export function createActiveQuartusProject(context: vscode.ExtensionContext) {
-    let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+export function createActiveQuartusProject(context: vscode.ExtensionContext): vscode.StatusBarItem {
+    const currentProjectDisplay: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
     currentProjectDisplay.command = 'vhdl-qqs.selectQuartusProject';
 
     let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveQuartusProject', undefined);
@@ -40,8 +39,8 @@ export function createActiveQuartusProject(context: vscode.ExtensionContext) {
  * 
  * @returns The initialized status bar item
  */
-export function createActiveQuestaProject(context: vscode.ExtensionContext) {
-    let currentProjectDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+export function createActiveQuestaProject(context: vscode.ExtensionContext): vscode.StatusBarItem {
+    const currentProjectDisplay: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
     currentProjectDisplay.command = 'vhdl-qqs.selectQuestaProject';
 
     let activeProjectName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveQuestaProject', undefined);
@@ -70,8 +69,8 @@ export function createActiveQuestaProject(context: vscode.ExtensionContext) {
  * 
  * @returns The initialized status bar item
  */
-export function createRunTests() {
-    let runTestsButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+export function createRunTests(): vscode.StatusBarItem {
+    const runTestsButton: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
     runTestsButton.command = 'vhdl-qqs.runQuestaTest';
     runTestsButton.text = '$(beaker)';
@@ -92,8 +91,8 @@ export function createRunTests() {
  * 
  * @returns The initialized status bar item
  */
-export async function createChangeTopLevel(context: vscode.ExtensionContext) {
-    let currentTopLevelDisplay = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+export async function createChangeTopLevel(context: vscode.ExtensionContext): Promise<vscode.StatusBarItem> {
+    const currentTopLevelDisplay: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
     currentTopLevelDisplay.command = 'vhdl-qqs.changeTopLevel';
     currentTopLevelDisplay.text = 'Top Level: None';
@@ -123,8 +122,8 @@ export async function createChangeTopLevel(context: vscode.ExtensionContext) {
  * 
  * @returns The initialized status bar item
  */
-export function createCompileProject() {
-    let compileProjectButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+export function createCompileProject(): vscode.StatusBarItem {
+    const compileProjectButton: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
     compileProjectButton.command = 'vhdl-qqs.compileCurrentProject';
     compileProjectButton.text = '$(play)';
@@ -140,8 +139,8 @@ export function createCompileProject() {
  * 
  * @returns The initialized status bar item
  */
-export function createCleanProject() {
-    let cleanCompileFilesButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+export function createCleanProject(): vscode.StatusBarItem {
+    const cleanCompileFilesButton: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
     cleanCompileFilesButton.command = 'vhdl-qqs.cleanCompileFiles';
     cleanCompileFilesButton.text = '$(trash)';
@@ -157,8 +156,8 @@ export function createCleanProject() {
  * 
  * @returns The initialized status bar item
  */
-export function createOpenProgrammer() {
-    let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+export function createOpenProgrammer(): vscode.StatusBarItem {
+    const openProgrammerButton: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
     openProgrammerButton.command = 'vhdl-qqs.openProgrammerActiveProject';
     openProgrammerButton.text = '$(flame)';
@@ -174,8 +173,8 @@ export function createOpenProgrammer() {
  * 
  * @returns The initialized status bar item
  */
-export function createOpenRtlViewer() {
-    let openProgrammerButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+export function createOpenRtlViewer(): vscode.StatusBarItem {
+    const openProgrammerButton: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
 
     openProgrammerButton.command = 'vhdl-qqs.openRtlViewerActiveProject';
     openProgrammerButton.text = '$(circuit-board)';

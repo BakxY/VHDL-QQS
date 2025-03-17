@@ -12,7 +12,7 @@ const PATH_TO_CMD: string = '/Windows/System32/cmd.exe';
  * @param currentProjectPath Path to the currently selected project
  * @param pathToQuesta Path to the users Questa installation, where the binaries reside
  */
-export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPath: string, pathToQuesta: string) {
+export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPath: string, pathToQuesta: string): void { //! Why th is this working (pathToQuesta isn't used so questa needs to be in system path)
     const pathToProject = path.dirname(path.join(pathUtils.getWorkspacePath()!, currentProjectPath));
 
     const pathToTests: string | undefined = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('questaTestsPath');
@@ -27,7 +27,7 @@ export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPa
     const scriptCmd = 'vsim -c -do ' + pathToTests.replaceAll('\\', '/') + ' -do exit';
 
     // Get all active terminals opened in editor
-    let openTerminals = vscode.window.terminals;
+    const openTerminals = vscode.window.terminals;
     let QuestaCompileShell: vscode.Terminal | undefined = undefined;
 
     // Filter for Questa terminal

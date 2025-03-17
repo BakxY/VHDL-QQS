@@ -1,5 +1,4 @@
 import * as entityUtils from './EntityUtils';
-import { outputChannel } from '../extension';
 
 /**
  * @brief Generates the testbench component string to apply to the testbench template
@@ -9,8 +8,8 @@ import { outputChannel } from '../extension';
  * 
  * @returns The component content to apply to the testbench template
  */
-export function generateTestbenchComponent(genericProperties: entityUtils.entityProperty[] | null, portProperties: entityUtils.entityProperty[] | null) {
-    let componentContent = '';
+export function generateTestbenchComponent(genericProperties: entityUtils.entityProperty[] | null, portProperties: entityUtils.entityProperty[] | null): string {
+    let componentContent: string = '';
 
     // Check if any generic components exist
     if (genericProperties) {
@@ -55,8 +54,8 @@ export function generateTestbenchComponent(genericProperties: entityUtils.entity
  * 
  * @returns The generated testbench signals as a string
  */
-export function generateTestbenchSignals(portProperties: entityUtils.entityProperty[] | null) {
-    let testbenchSignals = '';
+export function generateTestbenchSignals(portProperties: entityUtils.entityProperty[] | null): string {
+    let testbenchSignals: string = '';
 
     // Add all necessary signals
     for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {
@@ -74,8 +73,8 @@ export function generateTestbenchSignals(portProperties: entityUtils.entityPrope
  * 
  * @returns The generated testbench signal mapping
  */
-export function generateSignalMapping(portProperties: entityUtils.entityProperty[] | null) {
-    let testbenchSignals = '';
+export function generateSignalMapping(portProperties: entityUtils.entityProperty[] | null): string {
+    let testbenchSignals: string = '';
 
     // Add all signals to entity ports
     for (let signalIndex = 0; signalIndex < portProperties!.length; signalIndex++) {

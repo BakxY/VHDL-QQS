@@ -20,7 +20,7 @@ interface TomlConfig {
  * 
  * @returns An array of all files listed in toml file
  */
-export function getAllEntities(workspacePath: string, pathToToml: string) {
+export function getAllEntities(workspacePath: string, pathToToml: string): string[] | null {
     pathToToml = path.join(workspacePath, pathToToml);
 
     console.log('Using toml file at "' + pathToToml + '"');
@@ -46,11 +46,11 @@ export function getAllEntities(workspacePath: string, pathToToml: string) {
 
     let filesFromToml: string[] = [];
 
-    for (let lib in parsedToml['libraries']) {
+    for (const lib in parsedToml['libraries']) {
         filesFromToml = filesFromToml.concat(parsedToml['libraries'][lib]['files']);
     }
 
-    let filteredFiles: string[] = [];
+    const filteredFiles: string[] = [];
 
     console.log('Found ' + filesFromToml.length + ' number of raw paths');
     outputChannel.append('Found ' + filesFromToml.length + ' number of raw paths');
