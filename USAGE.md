@@ -8,6 +8,7 @@ This section provides practical examples of how to use the VHDL-QQS extension to
     * [1.1 Selecting a Quartus Project](#11-selecting-a-quartus-project)
     * [1.2 Selecting a Questa Project](#12-selecting-a-questa-project)
     * [1.3 Adding/Removing Files from Project](#13-addingremoving-files-from-project)
+    * [1.4 Change Quartus Project Property](#14-change-quartus-project-property)
 * [2. Compilation and Programming](#2-compilation-and-programming)
     * [2.1 Compiling a Quartus Project](#21-compiling-a-quartus-project)
     * [2.2 Cleaning Compile Files](#22-cleaning-compile-files)
@@ -56,6 +57,16 @@ These commands allow you to manage the files included in your project.
 * **Adding a File:** Use the context menu when right-clicking on a VHDL or Verilog file in the VS Code explorer.
 * **Removing a File:** Use the context menu when right-clicking on a VHDL or Verilog file in the VS Code explorer or use the minus icon in the "Project Source Files" view to select a file to remove.
 * **Refreshing Source Files:** Use the refresh icon in the "Project Source Files" view to reload the list of source files.
+
+### 1.4 Change Quartus Project Property
+
+This example will show how to change the value of a Project Property for a Quartus project.
+
+* **Step 1: Open the Project Folder:** Open your Quartus project folder in VS Code.
+
+* **Step 2: Open the Project Explorer:** Open the quartus project explorer from the action bar.
+
+* **Step 3: Change Property:** Click on the property you want to change and follow the wizard to change the value.
 
 ## 2. Compilation and Programming
 
