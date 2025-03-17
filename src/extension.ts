@@ -604,6 +604,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 				const selectedChip: string | undefined = await vscode.window.showQuickPick(availableChips, { title: 'Select a chip' });
 				if (selectedChip === undefined) { return; }
+
+				quartus.setProjectGlobal(context, activeProject, quartusPath, 'FAMILY', selectedFamily);
+				quartus.setProjectGlobal(context, activeProject, quartusPath, 'DEVICE', selectedChip);
 				break;
 
 			case 'VHDL Version':
@@ -614,13 +617,13 @@ export async function activate(context: vscode.ExtensionContext) {
 				if (selectedVersion === undefined) { return; }
 
 				quartus.setProjectGlobal(context, activeProject, quartusPath, 'VHDL_INPUT_VERSION', selectedVersion);
-
-				quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 				break;
 
 			default:
 				break;
 		}
+
+		quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
 	});
 	context.subscriptions.push(disposable);
 
