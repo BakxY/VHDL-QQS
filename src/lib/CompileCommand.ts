@@ -12,7 +12,7 @@ const PATH_TO_CMD: string = '/Windows/System32/cmd.exe';
  * @param currentProjectPath Path to the currently selected project
  * @param pathToQuartus Path to the users quartus installation, where the binaries reside
  */
-export function compileQuartusProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string) {
+export function compileQuartusProject(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string): void {
     const totalProjectPath = path.join(pathUtils.getWorkspacePath()!, currentProjectPath);
     const totalQuartusBinPath = path.join(quartusBinPath, 'quartus_sh');
     const totalScriptPath = path.join(context.extensionPath, 'res', 'compile.tcl');
@@ -22,7 +22,7 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
     const scriptCmd = '"' + totalQuartusBinPath + '" -t "' + totalScriptPath + '" ' + scriptCmdArgs;
 
     // Get all active terminals opened in editor
-    let openTerminals = vscode.window.terminals;
+    const openTerminals = vscode.window.terminals;
     let quartusCompileShell: vscode.Terminal | undefined = undefined;
 
     // Filter for quartus terminal
