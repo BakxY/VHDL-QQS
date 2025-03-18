@@ -84,6 +84,10 @@
                 "title": "VHDL-QQS: Compile quartus project"
             },
             {
+                "command": "vhdl-qqs.analyseElaborateCurrentProject",
+                "title": "VHDL-QQS: Analyse and elaborate quartus project"
+            },
+            {
                 "command": "vhdl-qqs.cleanCompileFiles",
                 "title": "VHDL-QQS: Clean quartus output folder"
             },
