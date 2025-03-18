@@ -162,10 +162,11 @@ This section describes the buttons, menus, and views provided by the VHDL-QQS ex
 2. **Top Level Selection:** Allows you to select the top level entity for current project.
 3. **Clean Output Files:** (Trash icon) - Cleans the output files for the currently selected Quartus project.
 4. **Compile:** (Play icon) - Compiles the currently selected Quartus project.
-5. **Open Programmer:** (Flame icon) - Opens the Quartus programmer for the compiled project.
-6. **Open RTL Viewer:** (PCB icon) - Opens the Quartus RTL Viewer for the compiled project.
-5. **Questa Project Selection:** Allows you to select the active Questa project.
-6. **Run Tests:** (Beaker icon) - Runs tests for the active questa project.
+5. **Analysis and Elaboration:** (Check icon) - Analyses and elaborates the currently selected Quartus project.
+6. **Open Programmer:** (Flame icon) - Opens the Quartus programmer for the compiled project.
+7. **Open RTL Viewer:** (PCB icon) - Opens the Quartus RTL Viewer for the compiled project.
+8. **Questa Project Selection:** Allows you to select the active Questa project.
+9. **Run Tests:** (Beaker icon) - Runs tests for the active questa project.
 
 ![Status Bar Button Screenshot](./docs/StatusBarButtons.png)
 
