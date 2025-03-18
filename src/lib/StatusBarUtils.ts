@@ -135,6 +135,23 @@ export function createCompileProject(): vscode.StatusBarItem {
 }
 
 /**
+ * @brief Function initializes the status bar item/button for analysis and elaboration active project
+ * 
+ * @returns The initialized status bar item
+ */
+export function createAnalysisProject(): vscode.StatusBarItem {
+    const analysisProjectButton: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+
+    analysisProjectButton.command = 'vhdl-qqs.analyseElaborateCurrentProject';
+    analysisProjectButton.text = '$(check)';
+    analysisProjectButton.tooltip = 'Analyse and elaborate the currently selected quartus project';
+
+    analysisProjectButton.show();
+
+    return analysisProjectButton;
+}
+
+/**
  * @brief Function initializes the status bar item/button for cleaning output files for active project.
  * 
  * @returns The initialized status bar item
