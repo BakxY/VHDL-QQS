@@ -11,10 +11,11 @@ This section provides practical examples of how to use the VHDL-QQS extension to
     * [1.4 Change Quartus Project Property](#14-change-quartus-project-property)
 * [2. Compilation and Programming](#2-compilation-and-programming)
     * [2.1 Compiling a Quartus Project](#21-compiling-a-quartus-project)
-    * [2.2 Cleaning Compile Files](#22-cleaning-compile-files)
-    * [2.3 Opening the FPGA Programmer](#23-opening-the-fpga-programmer)
-    * [2.4 Opening the RTL Viewer](#24-opening-the-rtl-viewer)
-    * [2.5 Changing the Top-Level Entity](#25-changing-the-top-level-entity)
+    * [2.2 Analyse and Elaborate a Quartus Project](#22-analyse-and-elaborate-a-quartus-project)
+    * [2.3 Cleaning Compile Files](#23-cleaning-compile-files)
+    * [2.4 Opening the FPGA Programmer](#24-opening-the-fpga-programmer)
+    * [2.5 Opening the RTL Viewer](#25-opening-the-rtl-viewer)
+    * [2.6 Changing the Top-Level Entity](#26-changing-the-top-level-entity)
 * [3. Testbench Generation](#3-testbench-generation)
     * [3.1 Generating a Testbench](#31-generating-a-testbench)
     * [3.2 Generating a Testbench from Selection](#32-generating-a-testbench-from-selection)
@@ -82,11 +83,24 @@ This example shows how to compile a Quartus project directly within VS Code.
 
 * **Step 3: Observe Compilation Progress:** The compilation progress will be displayed in the VS Code terminal.
 
-### 2.2 Cleaning Compile Files
+### 2.2 Analyse and Elaborate a Quartus Project
+
+This example shows how to analyse and elaborate a Quartus project directly within VS Code.
+
+* **Step 1: Select Project:** Ensure a Quartus project is selected (see section 1.1).
+
+* **Step 2: Trigger Compilation:** You have two options:
+    * **Command Palette:** Use the "VHDL-QQS: Analyse and elaborate quartus project" command.
+    * **Status Bar Button:** Click the analysis and elaboration button (check icon) in the status bar.
+
+* **Step 3: Observe Analysis and Elaboration Progress:** The analysis and elaboration progress will be displayed in the VS Code terminal.
+
+
+### 2.3 Cleaning Compile Files
 
 This command cleans the Quartus output folder for the active project. Use the "VHDL-QQS: Clean quartus output folder" command in the command palette or use the clean output folder button (trash icon) in the status bar.
 
-### 2.3 Opening the FPGA Programmer
+### 2.4 Opening the FPGA Programmer
 
 This example shows how to open the Quartus FPGA programmer with the currently compiled project.
 
@@ -96,7 +110,7 @@ This example shows how to open the Quartus FPGA programmer with the currently co
     * **Command Palette:** Use the "VHDL-QQS: Open programmer for active project" command.
     * **Status Bar Button:** Click the "Open Programmer" button (flame icon) in the status bar.
 
-### 2.4 Opening the RTL Viewer
+### 2.5 Opening the RTL Viewer
 
 This example shows how to open the Quartus RTL Viewer for the currently compiled project.
 
@@ -104,7 +118,7 @@ This example shows how to open the Quartus RTL Viewer for the currently compiled
 
 * **Step 2: Open RTL Viewer:** Use the "VHDL-QQS: Open RTL Viewer for active project" command in the command palette.
 
-### 2.5 Changing the Top-Level Entity
+### 2.6 Changing the Top-Level Entity
 
 This command allows you to change the top-level entity for the active Quartus project.
 
