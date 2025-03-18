@@ -663,6 +663,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
+	context.subscriptions.push(statusBarCreator.createAnalysisProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
 	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
 
