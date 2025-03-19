@@ -13,35 +13,7 @@ import { outputChannel } from '../extension';
  * @param context Context from where the command was ran
  * @param entityName Name of the entity that the testbench should be generated for
  */
-export function createNewTestbench(context: vscode.ExtensionContext, entityName: string): void {
-    // Get toml file path set in vs code setting
-    const pathToToml = pathUtils.getTomlLocalPath();
-    if (pathToToml === null) { return; }
-
-    // Get all entities listed in toml file
-    const allEntities = tomlUtils.getAllEntities(pathUtils.getWorkspacePath()!, pathToToml);
-    if (allEntities === null) { return; }
-
-    let pathToEntityFile: string = '';
-
-    // Check if selected entity has a entity file
-    for (const entity in allEntities) {
-        if (allEntities[entity].endsWith(entityName + '.vhd')) {
-            pathToEntityFile = allEntities[entity];
-            console.log('Found file associated with selected entity at "' + allEntities[entity] + '"');
-            outputChannel.append('Found file associated with selected entity at "' + allEntities[entity] + '"');
-            break;
-        }
-    }
-
-    // Trow error if no file was found
-    if (pathToEntityFile === '') {
-        vscode.window.showErrorMessage('Selected expression is not defined as a entity in your project!');
-        console.error('Selected expression is not defined as a entity in your project!');
-        outputChannel.append('Selected expression is not defined as a entity in your project!');
-        return;
-    }
-
+export function createNewTestbench(context: vscode.ExtensionContext, entityName: string, pathToEntityFile: string): void {
     // Get content of entity definition
     const entityContent: string | undefined = entityUtils.getEntityContents(pathToEntityFile)?.replaceAll('\r', '');
     if (entityContent === undefined) { return; }

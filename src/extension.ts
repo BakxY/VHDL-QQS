@@ -48,7 +48,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		const selectedExpression: string | null = entityUtils.getSelectedExpression(editor);
 		if (selectedExpression === null) { return; }
 
-		testbenchCommands.createNewTestbench(context, selectedExpression);
+		testbenchCommands.createNewTestbench(context, selectedExpression, editor.document.fileName);
 	});
 	context.subscriptions.push(disposable);
 
@@ -65,13 +65,15 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		const allEntities = tomlUtils.getAllEntities(pathUtils.getWorkspacePath()!, pathToToml);
 		if (allEntities === null) { return; }
 
+		const allEntityNames: string[] = [];
+
 		// Remove file extensions
 		for (let entity = 0; entity < allEntities.length; entity++) {
-			allEntities[entity] = path.basename(allEntities[entity]).replace(path.extname(allEntities[entity]), '');
+			allEntityNames[entity] = path.basename(allEntities[entity]).replace(path.extname(allEntities[entity]), '');
 		}
 
 		// Ask user to pick a entity
-		const selectedEntity: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select a entity to create a testbench' });
+		const selectedEntity: string | undefined = await vscode.window.showQuickPick(allEntityNames, { title: 'Select a entity to create a testbench' });
 		if (selectedEntity === undefined) { return; }
 
 		// Check if a testbench was selected to create a testbench
@@ -90,7 +92,27 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 			return;
 		}
 
-		testbenchCommands.createNewTestbench(context, selectedEntity);
+		let pathToEntityFile: string = '';
+
+		// Check if selected entity has a entity file
+		for (const entity in allEntities) {
+			if (allEntities[entity].endsWith(selectedEntity + '.vhd')) {
+				pathToEntityFile = allEntities[entity];
+				console.log('Found file associated with selected entity at "' + allEntities[entity] + '"');
+				outputChannel.append('Found file associated with selected entity at "' + allEntities[entity] + '"');
+				break;
+			}
+		}
+
+		// Trow error if no file was found
+		if (pathToEntityFile === '') {
+			vscode.window.showErrorMessage('Selected expression is not defined as a entity in your project!');
+			console.error('Selected expression is not defined as a entity in your project!');
+			outputChannel.append('Selected expression is not defined as a entity in your project!');
+			return;
+		}
+
+		testbenchCommands.createNewTestbench(context, selectedEntity, pathToEntityFile);
 	});
 	context.subscriptions.push(disposable);
 
@@ -638,14 +660,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 				break;
 
 			case 'Verilog Version':
-					const availableVerilogVersions = quartus.getAvailableVerilogVersions();
-	
-					// Ask user to select a vhdl version
-					const selectedVerilogVersion: string | undefined = await vscode.window.showQuickPick(availableVerilogVersions, { title: 'Select a VHDL version' });
-					if (selectedVerilogVersion === undefined) { return; }
-	
-					quartus.setProjectGlobal(context, activeProject, quartusPath, 'VERILOG_INPUT_VERSION', selectedVerilogVersion);
-					break;
+				const availableVerilogVersions = quartus.getAvailableVerilogVersions();
+
+				// Ask user to select a vhdl version
+				const selectedVerilogVersion: string | undefined = await vscode.window.showQuickPick(availableVerilogVersions, { title: 'Select a VHDL version' });
+				if (selectedVerilogVersion === undefined) { return; }
+
+				quartus.setProjectGlobal(context, activeProject, quartusPath, 'VERILOG_INPUT_VERSION', selectedVerilogVersion);
+				break;
 
 			default:
 				break;
