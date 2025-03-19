@@ -42,7 +42,7 @@ export function resolvePathWithWildcards(wildcardPath: string, baseDir: string =
         } else if (currentPart === '*') {
             const entries = fs.readdirSync(dir, { withFileTypes: true });
             for (const entry of entries) {
-                if (entry.name.match(new RegExp(`^${currentPart.replace(/\*/g, '.*')}$`))) {
+                if (entry.name.match(new RegExp(`^${currentPart.replace(/\*/g, '.*')}$`)) && fs.lstatSync(path.join(dir, entry.name)).isDirectory()) {
                     recursiveResolve(path.join(dir, entry.name), restParts);
                 }
             }
