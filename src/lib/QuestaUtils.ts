@@ -9,7 +9,7 @@ import * as pathUtils from './PathUtils';
  * @returns An array of all questa project files
  */
 export function getAllProjectFiles(): string[] {
-    const allFiles: string[] = pathUtils.resolvePathWithWildcards(path.normalize('**/*'));
+    const allFiles: string[] = pathUtils.resolvePathWithWildcards(path.normalize('**/*.*'));
     const allProjectFiles: string[] = [];
 
     // Check all files for project file extension
