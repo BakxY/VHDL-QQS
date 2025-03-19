@@ -73,7 +73,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		}
 
 		// Ask user to pick a entity
-		const selectedEntity: string | undefined = await vscode.window.showQuickPick(allEntityNames, { title: 'Select a entity to create a testbench' });
+		const selectedEntity: string | undefined = await vscode.window.showQuickPick(allEntityNames.sort(), { title: 'Select a entity to create a testbench' });
 		if (selectedEntity === undefined) { return; }
 
 		// Check if a testbench was selected to create a testbench
