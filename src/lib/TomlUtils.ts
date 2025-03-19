@@ -68,5 +68,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string): strin
         }
     }
 
-    return filteredFiles;
+    const noDuplicatesFiles: string[] = [...(new Set(filteredFiles))];
+
+    return noDuplicatesFiles;
 }

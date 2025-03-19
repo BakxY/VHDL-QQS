@@ -212,7 +212,7 @@
     "scripts": {
         "clean": "shx rm -rf out && shx rm -f res/vhdl_lang.exe res/vhdl_lang",
         "compile": "npm run clean && tsc -p ./",
-        "watch": "npm run build-prepare & tsc -watch -p ./",
+        "watch": "npm run esbuild-base & tsc -watch -p ./",
         "lint": "eslint src --ext ts",
         "pretest": "npm run compile && npm run lint",
         "test": "node ./out/test/run_test.js",
