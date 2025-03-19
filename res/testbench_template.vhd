@@ -36,11 +36,11 @@ begin
     );
 
     readcmd : process
-        variable cmd : string(1 to 7); --stores test command
-        variable line_in : line; --stores the to be processed line
-        variable tv : test_vect; --stores arguments 1 to 4
-        variable lincnt : integer := 0; --counts line number in testcase file
-        variable fail_counter : integer := 0; --counts failed tests
+        variable cmd: line; --stores test command
+        variable line_in: line; --stores the to be processed line
+        variable tv: test_vect; --stores arguments 1 to 4
+        variable lincnt: integer := 0; --counts line number in testcase file
+        variable fail_counter: integer := 0; --counts failed tests
 
     begin
         FILE_OPEN(cmdfile, "../testcase.dat", read_mode);
