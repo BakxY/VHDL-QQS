@@ -80,7 +80,7 @@ export function getCurrentQuartusProject(context: vscode.ExtensionContext): stri
     if (activeProject === undefined) {
         vscode.window.showErrorMessage('No quartus project selected!');
         console.error('No quartus project selected!');
-        outputChannel.append('No quartus project selected!');
+        outputChannel.appendLine('No quartus project selected!');
         return null;
     }
 
@@ -101,7 +101,7 @@ export function getCurrentQuestaProject(context: vscode.ExtensionContext): strin
     if (activeProject === undefined) {
         vscode.window.showErrorMessage('No questa project selected!');
         console.error('No questa project selected!');
-        outputChannel.append('No questa project selected!');
+        outputChannel.appendLine('No questa project selected!');
         return null;
     }
 
@@ -129,7 +129,7 @@ export function getQuartusBinPath(): string | null {
     if (quartusPath === undefined) {
         vscode.window.showErrorMessage('No quartus installation folder defined in settings!');
         console.error('No quartus installation folder defined in settings!');
-        outputChannel.append('No quartus installation folder defined in settings!');
+        outputChannel.appendLine('No quartus installation folder defined in settings!');
         return null;
     }
 
@@ -137,7 +137,7 @@ export function getQuartusBinPath(): string | null {
     if (!quartus.checkForQuartusInstallation(path.normalize(quartusPath))) {
         vscode.window.showErrorMessage('No quartus installation at provided path! Check your settings!');
         console.error('No quartus installation at provided path! Check your settings!');
-        outputChannel.append('No quartus installation at provided path! Check your settings!');
+        outputChannel.appendLine('No quartus installation at provided path! Check your settings!');
         return null;
     }
 
@@ -156,7 +156,7 @@ export function getQuestaBinPath(): string | null {
     if (questaPath === undefined) {
         vscode.window.showErrorMessage('No questa installation folder defined in settings!');
         console.error('No questa installation folder defined in settings!');
-        outputChannel.append('No questa installation folder defined in settings!');
+        outputChannel.appendLine('No questa installation folder defined in settings!');
         return null;
     }
 
@@ -164,7 +164,7 @@ export function getQuestaBinPath(): string | null {
     if (!questa.checkForQuestaInstallation(path.normalize(questaPath))) {
         vscode.window.showErrorMessage('No questa installation at provided path! Check your settings!');
         console.error('No questa installation at provided path! Check your settings!');
-        outputChannel.append('No questa installation at provided path! Check your settings!');
+        outputChannel.appendLine('No questa installation at provided path! Check your settings!');
         return null;
     }
 
@@ -183,7 +183,7 @@ export function getTomlLocalPath(): string | null {
     if (pathToToml === undefined) {
         vscode.window.showErrorMessage('No path for toml file set! Please change in settings!');
         console.error('No path for toml file set! Please change in settings!');
-        outputChannel.append('No path for toml file set! Please change in settings!');
+        outputChannel.appendLine('No path for toml file set! Please change in settings!');
         return null;
     }
 
