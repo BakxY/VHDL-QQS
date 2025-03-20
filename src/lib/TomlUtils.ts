@@ -24,12 +24,12 @@ export function getAllEntities(workspacePath: string, pathToToml: string): strin
     pathToToml = path.join(workspacePath, pathToToml);
 
     console.log('Using toml file at "' + pathToToml + '"');
-    outputChannel.append('Using toml file at "' + pathToToml + '"');
+    outputChannel.appendLine('Using toml file at "' + pathToToml + '"');
 
     if (!fs.existsSync(pathToToml)) {
         vscode.window.showErrorMessage('No file at "' + pathToToml + '"!');
         console.error('No file at "' + pathToToml + '"!');
-        outputChannel.append('No file at "' + pathToToml + '"!');
+        outputChannel.appendLine('No file at "' + pathToToml + '"!');
         return null;
     }
 
@@ -38,7 +38,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string): strin
     if (!tomlString) {
         vscode.window.showErrorMessage('Unable to read toml file at "' + pathToToml + '"!');
         console.error('Unable to read toml file at "' + pathToToml + '"!');
-        outputChannel.append('Unable to read toml file at "' + pathToToml + '"!');
+        outputChannel.appendLine('Unable to read toml file at "' + pathToToml + '"!');
         return null;
     }
 
@@ -53,7 +53,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string): strin
     const filteredFiles: string[] = [];
 
     console.log('Found ' + filesFromToml.length + ' number of raw paths');
-    outputChannel.append('Found ' + filesFromToml.length + ' number of raw paths');
+    outputChannel.appendLine('Found ' + filesFromToml.length + ' number of raw paths');
 
     // Go trough all files in toml file
     for (let fileIndex = 0; fileIndex < filesFromToml.length; fileIndex++) {
@@ -64,7 +64,7 @@ export function getAllEntities(workspacePath: string, pathToToml: string): strin
         for (let pathIndex = 0; pathIndex < resolvedPath.length; pathIndex++) {
             filteredFiles.push(resolvedPath[pathIndex]);
             console.log('Expanded path "' + filesFromToml[fileIndex] + '" to file "' + resolvedPath[pathIndex] + '"');
-            outputChannel.append('Expanded path "' + filesFromToml[fileIndex] + '" to file "' + resolvedPath[pathIndex] + '"');
+            outputChannel.appendLine('Expanded path "' + filesFromToml[fileIndex] + '" to file "' + resolvedPath[pathIndex] + '"');
         }
     }
 
