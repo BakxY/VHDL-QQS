@@ -677,6 +677,31 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	});
 	context.subscriptions.push(disposable);
 
+	/**
+	 * @brief Command that connects and prints device and software information required in bug reports
+	 * @author BakxY
+	 */
+	var disposable = vscode.commands.registerCommand('vhdl-qqs.genDebugDevInfo', async () => {
+		outputChannel.appendLine('\nCollected debug information: ')
+		outputChannel.appendLine('* OS: ' + process.platform);
+		outputChannel.appendLine('* VS Code version: ' + vscode.version);
+		outputChannel.appendLine('* Extension version: ' + vscode.extensions.getExtension('bakxy.vhdl-qqs')?.packageJSON.version);
+
+		// Get quartus install bin path
+		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+		if (quartusPath === null) {
+			outputChannel.appendLine('* Quartus version: not (correctly) configured');
+		}
+		else
+		{
+			outputChannel.appendLine('* Quartus version: ' + quartus.checkQuartusVersion(quartusPath));
+		}
+
+		outputChannel.show();
+	});
+	context.subscriptions.push(disposable);
+
+
 	const currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
 	context.subscriptions.push(currentQuartusProjectDisplay);
 
