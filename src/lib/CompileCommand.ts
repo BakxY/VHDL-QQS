@@ -48,7 +48,7 @@ export function compileQuartusProject(context: vscode.ExtensionContext, currentP
 
     console.log('Started compilation in terminal!');
     vscode.window.showInformationMessage('Started compilation in terminal!');
-    outputChannel.append('Started compilation in terminal!');
+    outputChannel.appendLine('Started compilation in terminal!');
 }
 
 /**
@@ -94,5 +94,5 @@ export function analyseQuartusProject(context: vscode.ExtensionContext, currentP
 
     console.log('Started analysis and elaboration in terminal!');
     vscode.window.showInformationMessage('Started analysis and elaboration in terminal!');
-    outputChannel.append('Started analysis and elaboration in terminal!');
+    outputChannel.appendLine('Started analysis and elaboration in terminal!');
 }
