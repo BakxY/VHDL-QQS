@@ -38,12 +38,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (editor === undefined) {
 			vscode.window.showErrorMessage('No editor opened!');
 			console.error('No editor opened!');
-			outputChannel.append('No editor opened!');
+			outputChannel.appendLine('No editor opened!');
 			return;
 		}
 
 		console.log('Found current open file "' + editor.document.fileName + '"');
-		outputChannel.append('Found current open file "' + editor.document.fileName + '"');
+		outputChannel.appendLine('Found current open file "' + editor.document.fileName + '"');
 
 		const selectedExpression: string | null = entityUtils.getSelectedExpression(editor);
 		if (selectedExpression === null) { return; }
@@ -80,7 +80,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (selectedEntity.endsWith('_tb')) {
 			vscode.window.showErrorMessage('Can\'t create a testbench of a testbench!');
 			console.error('Can\'t create a testbench of a testbench!');
-			outputChannel.append('Can\'t create a testbench of a testbench!');
+			outputChannel.appendLine('Can\'t create a testbench of a testbench!');
 			return;
 		}
 
@@ -88,7 +88,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (allEntities.includes(selectedEntity + '_tb')) {
 			vscode.window.showErrorMessage('The testbench for this entity already exists!');
 			console.error('The testbench for this entity already exists!');
-			outputChannel.append('The testbench for this entity already exists!');
+			outputChannel.appendLine('The testbench for this entity already exists!');
 			return;
 		}
 
@@ -99,7 +99,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 			if (allEntities[entity].endsWith(selectedEntity + '.vhd')) {
 				pathToEntityFile = allEntities[entity];
 				console.log('Found file associated with selected entity at "' + allEntities[entity] + '"');
-				outputChannel.append('Found file associated with selected entity at "' + allEntities[entity] + '"');
+				outputChannel.appendLine('Found file associated with selected entity at "' + allEntities[entity] + '"');
 				break;
 			}
 		}
@@ -108,7 +108,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (pathToEntityFile === '') {
 			vscode.window.showErrorMessage('Selected expression is not defined as a entity in your project!');
 			console.error('Selected expression is not defined as a entity in your project!');
-			outputChannel.append('Selected expression is not defined as a entity in your project!');
+			outputChannel.appendLine('Selected expression is not defined as a entity in your project!');
 			return;
 		}
 
@@ -127,7 +127,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (allProjectFiles.length === 0) {
 			vscode.window.showErrorMessage('There are no project in your workfolder!');
 			console.error('There are no project in your workfolder!');
-			outputChannel.append('There are no project in your workfolder!');
+			outputChannel.appendLine('There are no project in your workfolder!');
 			return;
 		}
 
@@ -227,7 +227,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 		vscode.window.showInformationMessage('Finished cleaning project output files!');
 		console.log('Finished cleaning project output files!');
-		outputChannel.append('Finished cleaning project output files!');
+		outputChannel.appendLine('Finished cleaning project output files!');
 	});
 	context.subscriptions.push(disposable);
 
@@ -251,7 +251,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (!fs.existsSync(fileToUpload)) {
 			vscode.window.showErrorMessage('No compiled project found! Compile project before opening programmer!');
 			console.error('No compiled project found! Compile project before opening programmer!');
-			outputChannel.append('No compiled project found! Compile project before opening programmer!');
+			outputChannel.appendLine('No compiled project found! Compile project before opening programmer!');
 			return;
 		}
 
@@ -285,7 +285,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (!fs.existsSync(fileToOpen)) {
 			vscode.window.showErrorMessage('Project file doesn\'t exits! Please open a valid project!');
 			console.error('Project file doesn\'t exits! Please open a valid project!');
-			outputChannel.append('Project file doesn\'t exits! Please open a valid project!');
+			outputChannel.appendLine('Project file doesn\'t exits! Please open a valid project!');
 			return;
 		}
 
@@ -496,7 +496,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (entityName.endsWith('_tb')) {
 			vscode.window.showErrorMessage('Entity name can\'t end in "_tp"! Suffix "_tp" is reserved for testbenches!');
 			console.error('Entity name can\'t end in "_tp"! Suffix "_tp" is reserved for testbenches!');
-			outputChannel.append('Entity name can\'t end in "_tp"! Suffix "_tp" is reserved for testbenches!');
+			outputChannel.appendLine('Entity name can\'t end in "_tp"! Suffix "_tp" is reserved for testbenches!');
 			return;
 		}
 
@@ -510,7 +510,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 			if (path.basename(allProjectFiles[fileIndex]).replace(path.extname(allProjectFiles[fileIndex]), '') === entityName) {
 				vscode.window.showErrorMessage('There already exists a entity with the name "' + entityName + '" in current project!');
 				console.error('There already exists a entity with the name "' + entityName + '" in current project!');
-				outputChannel.append('There already exists a entity with the name "' + entityName + '" in current project!');
+				outputChannel.appendLine('There already exists a entity with the name "' + entityName + '" in current project!');
 				return;
 			}
 		}
@@ -531,14 +531,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (fs.existsSync(targetFilePath)) {
 			vscode.window.showErrorMessage('Target file already exists at "' + targetFilePath + '"');
 			console.error('Target file already exists at "' + targetFilePath + '"');
-			outputChannel.append('Target file already exists at "' + targetFilePath + '"');
+			outputChannel.appendLine('Target file already exists at "' + targetFilePath + '"');
 			return;
 		}
 
 		// Generate entire path for template file
 		const PATH_TO_ENTITY_TEMPLATE: string = path.join(context.extensionPath, 'res', 'entity_template.vhd');
 		console.log('Loading template file from "' + PATH_TO_ENTITY_TEMPLATE + '"');
-		outputChannel.append('Loading template file from "' + PATH_TO_ENTITY_TEMPLATE + '"');
+		outputChannel.appendLine('Loading template file from "' + PATH_TO_ENTITY_TEMPLATE + '"');
 
 		let generatedEntity: string = fs.readFileSync(PATH_TO_ENTITY_TEMPLATE, 'utf-8');
 
@@ -548,7 +548,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 		// Write template to fs
 		console.log('Writing template to "' + generatedEntity + '"');
-		outputChannel.append('Writing template to "' + generatedEntity + '"');
+		outputChannel.appendLine('Writing template to "' + generatedEntity + '"');
 		fs.writeFileSync(targetFilePath, generatedEntity);
 
 		// Add file to project as source file
@@ -557,7 +557,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 		console.log('Finished creation of entity and added to active project as source file!');
 		vscode.window.showInformationMessage('Finished creation of entity and added to active project as source file!');
-		outputChannel.append('Finished creation of entity and added to active project as source file!');
+		outputChannel.appendLine('Finished creation of entity and added to active project as source file!');
 	});
 	context.subscriptions.push(disposable);
 
@@ -569,7 +569,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
 			vscode.window.showErrorMessage('Feature isn\'t enabled!');
 			console.error('Feature isn\'t enabled!');
-			outputChannel.append('Feature isn\'t enabled!');
+			outputChannel.appendLine('Feature isn\'t enabled!');
 			return;
 		}
 
@@ -579,7 +579,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (availableProjects.length === 0) {
 			vscode.window.showErrorMessage('There are no project in your workfolder!');
 			console.error('There are no project in your workfolder!');
-			outputChannel.append('There are no project in your workfolder!');
+			outputChannel.appendLine('There are no project in your workfolder!');
 			return;
 		}
 
@@ -601,7 +601,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
 			vscode.window.showErrorMessage('Feature isn\'t enabled!');
 			console.error('Feature isn\'t enabled!');
-			outputChannel.append('Feature isn\'t enabled!');
+			outputChannel.appendLine('Feature isn\'t enabled!');
 			return;
 		}
 
@@ -771,7 +771,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 				if (!vhdlLang.checkForVhdlLang(context)) {
 					vscode.window.showErrorMessage('No VHDL_lang executable found! Trying to download VHDL_lang!');
 					console.error('No VHDL_lang executable found! Trying to download VHDL_lang!');
-					outputChannel.append('No VHDL_lang executable found! Trying to download VHDL_lang!');
+					outputChannel.appendLine('No VHDL_lang executable found! Trying to download VHDL_lang!');
 					vhdlLang.checkDownloadVhdlLang(context);
 					return edits;
 				}
@@ -791,14 +791,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 						const processError = err as (Error & { stderr?: Buffer; stdout?: Buffer });
 
 						console.error('Error while executing "' + execString + '"!\nerror dump:\n' + processError.stdout?.toString());
-						outputChannel.append('Error while executing "' + execString + '"!\nerror dump:\n' + processError.stdout?.toString());
+						outputChannel.appendLine('Error while executing "' + execString + '"!\nerror dump:\n' + processError.stdout?.toString());
 
 						vscode.window.showErrorMessage('You can\'t format a file with broken syntax! Fix syntax before formatting file! Check output to see error!');
 						outputChannel.show();
 					}
 					else {
 						console.error('Error while executing "' + execString + '"!\nerror dump:\n' + err);
-						outputChannel.append('Error while executing "' + execString + '"!\nerror dump:\n' + err);
+						outputChannel.appendLine('Error while executing "' + execString + '"!\nerror dump:\n' + err);
 						vscode.window.showErrorMessage('Error while executing "' + execString + '"!\nerror dump:\n' + err);
 					}
 

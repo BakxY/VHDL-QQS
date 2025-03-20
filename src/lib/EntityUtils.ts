@@ -25,7 +25,7 @@ export function getSelectedExpression(editor: vscode.TextEditor | undefined): st
     if (!selection || selection.isEmpty) {
         vscode.window.showErrorMessage('No expression selected!');
         console.error('No expression selected!');
-        outputChannel.append('No expression selected!');
+        outputChannel.appendLine('No expression selected!');
         return null;
     }
 
@@ -36,7 +36,7 @@ export function getSelectedExpression(editor: vscode.TextEditor | undefined): st
     const selectedText: string = editor.document.getText(selectionRange);
     
     console.log('Found user selected text: "' + selectedText + '"');
-    outputChannel.append('Found user selected text: "' + selectedText + '"');
+    outputChannel.appendLine('Found user selected text: "' + selectedText + '"');
     return selectedText;
 }
 
@@ -54,7 +54,7 @@ export function getEntityContents(pathToEntityFile: string): string | null {
     if (!entityFile) {
         vscode.window.showErrorMessage('Unable to read entity file "' + pathToEntityFile + '"!');
         console.error('Unable to read entity file "' + pathToEntityFile + '"!');
-        outputChannel.append('Unable to read entity file "' + pathToEntityFile + '"!');
+        outputChannel.appendLine('Unable to read entity file "' + pathToEntityFile + '"!');
         return null;
     }
 
@@ -65,7 +65,7 @@ export function getEntityContents(pathToEntityFile: string): string | null {
     if (!entityBlockRegexMatch) {
         vscode.window.showErrorMessage('Entity didn\'t match expected format in "' + pathToEntityFile + '"!');
         console.error('Entity didn\'t match expected format in "' + pathToEntityFile + '"!');
-        outputChannel.append('Entity didn\'t match expected format in "' + pathToEntityFile + '"!');
+        outputChannel.appendLine('Entity didn\'t match expected format in "' + pathToEntityFile + '"!');
         return null;
     }
 
@@ -192,7 +192,7 @@ export function getPortPropertiesFromContent(entityContent: string | null): enti
         if (currentPropertyDir === null) {
             vscode.window.showErrorMessage('Entity port definition didn\'t match expected format!');
             console.error('Entity port definition didn\'t match expected format!');
-            outputChannel.append('Entity port definition didn\'t match expected format!');
+            outputChannel.appendLine('Entity port definition didn\'t match expected format!');
             return null;
         }
 

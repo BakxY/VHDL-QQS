@@ -74,7 +74,7 @@ export function checkQuartusVersion(pathToQuartus: string): string {
 
     vscode.window.showWarningMessage('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
     console.warn('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
-    outputChannel.append('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
+    outputChannel.appendLine('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
 
     return '';
 }
@@ -154,7 +154,7 @@ export function getProjectGlobal(context: vscode.ExtensionContext, currentProjec
     catch {
         console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
         vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
-        outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        outputChannel.appendLine('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
     }
 
     const filteredCommandOutput: string[] = [];
@@ -195,7 +195,7 @@ export function setProjectGlobal(context: vscode.ExtensionContext, currentProjec
     catch (err) {
         console.error('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
         vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
-        outputChannel.append('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
+        outputChannel.appendLine('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
     }
 }
 
@@ -329,7 +329,7 @@ export function removeProjectGlobal(context: vscode.ExtensionContext, currentPro
     catch {
         console.error('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
         vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
-        outputChannel.append('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
+        outputChannel.appendLine('Error while executing "' + scriptCmd + '"!\nstdout dump:\n' + commandOutput);
     }
 }
 
@@ -514,7 +514,7 @@ export function evalTclCmd(context: vscode.ExtensionContext, quartusBinPath: str
     catch (err) {
         console.error('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
         vscode.window.showErrorMessage('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
-        outputChannel.append('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
+        outputChannel.appendLine('Error while executing "' + scriptCmd + '"!\nerror dump:\n' + err);
 
         return null;
     }
@@ -534,7 +534,7 @@ export function getAvailableChipFamilies(context: vscode.ExtensionContext, quart
     if (families === null) {
         console.error('Tcl evaluated return value didn\'t match expected format!');
         vscode.window.showErrorMessage('Tcl evaluated return value didn\'t match expected format!');
-        outputChannel.append('Tcl evaluated return value didn\'t match expected format!');
+        outputChannel.appendLine('Tcl evaluated return value didn\'t match expected format!');
 
         return null;
     }
@@ -565,7 +565,7 @@ export function getAvailableChips(context: vscode.ExtensionContext, quartusBinPa
     if (families === null) {
         console.error('Tcl evaluated return value didn\'t match expected format!');
         vscode.window.showErrorMessage('Tcl evaluated return value didn\'t match expected format!');
-        outputChannel.append('Tcl evaluated return value didn\'t match expected format!');
+        outputChannel.appendLine('Tcl evaluated return value didn\'t match expected format!');
     }
 
     return families;

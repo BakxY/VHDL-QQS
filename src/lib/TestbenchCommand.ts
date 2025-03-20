@@ -28,7 +28,7 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
     // Generate entire path for template file
     const PATH_TO_TESTBENCH_TEMPLATE: string = path.join(context.extensionPath, 'res', 'testbench_template.vhd');
     console.log('Loading template file from "' + PATH_TO_TESTBENCH_TEMPLATE + '"');
-    outputChannel.append('Loading template file from "' + PATH_TO_TESTBENCH_TEMPLATE + '"');
+    outputChannel.appendLine('Loading template file from "' + PATH_TO_TESTBENCH_TEMPLATE + '"');
 
     let generatedTestbench: string = fs.readFileSync(PATH_TO_TESTBENCH_TEMPLATE, 'utf-8');
 
@@ -52,12 +52,12 @@ export function createNewTestbench(context: vscode.ExtensionContext, entityName:
     if (fs.existsSync(pathToEntityFile.replace('.vhd', '_tb.vhd'))) {
         vscode.window.showErrorMessage('File "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '" already exits!');
         console.error('File "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '" already exits!');
-        outputChannel.append('File "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '" already exits!');
+        outputChannel.appendLine('File "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '" already exits!');
         return;
     }
 
     // Write template to fs
     console.log('Writing testbench to "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '"');
-    outputChannel.append('Writing testbench to "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '"');
+    outputChannel.appendLine('Writing testbench to "' + pathToEntityFile.replace('.vhd', '_tb.vhd') + '"');
     fs.writeFileSync(pathToEntityFile.replace('.vhd', '_tb.vhd'), generatedTestbench);
 }
