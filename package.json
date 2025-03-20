@@ -140,6 +140,10 @@
             {
                 "command": "vhdl-qqs.changeQuartusProjectProperty",
                 "title": "VHDL-QQS: Change quartus project property"
+            },
+            {
+                "command": "vhdl-qqs.genDebugDevInfo",
+                "title": "VHDL-QQS: Collect debug information for bug reports"
             }
         ],
         "menus": {

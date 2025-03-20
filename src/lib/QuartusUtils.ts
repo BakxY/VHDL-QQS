@@ -62,13 +62,13 @@ export function getAllProjectFiles(): string[] {
     return allProjectFiles;
 }
 
-export function checkQuartusVersion(pathToQuartus: string): boolean {
+export function checkQuartusVersion(pathToQuartus: string): string {
     const pathToQuartusShell = path.join(pathToQuartus, 'quartus_sh');
     const quartusVersionOutput: string = cp.execSync('"' + pathToQuartusShell + '" -v').toString();
 
     for (let versionIndex = 0; versionIndex < SUPPORTED_QUARTUS_VERSIONS.length; versionIndex++) {
         if (quartusVersionOutput.includes(SUPPORTED_QUARTUS_VERSIONS[versionIndex])) {
-            return true;
+            return SUPPORTED_QUARTUS_VERSIONS[versionIndex];
         }
     }
 
@@ -76,7 +76,7 @@ export function checkQuartusVersion(pathToQuartus: string): boolean {
     console.warn('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
     outputChannel.append('The version of you quartus installation isn\'t officially supported! Check https://github.com/BakxY/VHDL-QQS/blob/main/QUARTUS_VERSIONS.md for supported versions!');
 
-    return false;
+    return '';
 }
 
 /**
