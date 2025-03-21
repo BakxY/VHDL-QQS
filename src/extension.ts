@@ -154,7 +154,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command that connects and prints device and software information required in bug reports
 	 * @author BakxY
 	 */
-	context.subscriptions.push(genDebugDevInfo.getCommand(context));
+	context.subscriptions.push(genDebugDevInfo.getCommand());
 
 
 	currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);

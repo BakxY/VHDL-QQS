@@ -6,9 +6,9 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
-export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
+export function getCommand(): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.genDebugDevInfo', async () => {
-        outputChannel.appendLine('\nCollected debug information: ')
+        outputChannel.appendLine('\nCollected debug information: ');
         outputChannel.appendLine('* OS: ' + process.platform);
         outputChannel.appendLine('* VS Code version: ' + vscode.version);
         outputChannel.appendLine('* Extension version: ' + vscode.extensions.getExtension('bakxy.vhdl-qqs')?.packageJSON.version);
