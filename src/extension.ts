@@ -9,7 +9,7 @@ import * as pathUtils from './lib/PathUtils';
 import * as vhdlLang from './lib/VhdlLang';
 
 // Import command creators
-import * as manualActivateExtension from './commands/manualActivateExtension'
+import * as manualActivateExtension from './commands/manualActivateExtension';
 import * as generateTestBenchSelection from './commands/generateTestBenchSelection';
 import * as generateTestBenchExplorer from './commands/generateTestBenchExplorer';
 import * as selectQuartusProject from './commands/selectQuartusProject';
