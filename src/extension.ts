@@ -33,6 +33,7 @@ import * as createNewEntity from './commands/createNewEntity'
 import * as selectQuestaProject from './commands/selectQuestaProject'
 import * as runQuestaTest from './commands/runQuestaTest'
 import * as changeQuartusProjectProperty from './commands/changeQuartusProjectProperty'
+import * as genDebugDevInfo from './commands/genDebugDevInfo'
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
@@ -160,25 +161,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command that connects and prints device and software information required in bug reports
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.genDebugDevInfo', async () => {
-		outputChannel.appendLine('\nCollected debug information: ')
-		outputChannel.appendLine('* OS: ' + process.platform);
-		outputChannel.appendLine('* VS Code version: ' + vscode.version);
-		outputChannel.appendLine('* Extension version: ' + vscode.extensions.getExtension('bakxy.vhdl-qqs')?.packageJSON.version);
-
-		// Get quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath === null) {
-			outputChannel.appendLine('* Quartus version: not (correctly) configured');
-		}
-		else
-		{
-			outputChannel.appendLine('* Quartus version: ' + quartus.checkQuartusVersion(quartusPath));
-		}
-
-		outputChannel.show();
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(genDebugDevInfo.getCommand(context));
 
 
 	currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
