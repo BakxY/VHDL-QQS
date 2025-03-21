@@ -63,18 +63,30 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(changeQuartusProjectProperty.getCommand(context));
 	context.subscriptions.push(genDebugDevInfo.getCommand());
 
+	// Create status bar item to display the active quartus project
 	currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
 	context.subscriptions.push(currentQuartusProjectDisplay);
 
+	// Create status bar item to display the current top level entity
 	currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
 	context.subscriptions.push(currentTopLevelDisplay);
 
+	// Create all remaining status bar items
 	context.subscriptions.push(statusBarCreator.createCleanProject());
 	context.subscriptions.push(statusBarCreator.createCompileProject());
 	context.subscriptions.push(statusBarCreator.createAnalysisProject());
 	context.subscriptions.push(statusBarCreator.createOpenProgrammer());
 	context.subscriptions.push(statusBarCreator.createOpenRtlViewer());
 
+	// Create status bar item to display the active questa project
+	currentQuestaProjectDisplay = statusBarCreator.createActiveQuestaProject(context);
+	context.subscriptions.push(currentQuestaProjectDisplay);
+
+	// Create status bar item to run questa tests
+	runQuestaTestsButton = statusBarCreator.createRunTests();
+	context.subscriptions.push(runQuestaTestsButton);
+
+	// Attach function as event handler to config changes
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async event => {
 		if (event.affectsConfiguration('vhdl-qqs.questaFeatureFlag')) {
 			if (vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
@@ -95,19 +107,15 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		}
 	}));
 
-	currentQuestaProjectDisplay = statusBarCreator.createActiveQuestaProject(context);
-	context.subscriptions.push(currentQuestaProjectDisplay);
-
-	runQuestaTestsButton = statusBarCreator.createRunTests();
-	context.subscriptions.push(runQuestaTestsButton);
-
+	// Create and add quartus project files view to custom activity bar item
 	quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
 	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
 
+	// Create and add quartus properties vew to custom activity bar item
 	quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
 	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
 
-	// Get currently active project
+	// Update custom views with current data
 	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
 	if (activeProject !== null) {
 		// Get  quartus install bin path
@@ -120,10 +128,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		}
 	}
 
+	// Handle checking for new versions of VHDL_lang and downloading the to fs
 	vhdlLang.checkDownloadVhdlLang(context);
 
-	context.subscriptions.push(
-		vscode.languages.registerDocumentFormattingEditProvider('vhdl', {
+	// Create new document formatter for vhdl files
+	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('vhdl', {
 			provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
 				const edits: vscode.TextEdit[] = [];
 
