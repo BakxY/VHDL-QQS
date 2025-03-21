@@ -3,8 +3,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as entityUtils from './EntityUtils';
 import * as testbenchUtils from './TestbenchUtils';
-import * as tomlUtils from './TomlUtils';
-import * as pathUtils from './PathUtils';
 import { outputChannel } from '../extension';
 
 /**
