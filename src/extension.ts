@@ -1,16 +1,9 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as fs from 'fs';
 import * as cp from 'child_process';
 
 // Import custom libs
-import * as entityUtils from './lib/EntityUtils';
-import * as testbenchCommands from './lib/TestbenchCommand';
-import * as tomlUtils from './lib/TomlUtils';
 import * as quartus from './lib/QuartusUtils';
-import * as questa from './lib/QuestaUtils';
-import * as compileCommands from './lib/CompileCommand';
-import * as testCommands from './lib/TestCommands';
 import * as statusBarCreator from './lib/StatusBarUtils';
 import * as pathUtils from './lib/PathUtils';
 import * as vhdlLang from './lib/VhdlLang';
@@ -25,15 +18,15 @@ import * as cleanCompileFiles from './commands/cleanCompileFiles';
 import * as openProgrammerActiveProject from './commands/openProgrammerActiveProject';
 import * as openRtlViewerActiveProject from './commands/openRtlViewerActiveProject';
 import * as changeTopLevel from './commands/changeTopLevel';
-import * as addFileToProjectContext from './commands/addFileToProjectContext'
-import * as removeFileFromProjectContext from './commands/removeFileFromProjectContext'
-import * as removeFileFromProject from './commands/removeFileFromProject'
-import * as refreshSourceFiles from './commands/refreshSourceFiles'
-import * as createNewEntity from './commands/createNewEntity'
-import * as selectQuestaProject from './commands/selectQuestaProject'
-import * as runQuestaTest from './commands/runQuestaTest'
-import * as changeQuartusProjectProperty from './commands/changeQuartusProjectProperty'
-import * as genDebugDevInfo from './commands/genDebugDevInfo'
+import * as addFileToProjectContext from './commands/addFileToProjectContext';
+import * as removeFileFromProjectContext from './commands/removeFileFromProjectContext';
+import * as removeFileFromProject from './commands/removeFileFromProject';
+import * as refreshSourceFiles from './commands/refreshSourceFiles';
+import * as createNewEntity from './commands/createNewEntity';
+import * as selectQuestaProject from './commands/selectQuestaProject';
+import * as runQuestaTest from './commands/runQuestaTest';
+import * as changeQuartusProjectProperty from './commands/changeQuartusProjectProperty';
+import * as genDebugDevInfo from './commands/genDebugDevInfo';
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
