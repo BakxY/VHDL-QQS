@@ -18,8 +18,15 @@ import * as vhdlLang from './lib/VhdlLang';
 // Import command creators
 import * as generateTestBenchSelection from './commands/generateTestBenchSelection';
 import * as generateTestBenchExplorer from './commands/generateTestBenchExplorer';
+import * as selectQuartusProject from './commands/selectQuartusProject';
 
 export let outputChannel: vscode.OutputChannel;
+export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
+export let quartusProjectPropertiesView: quartus.QuartusProjectPropertiesTreeDataProvider;
+export let currentQuestaProjectDisplay: vscode.StatusBarItem;
+export let runQuestaTestsButton: vscode.StatusBarItem;
+export let currentQuartusProjectDisplay: vscode.StatusBarItem;
+export let currentTopLevelDisplay: vscode.StatusBarItem;
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
 	outputChannel = vscode.window.createOutputChannel("VHDL-QQS");
@@ -49,40 +56,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command sets the currently selected project for the current workspace.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectQuartusProject', async () => {
-		const allProjectFiles: string[] = quartus.getAllProjectFiles();
-
-		// Check if there are any quartus project file are in current workspace
-		if (allProjectFiles.length === 0) {
-			vscode.window.showErrorMessage('There are no project in your workfolder!');
-			console.error('There are no project in your workfolder!');
-			outputChannel.appendLine('There are no project in your workfolder!');
-			return;
-		}
-
-		// Ask user to select a project
-		const selectedProject: string | undefined = await vscode.window.showQuickPick(allProjectFiles, { title: 'Select a project' });
-		if (selectedProject === undefined) { return; }
-
-		// Update UI elements and update workspace storage
-		context.workspaceState.update('vhdl-qqs.currentActiveQuartusProject', selectedProject);
-		currentQuartusProjectDisplay.text = 'Quartus: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
-
-		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
-		if (activeProject === null) { return; }
-
-		// Get  quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath === null) { return; }
-
-		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
-		quartusProjectPropertiesView.updateData(context, activeProject, quartusPath);
-
-		const projectTopLevel: string = quartus.getProjectTopLevel(context, activeProject, quartusPath);
-		currentTopLevelDisplay.text = 'Top Level: ' + projectTopLevel;
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(selectQuartusProject.getCommand(context));
 
 	/**
 	 * @brief Commands created and runs a tcl script in the quartus tcl shell that will compile the currently active project.
@@ -631,10 +605,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(disposable);
 
 
-	const currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
+	currentQuartusProjectDisplay = statusBarCreator.createActiveQuartusProject(context);
 	context.subscriptions.push(currentQuartusProjectDisplay);
 
-	const currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
+	currentTopLevelDisplay = await statusBarCreator.createChangeTopLevel(context);
 	context.subscriptions.push(currentTopLevelDisplay);
 
 	context.subscriptions.push(statusBarCreator.createCleanProject());
@@ -663,16 +637,16 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		}
 	}));
 
-	const currentQuestaProjectDisplay: vscode.StatusBarItem = statusBarCreator.createActiveQuestaProject(context);
+	currentQuestaProjectDisplay = statusBarCreator.createActiveQuestaProject(context);
 	context.subscriptions.push(currentQuestaProjectDisplay);
 
-	const runQuestaTestsButton: vscode.StatusBarItem = statusBarCreator.createRunTests();
+	runQuestaTestsButton = statusBarCreator.createRunTests();
 	context.subscriptions.push(runQuestaTestsButton);
 
-	const quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
+	quartusProjectFilesView = new quartus.QuartusProjectFileTreeDataProvider();
 	vscode.window.createTreeView('projectSourceFiles', { treeDataProvider: quartusProjectFilesView });
 
-	const quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
+	quartusProjectPropertiesView = new quartus.QuartusProjectPropertiesTreeDataProvider();
 	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
 
 	// Get currently active project
