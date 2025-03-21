@@ -28,6 +28,7 @@ import * as changeTopLevel from './commands/changeTopLevel';
 import * as addFileToProjectContext from './commands/addFileToProjectContext'
 import * as removeFileFromProjectContext from './commands/removeFileFromProjectContext'
 import * as removeFileFromProject from './commands/removeFileFromProject'
+import * as refreshSourceFiles from './commands/refreshSourceFiles'
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
@@ -125,19 +126,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command used to refresh the data displayed in Quartus Source File list.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async () => {
-		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
-		if (activeProject === null) { return; }
-
-		// Get  quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath === null) { return; }
-
-		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
-		vscode.window.showInformationMessage('Refreshed source file list!');
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(refreshSourceFiles.getCommand(context));
 
 	/**
 	 * @brief Command used to create a new entity from a template file
