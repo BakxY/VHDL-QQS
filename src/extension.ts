@@ -31,6 +31,7 @@ import * as removeFileFromProject from './commands/removeFileFromProject'
 import * as refreshSourceFiles from './commands/refreshSourceFiles'
 import * as createNewEntity from './commands/createNewEntity'
 import * as selectQuestaProject from './commands/selectQuestaProject'
+import * as runQuestaTest from './commands/runQuestaTest'
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
@@ -146,25 +147,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command used to run tests for selected questa project
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.runQuestaTest', async () => {
-		if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
-			vscode.window.showErrorMessage('Feature isn\'t enabled!');
-			console.error('Feature isn\'t enabled!');
-			outputChannel.appendLine('Feature isn\'t enabled!');
-			return;
-		}
-
-		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentQuestaProject(context);
-		if (activeProject === null) { return; }
-
-		// Get  quartus install bin path
-		const questaPath: string | null = await pathUtils.getQuestaBinPath();
-		if (questaPath === null) { return; }
-
-		testCommands.runQuestaTest(context, activeProject, questaPath);
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(runQuestaTest.getCommand(context));
 
 	/**
 	 * @brief Command is called once user clicks on a project property
