@@ -6,6 +6,10 @@ import * as questa from './../lib/QuestaUtils';
 
 import { outputChannel, currentQuestaProjectDisplay } from '../extension';
 
+/**
+ * @brief Command used to select questa project to run tests for
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.selectQuestaProject', async () => {
         if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {

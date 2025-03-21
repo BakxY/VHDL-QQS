@@ -7,6 +7,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel, quartusProjectFilesView, quartusProjectPropertiesView, currentQuartusProjectDisplay, currentTopLevelDisplay } from '../extension';
 
+/**
+ * @brief Command sets the currently selected project for the current workspace.
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.selectQuartusProject', async () => {
         const allProjectFiles: string[] = quartus.getAllProjectFiles();

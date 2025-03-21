@@ -8,6 +8,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
+/**
+ * @brief Command opens the quartus fpga programmer for the currently active and compiled project
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.openProgrammerActiveProject', async () => {
         // Get currently active project

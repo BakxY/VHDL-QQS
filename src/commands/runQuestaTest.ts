@@ -6,6 +6,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
+/**
+ * @brief Command used to run tests for selected questa project
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.runQuestaTest', async () => {
         if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {

@@ -8,6 +8,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
+/**
+ * @brief Command used to create a new entity from a template file
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.createNewEntity', async () => {
         // Get currently active project

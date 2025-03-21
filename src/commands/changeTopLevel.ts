@@ -8,6 +8,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { currentTopLevelDisplay } from '../extension';
 
+/**
+ * @brief Command changes the current top level entity file of the active project.
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.changeTopLevel', async () => {
         // Get currently active project

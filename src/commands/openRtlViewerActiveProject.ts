@@ -8,6 +8,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
+/**
+ * @brief Command opens the quartus rtl viewer for currently active project
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.openRtlViewerActiveProject', async () => {
         // Get currently active project

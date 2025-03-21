@@ -6,6 +6,10 @@ import * as testbenchCommands from './../lib/TestbenchCommand';
 
 import { outputChannel } from '../extension';
 
+/**
+ * @brief Command generates a new testbench for a entity. This commands uses the user selected expression as the entity to generate the testbench for.
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
         const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;

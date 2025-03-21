@@ -7,6 +7,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { quartusProjectFilesView } from '../extension';
 
+/**
+ * @brief Command used in context menu to remove a file from the current project.
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.removeFileFromProjectContext', async (uri: vscode.Uri) => {
         const filePath: string = path.normalize(uri.fsPath);

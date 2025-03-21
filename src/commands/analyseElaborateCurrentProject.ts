@@ -5,7 +5,10 @@ import * as path from 'path';
 import * as compileCommands from './../lib/CompileCommand';
 import * as pathUtils from './../lib/PathUtils';
 
-
+/**
+ * @brief Commands created and runs a tcl script in the quartus tcl shell that will analyse and elaborate the currently active project.
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.analyseElaborateCurrentProject', async () => {
         // Get currently active project

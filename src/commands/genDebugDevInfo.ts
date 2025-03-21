@@ -6,6 +6,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
+/**
+ * @brief Command that connects and prints device and software information required in bug reports
+ * @author BakxY
+ */
 export function getCommand(): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.genDebugDevInfo', async () => {
         outputChannel.appendLine('\nCollected debug information: ');

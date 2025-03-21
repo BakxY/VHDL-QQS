@@ -5,6 +5,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { quartusProjectFilesView } from '../extension';
 
+/**
+ * @brief Command used to refresh the data displayed in Quartus Source File list.
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async () => {
         // Get currently active project

@@ -8,6 +8,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
+/**
+ * @brief Command generates a new testbench for a entity. This commands uses the toml file to get available entities and present the user with a menu selection.
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.generateTestBenchExplorer', async () => {
         // Get toml file path set in vs code setting

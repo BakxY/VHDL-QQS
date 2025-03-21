@@ -6,6 +6,10 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { quartusProjectPropertiesView } from '../extension';
 
+/**
+ * @brief Command is called once user clicks on a project property
+ * @author BakxY
+ */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.changeQuartusProjectProperty', async (element) => {
         // Get currently active project
