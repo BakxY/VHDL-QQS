@@ -9,6 +9,7 @@ import * as pathUtils from './lib/PathUtils';
 import * as vhdlLang from './lib/VhdlLang';
 
 // Import command creators
+import * as manualActivateExtension from './commands/manualActivateExtension'
 import * as generateTestBenchSelection from './commands/generateTestBenchSelection';
 import * as generateTestBenchExplorer from './commands/generateTestBenchExplorer';
 import * as selectQuartusProject from './commands/selectQuartusProject';
@@ -43,10 +44,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command that reloads entire VS Code windows so the extension restarts.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.manualActivateExtension', () => {
-		vscode.commands.executeCommand('workbench.action.reloadWindow');
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(manualActivateExtension.getCommand());
 
 	/**
 	 * @brief Command generates a new testbench for a entity. This commands uses the user selected expression as the entity to generate the testbench for.
