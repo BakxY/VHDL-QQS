@@ -7,7 +7,7 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel, quartusProjectFilesView, quartusProjectPropertiesView, currentQuartusProjectDisplay, currentTopLevelDisplay } from '../extension';
 
-export function getCommand(context: vscode.ExtensionContext) {
+export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.selectQuartusProject', async () => {
         const allProjectFiles: string[] = quartus.getAllProjectFiles();
 

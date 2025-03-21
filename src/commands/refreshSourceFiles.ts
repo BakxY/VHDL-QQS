@@ -5,7 +5,7 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { quartusProjectFilesView } from '../extension';
 
-export function getCommand(context: vscode.ExtensionContext) {
+export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.refreshSourceFiles', async () => {
         // Get currently active project
         const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);

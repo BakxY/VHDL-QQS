@@ -8,7 +8,7 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
-export function getCommand(context: vscode.ExtensionContext) {
+export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.generateTestBenchExplorer', async () => {
         // Get toml file path set in vs code setting
         const pathToToml = pathUtils.getTomlLocalPath();

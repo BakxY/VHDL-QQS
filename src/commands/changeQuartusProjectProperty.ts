@@ -6,7 +6,7 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { quartusProjectPropertiesView } from '../extension';
 
-export function getCommand(context: vscode.ExtensionContext) {
+export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.changeQuartusProjectProperty', async (element) => {
         // Get currently active project
         const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);

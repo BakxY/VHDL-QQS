@@ -6,7 +6,7 @@ import * as testbenchCommands from './../lib/TestbenchCommand';
 
 import { outputChannel } from '../extension';
 
-export function getCommand(context: vscode.ExtensionContext) {
+export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.generateTestBenchSelection', () => {
         const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
     

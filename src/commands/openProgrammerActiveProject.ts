@@ -8,7 +8,7 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
 
-export function getCommand(context: vscode.ExtensionContext) {
+export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.openProgrammerActiveProject', async () => {
         // Get currently active project
         const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);

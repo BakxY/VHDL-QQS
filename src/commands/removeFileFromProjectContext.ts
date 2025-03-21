@@ -7,7 +7,7 @@ import * as pathUtils from './../lib/PathUtils';
 
 import { quartusProjectFilesView } from '../extension';
 
-export function getCommand(context: vscode.ExtensionContext) {
+export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.removeFileFromProjectContext', async (uri: vscode.Uri) => {
         const filePath: string = path.normalize(uri.fsPath);
         if (!['.vhd', '.v'].includes(path.extname(filePath))) { return; }
