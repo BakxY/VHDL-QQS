@@ -27,6 +27,7 @@ import * as openRtlViewerActiveProject from './commands/openRtlViewerActiveProje
 import * as changeTopLevel from './commands/changeTopLevel';
 import * as addFileToProjectContext from './commands/addFileToProjectContext'
 import * as removeFileFromProjectContext from './commands/removeFileFromProjectContext'
+import * as removeFileFromProject from './commands/removeFileFromProject'
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
@@ -118,38 +119,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command used to remove a file from the current project by a user menu selection.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.removeFileFromProject', async () => {
-		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
-		if (activeProject === null) { return; }
-
-		// Get  quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath === null) { return; }
-
-		let allProjectFiles: string[] = [];
-
-		allProjectFiles = allProjectFiles.concat(quartus.getProjectVhdlSourceFiles(context, activeProject, quartusPath));
-		allProjectFiles = allProjectFiles.concat(quartus.getProjectVerilogSourceFiles(context, activeProject, quartusPath));
-
-		// Ask user to pick a entity
-		const fileToRemove: string | undefined = await vscode.window.showQuickPick(allProjectFiles, { title: 'Select a file to remove from project' });
-		if (fileToRemove === undefined) { return; }
-
-		switch (path.extname(fileToRemove)) {
-			case '.vhd':
-				quartus.removeVhdlFileToProject(context, activeProject, quartusPath, fileToRemove);
-				break;
-
-			case '.v':
-				quartus.removeVerilogFileToProject(context, activeProject, quartusPath, fileToRemove);
-				break;
-		}
-
-		quartusProjectFilesView.updateData(context, activeProject, quartusPath);
-		vscode.window.showInformationMessage('Removed file to active project!');
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(removeFileFromProject.getCommand(context));
 
 	/**
 	 * @brief Command used to refresh the data displayed in Quartus Source File list.
