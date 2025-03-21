@@ -19,6 +19,7 @@ import * as vhdlLang from './lib/VhdlLang';
 import * as generateTestBenchSelection from './commands/generateTestBenchSelection';
 import * as generateTestBenchExplorer from './commands/generateTestBenchExplorer';
 import * as selectQuartusProject from './commands/selectQuartusProject';
+import * as compileCurrentProject from './commands/compileCurrentProject'
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
@@ -62,19 +63,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Commands created and runs a tcl script in the quartus tcl shell that will compile the currently active project.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.compileCurrentProject', async () => {
-		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
-		if (activeProject === null) { return; }
-
-		// Get  quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath === null) { return; }
-
-		// Run compile command
-		compileCommands.compileQuartusProject(context, activeProject, path.normalize(quartusPath));
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(compileCurrentProject.getCommand(context));
 
 	/**
 	 * @brief Commands created and runs a tcl script in the quartus tcl shell that will analyse and elaborate the currently active project.
