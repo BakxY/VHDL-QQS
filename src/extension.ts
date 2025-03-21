@@ -19,10 +19,11 @@ import * as vhdlLang from './lib/VhdlLang';
 import * as generateTestBenchSelection from './commands/generateTestBenchSelection';
 import * as generateTestBenchExplorer from './commands/generateTestBenchExplorer';
 import * as selectQuartusProject from './commands/selectQuartusProject';
-import * as compileCurrentProject from './commands/compileCurrentProject'
-import * as analyseElaborateCurrentProject from './commands/analyseElaborateCurrentProject'
-import * as cleanCompileFiles from './commands/cleanCompileFiles'
-import * as openProgrammerActiveProject from './commands/openProgrammerActiveProject'
+import * as compileCurrentProject from './commands/compileCurrentProject';
+import * as analyseElaborateCurrentProject from './commands/analyseElaborateCurrentProject';
+import * as cleanCompileFiles from './commands/cleanCompileFiles';
+import * as openProgrammerActiveProject from './commands/openProgrammerActiveProject';
+import * as openRtlViewerActiveProject from './commands/openRtlViewerActiveProject';
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
@@ -90,35 +91,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command opens the quartus rtl viewer for currently active project
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.openRtlViewerActiveProject', async () => {
-		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
-		if (activeProject === null) { return; }
-
-		// Get  quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath === null) { return; }
-
-		// Create full path for programming file
-		const fileToOpen = path.join(pathUtils.getWorkspacePath()!, path.dirname(activeProject), path.basename(activeProject)).replace('.qsf', '.qpf');
-
-		// check if file exists (if project was compiled)
-		if (!fs.existsSync(fileToOpen)) {
-			vscode.window.showErrorMessage('Project file doesn\'t exits! Please open a valid project!');
-			console.error('Project file doesn\'t exits! Please open a valid project!');
-			outputChannel.appendLine('Project file doesn\'t exits! Please open a valid project!');
-			return;
-		}
-
-		// Create full programmer binary path
-		const rtlViewerFilePath = path.join(path.normalize(quartusPath), 'qnui');
-
-		// Start programmer
-		cp.exec('"' + rtlViewerFilePath + '" "' + fileToOpen + '"');
-
-		vscode.window.showInformationMessage('Opening RTL Viewer for project "' + path.basename(activeProject).replace(path.extname(activeProject), '') + '"');
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(openRtlViewerActiveProject.getCommand(context));
 
 	/**
 	 * @brief Command changes the current top level entity file of the active project.
