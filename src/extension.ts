@@ -24,6 +24,7 @@ import * as analyseElaborateCurrentProject from './commands/analyseElaborateCurr
 import * as cleanCompileFiles from './commands/cleanCompileFiles';
 import * as openProgrammerActiveProject from './commands/openProgrammerActiveProject';
 import * as openRtlViewerActiveProject from './commands/openRtlViewerActiveProject';
+import * as changeTopLevel from './commands/changeTopLevel';
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
@@ -97,38 +98,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command changes the current top level entity file of the active project.
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.changeTopLevel', async () => {
-		// Get currently active project
-		const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
-		if (activeProject === null) { return; }
-
-		// Get  quartus install bin path
-		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
-		if (quartusPath === null) { return; }
-
-		// Get toml file path set in vs code setting
-		const pathToToml = pathUtils.getTomlLocalPath();
-		if (pathToToml === null) { return; }
-
-		// Get all entities listed in toml file
-		const allEntities = tomlUtils.getAllEntities(pathUtils.getWorkspacePath()!, pathToToml);
-		if (allEntities === null) { return; }
-
-		// Remove file extensions
-		for (let entity = 0; entity < allEntities.length; entity++) {
-			allEntities[entity] = path.basename(allEntities[entity]).replace(path.extname(allEntities[entity]), '');
-		}
-
-		// Ask user to pick a entity
-		const newTopLevel: string | undefined = await vscode.window.showQuickPick(allEntities, { title: 'Select new top level entity' });
-		if (newTopLevel === undefined) { return; }
-
-		// Update UI elements and update workspace storage
-		quartus.setProjectTopLevel(context, activeProject, quartusPath, newTopLevel);
-		currentTopLevelDisplay.text = 'Top Level: ' + newTopLevel;
-		vscode.commands.executeCommand('vhdl-qqs.cleanCompileFiles');
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(changeTopLevel.getCommand(context));
 
 	/**
 	 * @brief Command used in context menu to add a file to the current project.
