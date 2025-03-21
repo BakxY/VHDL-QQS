@@ -30,6 +30,7 @@ import * as removeFileFromProjectContext from './commands/removeFileFromProjectC
 import * as removeFileFromProject from './commands/removeFileFromProject'
 import * as refreshSourceFiles from './commands/refreshSourceFiles'
 import * as createNewEntity from './commands/createNewEntity'
+import * as selectQuestaProject from './commands/selectQuestaProject'
 
 export let outputChannel: vscode.OutputChannel;
 export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
@@ -139,33 +140,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	 * @brief Command used to select questa project to run tests for
 	 * @author BakxY
 	 */
-	var disposable = vscode.commands.registerCommand('vhdl-qqs.selectQuestaProject', async () => {
-		if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
-			vscode.window.showErrorMessage('Feature isn\'t enabled!');
-			console.error('Feature isn\'t enabled!');
-			outputChannel.appendLine('Feature isn\'t enabled!');
-			return;
-		}
-
-		const availableProjects: string[] = questa.getAllProjectFiles();
-
-		// Check if there are any quartus project file are in current workspace
-		if (availableProjects.length === 0) {
-			vscode.window.showErrorMessage('There are no project in your workfolder!');
-			console.error('There are no project in your workfolder!');
-			outputChannel.appendLine('There are no project in your workfolder!');
-			return;
-		}
-
-		// Ask user to select a project
-		const selectedProject: string | undefined = await vscode.window.showQuickPick(availableProjects, { title: 'Select a project' });
-		if (selectedProject === undefined) { return; }
-
-		// Update UI elements and update workspace storage
-		context.workspaceState.update('vhdl-qqs.currentActiveQuestaProject', selectedProject);
-		currentQuestaProjectDisplay.text = 'Questa: ' + path.basename(selectedProject).replace(path.extname(selectedProject), '');
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(selectQuestaProject.getCommand(context));
 
 	/**
 	 * @brief Command used to run tests for selected questa project
