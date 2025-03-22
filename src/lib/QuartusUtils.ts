@@ -251,6 +251,19 @@ export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, c
 }
 
 /**
+ * @brief Gets the path to the compile output
+ * 
+ * @param context The context form where the function was ran
+ * @param currentProjectPath Workspace path to current project
+ * @param quartusBinPath Path to quartus binaries
+ * 
+ * @returns A path to the compile path
+ */
+export function getProjectOutputDir(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string): string {
+    return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'PROJECT_OUTPUT_DIRECTORY')[0];
+}
+
+/**
  * @brief Checks if a provided path is part of the quartus project
  * 
  * @param context The context form where the function was ran
