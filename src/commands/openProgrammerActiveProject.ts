@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as cp from 'child_process';
 
 // Import custom libs
+import * as quartus from './../lib/QuartusUtils';
 import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
@@ -23,7 +24,7 @@ export function getCommand(context: vscode.ExtensionContext): vscode.Disposable 
         if (quartusPath === null) { return; }
 
         // Create full path for programming file
-        const fileToUpload = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, path.dirname(activeProject), 'output_files', path.basename(activeProject).replace(path.extname(activeProject), '') + '.sof');
+        const fileToUpload = path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, path.dirname(activeProject), quartus.getProjectOutputDir(context, activeProject, quartusPath), path.basename(activeProject).replace(path.extname(activeProject), '') + '.sof');
 
         // check if file exists (if project was compiled)
         if (!fs.existsSync(fileToUpload)) {
