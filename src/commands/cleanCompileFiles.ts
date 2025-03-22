@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 // Import custom libs
+import * as quartus from './../lib/QuartusUtils';
 import * as pathUtils from './../lib/PathUtils';
 
 import { outputChannel } from '../extension';
@@ -17,12 +18,16 @@ export function getCommand(context: vscode.ExtensionContext): vscode.Disposable 
         const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
         if (activeProject === null) { return; }
 
+        // Get  quartus install bin path
+        const quartusPath: string | null = await pathUtils.getQuartusBinPath();
+        if (quartusPath === null) { return; }
+
         // Create full folder path
         const folderToClean = path.join(pathUtils.getWorkspacePath()!, path.dirname(activeProject));
 
         // Try to delete folders
         try {
-            fs.rmSync(path.join(folderToClean, 'output_files'), { recursive: true });
+            fs.rmSync(path.join(folderToClean, quartus.getProjectOutputDir(context, activeProject, quartusPath)), { recursive: true });
         }
         catch (err) {
             console.warn(err);
