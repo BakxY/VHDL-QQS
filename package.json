@@ -135,7 +135,11 @@
             },
             {
                 "command": "vhdl-qqs.runQuestaTest",
-                "title": "VHDL-QQS: Run Questa Tests"
+                "title": "VHDL-QQS: Run Questa Tests of the current project"
+            },
+            {
+                "command": "vhdl-qqs.openProjectWaveFile",
+                "title": "VHDL-QQS: Open the Questa wave file of the current project"
             },
             {
                 "command": "vhdl-qqs.changeQuartusProjectProperty",
