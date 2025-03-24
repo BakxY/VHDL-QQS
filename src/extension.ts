@@ -26,6 +26,7 @@ import * as selectQuestaProject from './commands/selectQuestaProject';
 import * as runQuestaTest from './commands/runQuestaTest';
 import * as changeQuartusProjectProperty from './commands/changeQuartusProjectProperty';
 import * as genDebugDevInfo from './commands/genDebugDevInfo';
+import * as openProjectWaveFile from './commands/openProjectWaveFile'
 
 // Import code formatters
 import * as vhdl from './formatter/vhdl'
@@ -61,6 +62,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(createNewEntity.getCommand(context));
 	context.subscriptions.push(selectQuestaProject.getCommand(context));
 	context.subscriptions.push(runQuestaTest.getCommand(context));
+	context.subscriptions.push(openProjectWaveFile.getCommand(context));
 	context.subscriptions.push(changeQuartusProjectProperty.getCommand(context));
 	context.subscriptions.push(genDebugDevInfo.getCommand());
 
