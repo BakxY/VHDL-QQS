@@ -174,17 +174,19 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext): P
         fs.rmSync(pathToZip.replace('.zip', ''), { recursive: true });
     }
 
-    console.log('Extracting VHDL_lang to "' + pathToZip + '"!');
-    outputChannel.appendLine('Extracting VHDL_lang to "' + pathToZip + '"!');
+    const extractTargetDir = pathToZip.replace('.zip', '_extracted');
+
+    console.log('Extracting VHDL_lang to "' + extractTargetDir + '"!');
+    outputChannel.appendLine('Extracting VHDL_lang to "' + extractTargetDir + '"!');
 
     // Unpack downloaded zip
-    await extract(pathToZip, { dir: pathToZip.replace('.zip', '') });
+    await extract(pathToZip, { dir: extractTargetDir });
 
     // Removed now unused zip file
     fs.rmSync(pathToZip);
 
     // Generate paths for VHDL_lang binary
-    const pathToBin = path.join(context.extensionPath, 'res', 'vhdl_lang', fileName.replace('.zip', ''), '/bin/', binaryName);
+    const pathToBin = path.join(extractTargetDir, fileName.replace('.zip', ''), '/bin/', binaryName);
     const targetBinPath = path.join(context.extensionPath, 'res', binaryName);
 
     console.log('Copying binary from "' + pathToBin + '" to "' + targetBinPath + '"!');
@@ -192,7 +194,7 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext): P
 
     // Copy binary and remove no longer used unpacked folder
     fs.cpSync(pathToBin, targetBinPath);
-    fs.rmSync(path.join(context.extensionPath, 'res', 'vhdl_lang'), { recursive: true });
+    fs.rmSync(extractTargetDir, { recursive: true });
 
     vscode.window.showInformationMessage('Finished downloading VHDL_lang!');
     console.log('Finished downloading VHDL_lang!');
