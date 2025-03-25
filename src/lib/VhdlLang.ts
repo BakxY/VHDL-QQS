@@ -143,6 +143,9 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext): P
     // Generate path for zip file to download
     const pathToZip: string = pathToVhdlLang.replace(path.extname(pathToVhdlLang), '') + '.zip';
 
+    console.log('Downloading VHDL_lang release to "' + pathToZip + '"!');
+    outputChannel.appendLine('Downloading VHDL_lang release to "' + pathToZip + '"!');
+
     // Delete old version of zip file
     if (fs.existsSync(pathToZip)) {
         fs.rmSync(pathToZip);
@@ -150,6 +153,9 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext): P
 
     // Request file from server
     const response = await fetch(downloadUrl + fileName);
+
+    console.log('Got ' + response.status + ' while fetching for VHDL_lang!');
+    outputChannel.appendLine('Got ' + response.status + ' while fetching for VHDL_lang!');
 
     // Check request was successful
     if (response.status !== 200) {
