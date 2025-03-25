@@ -174,6 +174,9 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext): P
         fs.rmSync(pathToZip.replace('.zip', ''), { recursive: true });
     }
 
+    console.log('Extracting VHDL_lang to "' + pathToZip + '"!');
+    outputChannel.appendLine('Extracting VHDL_lang to "' + pathToZip + '"!');
+
     // Unpack downloaded zip
     await extract(pathToZip, { dir: pathToZip.replace('.zip', '') });
 
@@ -183,6 +186,9 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext): P
     // Generate paths for VHDL_lang binary
     const pathToBin = path.join(context.extensionPath, 'res', 'vhdl_lang', fileName.replace('.zip', ''), '/bin/', binaryName);
     const targetBinPath = path.join(context.extensionPath, 'res', binaryName);
+
+    console.log('Copying binary from "' + pathToBin + '" to "' + targetBinPath + '"!');
+    outputChannel.appendLine('Copying binary from "' + pathToBin + '" to "' + targetBinPath + '"!');
 
     // Copy binary and remove no longer used unpacked folder
     fs.cpSync(pathToBin, targetBinPath);
