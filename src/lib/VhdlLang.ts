@@ -141,7 +141,7 @@ export async function getVhdlLangExecutable(context: vscode.ExtensionContext): P
     if (fs.existsSync(pathToVhdlLang)) { fs.rmSync(pathToVhdlLang); }
 
     // Generate path for zip file to download
-    const pathToZip: string = path.join(pathToVhdlLang).replace(path.extname(pathToVhdlLang), '.zip');
+    const pathToZip: string = pathToVhdlLang.replace(path.extname(pathToVhdlLang), '') + '.zip';
 
     // Delete old version of zip file
     if (fs.existsSync(pathToZip)) {
