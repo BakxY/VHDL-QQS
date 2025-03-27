@@ -9,7 +9,7 @@ import { outputChannel } from '../extension';
 
 export function getFormatter(context: vscode.ExtensionContext): vscode.Disposable {
     return vscode.languages.registerDocumentFormattingEditProvider('vhdl', {
-        provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
+        async provideDocumentFormattingEdits(document: vscode.TextDocument): Promise<vscode.TextEdit[]> {
             const edits: vscode.TextEdit[] = [];
 
             const pathToBin = path.join(context.extensionPath, 'res', 'vhdl_lang');
@@ -23,7 +23,7 @@ export function getFormatter(context: vscode.ExtensionContext): vscode.Disposabl
             }
 
             // Save document before formatting it
-            document.save();
+            await document.save();
 
             const fullRange: vscode.Range = new vscode.Range(0, 0, document.lineCount, 0);
             const execString: string = '"' + pathToBin + '" --format "' + document.uri.fsPath + '"';
