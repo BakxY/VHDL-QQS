@@ -23,7 +23,12 @@ export function getFormatter(context: vscode.ExtensionContext): vscode.Disposabl
             }
 
             // Save document before formatting it
-            await document.save();
+            if (!(await document.save())) {
+                vscode.window.showErrorMessage('Failed to save open document! Please save manually and try again!');
+                console.error('Failed to save open document! Please save manually and try again!');
+                outputChannel.appendLine('Failed to save open document! Please save manually and try again!');
+                return edits;
+            }
 
             const fullRange: vscode.Range = new vscode.Range(0, 0, document.lineCount, 0);
             const execString: string = '"' + pathToBin + '" --format "' + document.uri.fsPath + '"';
