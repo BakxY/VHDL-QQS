@@ -105,13 +105,11 @@
             },
             {
                 "command": "vhdl-qqs.addFileToProjectContext",
-                "title": "VHDL-QQS: Add File to Project",
-                "enablement": "resourceExtname == '.vhd' || resourceExtname == '.v'"
+                "title": "VHDL-QQS: Add File to Project"
             },
             {
                 "command": "vhdl-qqs.removeFileFromProjectContext",
-                "title": "VHDL-QQS: Remove File to Project",
-                "enablement": "resourceExtname == '.vhd' || resourceExtname == '.v'"
+                "title": "VHDL-QQS: Remove File to Project"
             },
             {
                 "command": "vhdl-qqs.removeFileFromProject",
@@ -150,6 +148,14 @@
             "commandPalette": [
                 {
                     "command": "vhdl-qqs.changeQuartusProjectProperty",
+                    "when": "false"
+                },
+                {
+                    "command": "vhdl-qqs.addFileToProjectContext",
+                    "when": "false"
+                },
+                {
+                    "command": "vhdl-qqs.removeFileFromProjectContext",
                     "when": "false"
                 }
             ],
