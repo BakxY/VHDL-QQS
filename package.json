@@ -116,6 +116,12 @@
                 "title": "VHDL-QQS: Remove File to Project"
             },
             {
+                "command": "vhdl-qqs.removeFileFromProjectExplorer",
+                "title": "vhdl-qqs.removeFileFromProjectExplorer",
+                "icon": "$(remove)",
+                "enablement": "view == projectSourceFiles"
+            },
+            {
                 "command": "vhdl-qqs.removeFileFromProject",
                 "title": "VHDL-QQS: Remove current File to Project"
             },
@@ -165,6 +171,14 @@
                 {
                     "command": "vhdl-qqs.generateTestBenchSelection",
                     "when": "editorHasSelection"
+                },
+                {
+                    "command": "vhdl-qqs.addFileToProject",
+                    "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
+                },
+                {
+                    "command": "vhdl-qqs.removeFileFromProject",
+                    "when": "resourceExtname == '.vhd' || resourceExtname == '.v'"
                 }
             ],
             "explorer/context": [
@@ -178,6 +192,11 @@
                 }
             ],
             "view/title": [
+                {
+                    "command": "vhdl-qqs.removeFileFromProjectExplorer",
+                    "when": "view == projectSourceFiles",
+                    "group": "navigation@2"
+                },
                 {
                     "command": "vhdl-qqs.refreshSourceFiles",
                     "when": "view == projectSourceFiles",
