@@ -18,6 +18,7 @@ import * as openProgrammerActiveProject from './commands/openProgrammerActivePro
 import * as openRtlViewerActiveProject from './commands/openRtlViewerActiveProject';
 import * as changeTopLevel from './commands/changeTopLevel';
 import * as addFileToProjectContext from './commands/addFileToProjectContext';
+import * as addFileToProject from './commands/addFileToProject';
 import * as removeFileFromProjectContext from './commands/removeFileFromProjectContext';
 import * as removeFileFromProject from './commands/removeFileFromProject';
 import * as refreshSourceFiles from './commands/refreshSourceFiles';
@@ -55,6 +56,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(openRtlViewerActiveProject.getCommand(context));
 	context.subscriptions.push(changeTopLevel.getCommand(context));
 	context.subscriptions.push(addFileToProjectContext.getCommand(context));
+	context.subscriptions.push(addFileToProject.getCommand(context));
 	context.subscriptions.push(removeFileFromProjectContext.getCommand(context));
 	context.subscriptions.push(removeFileFromProject.getCommand(context));
 	context.subscriptions.push(refreshSourceFiles.getCommand(context));
