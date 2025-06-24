@@ -21,6 +21,7 @@ import * as addFileToProjectContext from './commands/addFileToProjectContext';
 import * as addFileToProject from './commands/addFileToProject';
 import * as removeFileFromProjectContext from './commands/removeFileFromProjectContext';
 import * as removeFileFromProject from './commands/removeFileFromProject';
+import * as removeFileFromProjectExplorer from './commands/removeFileFromProjectExplorer';
 import * as refreshSourceFiles from './commands/refreshSourceFiles';
 import * as createNewEntity from './commands/createNewEntity';
 import * as selectQuestaProject from './commands/selectQuestaProject';
@@ -59,6 +60,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(addFileToProject.getCommand(context));
 	context.subscriptions.push(removeFileFromProjectContext.getCommand(context));
 	context.subscriptions.push(removeFileFromProject.getCommand(context));
+	context.subscriptions.push(removeFileFromProjectExplorer.getCommand(context));
 	context.subscriptions.push(refreshSourceFiles.getCommand(context));
 	context.subscriptions.push(createNewEntity.getCommand(context));
 	context.subscriptions.push(selectQuestaProject.getCommand(context));
