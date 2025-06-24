@@ -108,14 +108,16 @@
                 "title": "VHDL-QQS: Add File to Project"
             },
             {
+                "command": "vhdl-qqs.addFileToProject",
+                "title": "VHDL-QQS: Add current File to Project"
+            },
+            {
                 "command": "vhdl-qqs.removeFileFromProjectContext",
                 "title": "VHDL-QQS: Remove File to Project"
             },
             {
                 "command": "vhdl-qqs.removeFileFromProject",
-                "title": "vhdl-qqs.removeFileFromProject",
-                "icon": "$(remove)",
-                "enablement": "view == projectSourceFiles"
+                "title": "VHDL-QQS: Remove current File to Project"
             },
             {
                 "command": "vhdl-qqs.refreshSourceFiles",
@@ -176,11 +178,6 @@
                 }
             ],
             "view/title": [
-                {
-                    "command": "vhdl-qqs.removeFileFromProject",
-                    "when": "view == projectSourceFiles",
-                    "group": "navigation@2"
-                },
                 {
                     "command": "vhdl-qqs.refreshSourceFiles",
                     "when": "view == projectSourceFiles",
