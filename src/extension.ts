@@ -121,7 +121,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
 
 	// Update custom views with current data
-	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
+	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context, false);
 	if (activeProject !== null) {
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
