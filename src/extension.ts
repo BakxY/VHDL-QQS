@@ -24,6 +24,8 @@ import * as removeFileFromProject from './commands/removeFileFromProject';
 import * as removeFileFromProjectExplorer from './commands/removeFileFromProjectExplorer';
 import * as refreshSourceFiles from './commands/refreshSourceFiles';
 import * as createNewEntity from './commands/createNewEntity';
+import * as copyEntityToComponent from './commands/copyEntityToComponent';
+import * as stutterMode from './commands/stutterMode';
 import * as selectQuestaProject from './commands/selectQuestaProject';
 import * as runQuestaTest from './commands/runQuestaTest';
 import * as changeQuartusProjectProperty from './commands/changeQuartusProjectProperty';
@@ -63,6 +65,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(removeFileFromProjectExplorer.getCommand(context));
 	context.subscriptions.push(refreshSourceFiles.getCommand(context));
 	context.subscriptions.push(createNewEntity.getCommand(context));
+	context.subscriptions.push(copyEntityToComponent.getCommand(context));
+	context.subscriptions.push(stutterMode.getCommand());
 	context.subscriptions.push(selectQuestaProject.getCommand(context));
 	context.subscriptions.push(runQuestaTest.getCommand(context));
 	context.subscriptions.push(changeQuartusProjectProperty.getCommand(context));
