@@ -8,7 +8,7 @@ export type entityProperty = {
     propertySignalDir: string | undefined;
 }
 
-const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end\s+(\1\s*|entity);/;
+const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end(?:\s+entity)?(?:\s+\1)?\s*;/;
 const MATCH_PROPERTY_DIR: RegExp = /\s+(in|out|inout)\s+/;
 
 /**
