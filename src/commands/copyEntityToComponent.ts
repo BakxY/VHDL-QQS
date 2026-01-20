@@ -264,13 +264,19 @@ async function insertComponentAndInstance(
             return false;
         }
 
-        const beginPosition: number = documentText.indexOf('begin');
-        const lineNumber: number = documentText.substring(0, beginPosition).split('\n').length - 1;
-        const insertComponentLine: vscode.Position = new vscode.Position(lineNumber, 0);
+        // Check if component is already declared
+        const componentRegex: RegExp = new RegExp(`component\\s+${componentName}\\s+is`, 'i');
+        const componentExists: boolean = componentRegex.test(documentText);
 
-        await editor.edit((editBuilder: vscode.TextEditorEdit) => {
-            editBuilder.insert(insertComponentLine, componentDeclaration + '\n');
-        });
+        if (!componentExists) {
+            const beginPosition: number = documentText.indexOf('begin');
+            const lineNumber: number = documentText.substring(0, beginPosition).split('\n').length - 1;
+            const insertComponentLine: vscode.Position = new vscode.Position(lineNumber, 0);
+
+            await editor.edit((editBuilder: vscode.TextEditorEdit) => {
+                editBuilder.insert(insertComponentLine, componentDeclaration + '\n');
+            });
+        }
 
         const textAfterComponent: string = editor.document.getText();
         const beginIndexAfter: number = textAfterComponent.indexOf('begin');
