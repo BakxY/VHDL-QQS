@@ -66,6 +66,27 @@ function setupStutterModeKeybindings(): vscode.Disposable {
                         }
                     }
                 }
+            } else if (change.text === ':') {
+                const position = change.range.start;
+                if (position.character >= 1) {
+                    const prevChar = document.getText(new vscode.Range(
+                        new vscode.Position(position.line, position.character - 1),
+                        position
+                    ));
+
+                    if (prevChar === ':') {
+                        const editor = vscode.window.activeTextEditor;
+                        if (editor && editor.document === document) {
+                            await editor.edit(editBuilder => {
+                                const replaceRange = new vscode.Range(
+                                    new vscode.Position(position.line, position.character - 1),
+                                    new vscode.Position(position.line, position.character + 1)
+                                );
+                                editBuilder.replace(replaceRange, ':=');
+                            });
+                        }
+                    }
+                }
             }
         }
     });
