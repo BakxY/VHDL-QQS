@@ -113,7 +113,7 @@
             },
             {
                 "command": "vhdl-qqs.removeFileFromProjectContext",
-                "title": "VHDL-QQS: Remove File to Project"
+                "title": "VHDL-QQS: Remove File from Project"
             },
             {
                 "command": "vhdl-qqs.removeFileFromProjectExplorer",
@@ -123,7 +123,7 @@
             },
             {
                 "command": "vhdl-qqs.removeFileFromProject",
-                "title": "VHDL-QQS: Remove current File to Project"
+                "title": "VHDL-QQS: Remove current File from Project"
             },
             {
                 "command": "vhdl-qqs.refreshSourceFiles",
