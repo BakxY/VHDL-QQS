@@ -5,7 +5,7 @@ import * as cp from 'child_process';
 import * as pathUtils from './PathUtils';
 import { outputChannel } from '../extension';
 
-const SUPPORTED_QUARTUS_VERSIONS: string[] = ['23.1std'];
+const SUPPORTED_QUARTUS_VERSIONS: string[] = ['23.1std', '24.1std', '25.1std'];
 
 const TCL_RETURN_FORMAT_REGEX: RegExp = /(?:\{(.*?)\}|(\S+))/g;
 
