@@ -73,12 +73,12 @@ export function resolvePathWithWildcards(wildcardPath: string, baseDir: string =
  * 
  * @returns The workstation path to the current project
  */
-export function getCurrentQuartusProject(context: vscode.ExtensionContext): string | null {
+export function getCurrentQuartusProject(context: vscode.ExtensionContext, showError: boolean = false): string | null {
     const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveQuartusProject', undefined);
 
     // Check if no project is set in current workspace
     if (activeProject === undefined) {
-        vscode.window.showErrorMessage('No quartus project selected!');
+        if(showError === true) { vscode.window.showErrorMessage('No quartus project selected!'); }
         console.error('No quartus project selected!');
         outputChannel.appendLine('No quartus project selected!');
         return null;
