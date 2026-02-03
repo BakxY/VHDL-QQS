@@ -12,7 +12,7 @@ import { outputChannel, quartusProjectFilesView } from '../extension';
  * @author BakxY
  */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
-    return vscode.commands.registerCommand('vhdl-qqs.addFileToProject', async (uri: vscode.Uri) => {
+    return vscode.commands.registerCommand('vhdl-qqs.addFileToProject', async () => {
         const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 
         // Check if editor is opened

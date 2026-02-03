@@ -30,7 +30,7 @@ import * as changeQuartusProjectProperty from './commands/changeQuartusProjectPr
 import * as genDebugDevInfo from './commands/genDebugDevInfo';
 
 // Import code formatters
-import * as vhdl from './formatter/vhdl'
+import * as vhdl from './formatter/vhdl';
 
 // Exports to all lib files and external command files
 export let outputChannel: vscode.OutputChannel;
