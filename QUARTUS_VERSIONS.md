@@ -3,6 +3,8 @@
 This VS Code extension has been tested and is known to work with the following versions of Intel Quartus Prime:
 
 * **23.1std**
+* **24.1std**
+* **25.1std**
 
 While the VS Code extension aims for broad compatibility, these are the versions that have been specifically verified.
 

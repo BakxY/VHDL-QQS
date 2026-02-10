@@ -32,7 +32,7 @@ import * as changeQuartusProjectProperty from './commands/changeQuartusProjectPr
 import * as genDebugDevInfo from './commands/genDebugDevInfo';
 
 // Import code formatters
-import * as vhdl from './formatter/vhdl'
+import * as vhdl from './formatter/vhdl';
 
 // Exports to all lib files and external command files
 export let outputChannel: vscode.OutputChannel;
@@ -125,7 +125,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	vscode.window.createTreeView('projectProperties', { treeDataProvider: quartusProjectPropertiesView });
 
 	// Update custom views with current data
-	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context);
+	const activeProject: string | null = await pathUtils.getCurrentQuartusProject(context, false);
 	if (activeProject !== null) {
 		// Get  quartus install bin path
 		const quartusPath: string | null = await pathUtils.getQuartusBinPath();
