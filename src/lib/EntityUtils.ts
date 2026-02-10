@@ -8,8 +8,8 @@ export type entityProperty = {
     propertySignalDir: string | undefined;
 }
 
-const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end\s+(\1\s*|entity);/;
-const MATCH_PROPERTY_DIR: RegExp = /\s+(in|out|inout)\s+/;
+const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end(?:\s+entity)?(?:\s+\1)?\s*;/i;
+const MATCH_PROPERTY_DIR: RegExp = /\s+(in|out|inout)\s+/i;
 
 /**
  * @brief Gets the expression the user has currently selected
@@ -84,13 +84,13 @@ export function getGenericContent(entityContent: string): string | null {
     entityContent = entityContent.replace(/--.*$/gm, '').replaceAll('\n', '');
 
     // Check if any generic properties exist
-    if(!entityContent.includes('generic')) { return null;}
+    if(!entityContent.toLowerCase().includes('generic')) { return null;}
 
     let genericContent: string = '';
     let parenthesesCount = 0;
 
     // Separate generic part of entity definition from definition
-    for (let index = entityContent.indexOf('generic'); index < entityContent.length; index++) {
+    for (let index = entityContent.toLowerCase().indexOf('generic'); index < entityContent.length; index++) {
         if (entityContent[index] === '(') {
             parenthesesCount++;
         }
@@ -135,7 +135,7 @@ export function getPortContent(entityContent: string): string | null {
     let parenthesesCount: number = 0;
 
     // Separate port part of entity definition from definition
-    for (let index = entityContent.indexOf('port'); index < entityContent.length; index++) {
+    for (let index = entityContent.toLowerCase().indexOf('port'); index < entityContent.length; index++) {
         if (entityContent[index] === '(') {
             parenthesesCount++;
         }
