@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 
+const STUTTER_MODE_MAPPINGS = [ ',', '.', ':' ];
+
 /**
  * @brief Registers keybindings for stutter mode (emacs-like shortcuts).
  * 
@@ -19,69 +21,64 @@ export function setupStutterMode(): vscode.Disposable {
         }
 
         for (const change of event.contentChanges) {
-            if (change.text === ',') {
-                const position = change.range.start;
-                if (position.character >= 1) {
-                    const prevChar = document.getText(new vscode.Range(
-                        new vscode.Position(position.line, position.character - 1),
-                        position
-                    ));
+            // Check if change could be relevant to stutter mode
+            if(!STUTTER_MODE_MAPPINGS.includes(change.text))
+            {
+                continue;
+            }
 
-                    if (prevChar === ',') {
-                        const editor = vscode.window.activeTextEditor;
-                        if (editor && editor.document === document) {
-                            await editor.edit(editBuilder => {
-                                const replaceRange = new vscode.Range(
-                                    new vscode.Position(position.line, position.character - 1),
-                                    new vscode.Position(position.line, position.character + 1)
-                                );
-                                editBuilder.replace(replaceRange, '<=');
-                            });
-                        }
-                    }
-                }
-            } else if (change.text === '.') {
-                const position = change.range.start;
-                if (position.character >= 1) {
-                    const prevChar = document.getText(new vscode.Range(
-                        new vscode.Position(position.line, position.character - 1),
-                        position
-                    ));
+            const position = change.range.start;
 
-                    if (prevChar === '.') {
-                        const editor = vscode.window.activeTextEditor;
-                        if (editor && editor.document === document) {
-                            await editor.edit(editBuilder => {
-                                const replaceRange = new vscode.Range(
-                                    new vscode.Position(position.line, position.character - 1),
-                                    new vscode.Position(position.line, position.character + 1)
-                                );
-                                editBuilder.replace(replaceRange, '=>');
-                            });
-                        }
-                    }
-                }
-            } else if (change.text === ':') {
-                const position = change.range.start;
-                if (position.character >= 1) {
-                    const prevChar = document.getText(new vscode.Range(
-                        new vscode.Position(position.line, position.character - 1),
-                        position
-                    ));
+            if (position.character < 1) {
+                continue;
+            }
 
-                    if (prevChar === ':') {
-                        const editor = vscode.window.activeTextEditor;
-                        if (editor && editor.document === document) {
-                            await editor.edit(editBuilder => {
-                                const replaceRange = new vscode.Range(
-                                    new vscode.Position(position.line, position.character - 1),
-                                    new vscode.Position(position.line, position.character + 1)
-                                );
-                                editBuilder.replace(replaceRange, ':=');
-                            });
-                        }
-                    }
-                }
+            // Get character right before relevant changed character
+            const prevChar = document.getText(new vscode.Range(
+                new vscode.Position(
+                    position.line, 
+                    position.character - 1
+                ),
+                position
+            ));
+
+            // Check if characters match
+            if(change.text !== prevChar) {
+                continue;
+            }
+
+            let replaceSequence: string = '';
+
+            switch(change.text)
+            {
+                case ',':
+                    replaceSequence = '<=';
+                    break;
+
+                case '.':
+                    replaceSequence = '=>';
+                    break;
+
+                case ':':
+                    replaceSequence = ':=';
+                    break;
+
+                // Should be impossible to reach
+                default:
+                    continue;
+
+            }
+
+            const editor = vscode.window.activeTextEditor;
+
+            if (editor && editor.document === document) {
+                await editor.edit(editBuilder => {
+                    const replaceRange = new vscode.Range(
+                        new vscode.Position(position.line, position.character - 1),
+                        new vscode.Position(position.line, position.character + 1)
+                    );
+                    editBuilder.replace(replaceRange, replaceSequence);
+                });
             }
         }
     });
