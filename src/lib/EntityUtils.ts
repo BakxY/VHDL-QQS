@@ -1,11 +1,18 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 import * as fs from 'fs';
+
 import { outputChannel } from '../extension';
 
 export type entityProperty = {
     propertyName: string;
     propertyType: string;
     propertySignalDir: string | undefined;
+}
+
+export interface EntityQuickPickItem extends vscode.QuickPickItem {
+    filePath: string;
+    entityName: string;
 }
 
 const ENTITY_BLOCK_FORMAT: RegExp = /entity\s+(\w+)\s+is\s+([\s\S]*?)\s+end(?:\s+entity)?(?:\s+\1)?\s*;/i;
@@ -240,4 +247,211 @@ export function getGenericPropertiesFromContent(entityContent: string | null): e
     }
 
     return entityProperties;
+}
+
+/**
+ * @brief Finds all entities in the workspace
+ * 
+ * @returns Array of EntityQuickPickItem with available entities
+ */
+export async function findAllEntitiesInWorkspace(): Promise<EntityQuickPickItem[]> {
+    const entities: EntityQuickPickItem[] = [];
+
+    const vhdlFiles: vscode.Uri[] = await vscode.workspace.findFiles('**/*.vhd');
+
+    for (const fileUri of vhdlFiles) {
+        const filePath: string = fileUri.fsPath;
+        const entityName: string | null = extractEntityName(filePath);
+
+        if (entityName !== null) {
+            entities.push({
+                label: entityName,
+                description: path.relative(vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || '', filePath),
+                filePath: filePath,
+                entityName: entityName
+            });
+        }
+    }
+
+    entities.sort((a, b) => a.entityName.localeCompare(b.entityName));
+
+    return entities;
+}
+
+/**
+ * @brief Extracts the entity name from a VHDL file
+ * 
+ * @param filePath Path to the VHDL file
+ * @returns Entity name or null if not found
+ */
+export function extractEntityName(filePath: string): string | null {
+    try {
+        const fileContent: string = fs.readFileSync(filePath, 'utf-8');
+        const entityMatch: RegExpMatchArray | null = fileContent.match(/entity\s+(\w+)\s+is/i);
+
+        if (!entityMatch) {
+            return null;
+        }
+
+        return entityMatch[1];
+    } catch (error) {
+        return null;
+    }
+}
+
+/**
+ * @brief Generates component declaration
+ * 
+ * @param entityName Name of the entity
+ * @param genericProperties Array of generic properties
+ * @param portProperties Array of port properties
+ * @returns Component declaration string
+ */
+export function generateComponentDeclaration(
+    entityName: string,
+    genericProperties: entityProperty[] | null,
+    portProperties: entityProperty[] | null
+): string {
+    let componentContent: string = `component ${entityName} is\n`;
+
+    if (genericProperties && genericProperties.length > 0) {
+        componentContent += '  generic (\n';
+
+        for (let i = 0; i < genericProperties.length; i++) {
+            componentContent += `    ${genericProperties[i].propertyName} : ${genericProperties[i].propertyType}`;
+            if (i < genericProperties.length - 1) {
+                componentContent += ';\n';
+            } else {
+                componentContent += ');\n';
+            }
+        }
+    }
+
+    componentContent += '  port (\n';
+
+    for (let i = 0; i < portProperties!.length; i++) {
+        componentContent += `    ${portProperties![i].propertyName} : ${portProperties![i].propertySignalDir} ${portProperties![i].propertyType}`;
+        if (i < portProperties!.length - 1) {
+            componentContent += ';\n';
+        } else {
+            componentContent += ');\n';
+        }
+    }
+
+    componentContent += `end component ${entityName};\n`;
+
+    return componentContent;
+}
+
+/**
+ * @brief Generates instance instantiation
+ * 
+ * @param entityName Name of the entity
+ * @param instanceName Name of the instance
+ * @param genericProperties Array of generic properties
+ * @param portProperties Array of port properties
+ * @returns Instance instantiation string
+ */
+export function generateInstance(
+    entityName: string,
+    instanceName: string,
+    genericProperties: entityProperty[] | null,
+    portProperties: entityProperty[] | null
+): string {
+    let instanceContent: string = `${instanceName} : ${entityName}\n`;
+
+    if (genericProperties && genericProperties.length > 0) {
+        instanceContent += '  generic map (\n';
+
+        for (let i = 0; i < genericProperties.length; i++) {
+            instanceContent += `    ${genericProperties[i].propertyName} => ${genericProperties[i].propertyName}`;
+            if (i < genericProperties.length - 1) {
+                instanceContent += ',\n';
+            } else {
+                instanceContent += ')\n';
+            }
+        }
+    }
+
+    instanceContent += '  port map (\n';
+
+    for (let i = 0; i < portProperties!.length; i++) {
+        instanceContent += `    ${portProperties![i].propertyName} => ${portProperties![i].propertyName}`;
+        if (i < portProperties!.length - 1) {
+            instanceContent += ',\n';
+        } else {
+            instanceContent += ');\n';
+        }
+    }
+
+    return instanceContent;
+}
+
+/**
+ * @brief Inserts component declaration and instance into active document
+ * 
+ * @param editor The active text editor
+ * @param componentDeclaration Component declaration string
+ * @param instanceString Instance instantiation string
+ * @param componentName Name of the component
+ * @returns true if successful, false otherwise
+ */
+export async function insertComponentAndInstance(
+    editor: vscode.TextEditor,
+    componentDeclaration: string,
+    instanceString: string,
+    componentName: string
+): Promise<boolean> {
+    try {
+        const document: vscode.TextDocument = editor.document;
+        const documentText: string = document.getText();
+
+        const archBeginMatch: RegExpMatchArray | null = documentText.match(/\bbegin\b/i);
+        if (!archBeginMatch) {
+            vscode.window.showErrorMessage('Could not find "begin" keyword in file!');
+            console.error('Could not find "begin" keyword in file!');
+            outputChannel.appendLine('Could not find "begin" keyword in file!');
+            return false;
+        }
+
+        // Check if component is already declared
+        const componentRegex: RegExp = new RegExp(`component\\s+${componentName}\\s+is`, 'i');
+        const componentExists: boolean = componentRegex.test(documentText);
+
+        if (!componentExists) {
+            const beginPosition: number = documentText.indexOf('begin');
+            const lineNumber: number = documentText.substring(0, beginPosition).split('\n').length - 1;
+            const insertComponentLine: vscode.Position = new vscode.Position(lineNumber, 0);
+
+            await editor.edit((editBuilder: vscode.TextEditorEdit) => {
+                editBuilder.insert(insertComponentLine, componentDeclaration + '\n');
+            });
+        }
+
+        const textAfterComponent: string = editor.document.getText();
+        const beginIndexAfter: number = textAfterComponent.indexOf('begin');
+
+        if (beginIndexAfter !== -1) {
+            const beginLineEnd: number = textAfterComponent.indexOf('\n', beginIndexAfter);
+            const insertInstanceLine: vscode.Position = new vscode.Position(
+                textAfterComponent.substring(0, beginLineEnd).split('\n').length,
+                0
+            );
+
+            await editor.edit((editBuilder: vscode.TextEditorEdit) => {
+                editBuilder.insert(insertInstanceLine, instanceString + '\n');
+            });
+        } else {
+            vscode.window.showWarningMessage('Could not find "begin" keyword for instance insertion.');
+            console.warn('Could not find "begin" keyword for instance insertion.');
+            outputChannel.appendLine('Could not find "begin" keyword for instance insertion.');
+        }
+
+        return true;
+    } catch (error) {
+        vscode.window.showErrorMessage('Error inserting component: ' + String(error));
+        console.error('Error inserting component: ' + error);
+        outputChannel.appendLine('Error inserting component: ' + error);
+        return false;
+    }
 }
