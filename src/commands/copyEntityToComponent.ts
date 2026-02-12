@@ -9,7 +9,7 @@ import { outputChannel } from '../extension';
  * @brief Command used to copy an entity to a component and create an instance in the active architecture
  * @author dwildmann
  */
-export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
+export function getCommand(): vscode.Disposable {
     return vscode.commands.registerCommand('vhdl-qqs.copyEntityToComponent', async () => {
         const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 
