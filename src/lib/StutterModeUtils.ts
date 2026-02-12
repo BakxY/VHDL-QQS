@@ -1,24 +1,16 @@
 import * as vscode from 'vscode';
 
-import { outputChannel } from '../extension';
-
 /**
- * @brief Setup function for stutter mode - emacs-like shortcuts
- * Replaces ,, with <= and .. with =>
+ * @brief Registers keybindings for stutter mode (emacs-like shortcuts).
+ * 
+ * @details This listens for text document changes and replaces ,, with <= and .. with =>
+ * 
  * @author dwildmann
  */
-export function getCommand(): vscode.Disposable {
-    return setupStutterModeKeybindings();
-}
-
-/**
- * @brief Registers keybindings for stutter mode
- * This listens for text document changes and replaces ,, with <= and .. with =>
- */
-function setupStutterModeKeybindings(): vscode.Disposable {
+export function setupStutterMode(): vscode.Disposable {
     return vscode.workspace.onDidChangeTextDocument(async (event) => {
         const document = event.document;
-        
+
         if (document.languageId !== 'vhdl') {
             return;
         }

@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 // Import custom libs
 import * as quartus from './lib/QuartusUtils';
 import * as statusBarCreator from './lib/StatusBarUtils';
+import * as stutterModeUtils from './lib/StutterModeUtils'
 import * as pathUtils from './lib/PathUtils';
 import * as vhdlLang from './lib/VhdlLang';
 
@@ -25,7 +26,6 @@ import * as removeFileFromProjectExplorer from './commands/removeFileFromProject
 import * as refreshSourceFiles from './commands/refreshSourceFiles';
 import * as createNewEntity from './commands/createNewEntity';
 import * as copyEntityToComponent from './commands/copyEntityToComponent';
-import * as stutterMode from './commands/stutterMode';
 import * as selectQuestaProject from './commands/selectQuestaProject';
 import * as runQuestaTest from './commands/runQuestaTest';
 import * as changeQuartusProjectProperty from './commands/changeQuartusProjectProperty';
@@ -66,7 +66,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(refreshSourceFiles.getCommand(context));
 	context.subscriptions.push(createNewEntity.getCommand(context));
 	context.subscriptions.push(copyEntityToComponent.getCommand(context));
-	context.subscriptions.push(stutterMode.getCommand());
 	context.subscriptions.push(selectQuestaProject.getCommand(context));
 	context.subscriptions.push(runQuestaTest.getCommand(context));
 	context.subscriptions.push(changeQuartusProjectProperty.getCommand(context));
@@ -107,6 +106,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 				runQuestaTestsButton.hide();
 			}
 		}
+
 		if (event.affectsConfiguration('vhdl-qqs.quartusBinPath')) {
 			const quartusPath: string | null = await pathUtils.getQuartusBinPath();
 
@@ -142,6 +142,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 	// Create new document formatter for vhdl files
 	context.subscriptions.push(vhdl.getFormatter(context));
+
+	// Setup stutter mode, if feature flag is enabled
+	if (vscode.workspace.getConfiguration('vhdl-qqs').get('stutterModeFeatureFlag')) {
+		context.subscriptions.push(stutterModeUtils.setupStutterMode());
+	}
 }
 
 export function deactivate(): void {
