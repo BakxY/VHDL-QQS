@@ -3,9 +3,12 @@ import * as vscode from 'vscode';
 /**
  * @brief Registers keybindings for stutter mode (emacs-like shortcuts).
  * 
- * @details This listens for text document changes and replaces ,, with <= and .. with =>
+ * @details This listens for text document changes and replaces `,,` with `<=` and `..` with `=>`.
  * 
  * @author dwildmann
+ * 
+ * @todo Move feature flag check to setup function.
+ * @todo Implement support for enable/disable stutter mode without restart.
  */
 export function setupStutterMode(): vscode.Disposable {
     return vscode.workspace.onDidChangeTextDocument(async (event) => {

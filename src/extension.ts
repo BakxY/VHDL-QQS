@@ -65,7 +65,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(removeFileFromProjectExplorer.getCommand(context));
 	context.subscriptions.push(refreshSourceFiles.getCommand(context));
 	context.subscriptions.push(createNewEntity.getCommand(context));
-	context.subscriptions.push(copyEntityToComponent.getCommand(context));
+	context.subscriptions.push(copyEntityToComponent.getCommand());
 	context.subscriptions.push(selectQuestaProject.getCommand(context));
 	context.subscriptions.push(runQuestaTest.getCommand(context));
 	context.subscriptions.push(changeQuartusProjectProperty.getCommand(context));
