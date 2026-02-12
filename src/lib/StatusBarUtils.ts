@@ -65,6 +65,38 @@ export function createActiveQuestaProject(context: vscode.ExtensionContext): vsc
 }
 
 /**
+ * @brief Function initializes the status bar item/button for the active questa test script
+ * 
+ * @param context The context form where the function was ran
+ * 
+ * @returns The initialized status bar item
+ */
+export function createActiveQuestaTestScript(context: vscode.ExtensionContext): vscode.StatusBarItem {
+    const currentTestScriptDisplay: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+    currentTestScriptDisplay.command = 'vhdl-qqs.selectQuestaTestScript';
+
+    let activeTestScriptName: string | undefined = context.workspaceState.get('vhdl-qqs.currentActiveQuestaTestScript', undefined);
+
+    // Check if a test script is selected in current workspace
+    if (activeTestScriptName === undefined) {
+        activeTestScriptName = 'None';
+    }
+    else {
+        activeTestScriptName = path.basename(activeTestScriptName);
+    }
+
+    currentTestScriptDisplay.text = 'Test Script: ' + activeTestScriptName;
+    currentTestScriptDisplay.tooltip = 'Change current active questa test script';
+
+    if(vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag'))
+    {
+        currentTestScriptDisplay.show();
+    }
+    
+    return currentTestScriptDisplay;
+}
+
+/**
  * @brief Function initializes the status bar item/button for compiling active project
  * 
  * @returns The initialized status bar item

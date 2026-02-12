@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 
 // Import custom libs
 import * as pathUtils from '../lib/PathUtils';
 import * as questa from '../lib/QuestaUtils';
 
-import { outputChannel } from '../extension';
+import { outputChannel, currentQuestaTestScriptDisplay } from '../extension';
 
 /**
  * @brief Command used to select questa test script to run
@@ -37,5 +38,6 @@ export function getCommand(context: vscode.ExtensionContext): vscode.Disposable 
 
         // Update workspace storage
         context.workspaceState.update('vhdl-qqs.currentActiveQuestaTestScript', selectedTestScript);
+        currentQuestaTestScriptDisplay.text = 'Test Script: ' + path.basename(selectedTestScript);
     });
 } 
