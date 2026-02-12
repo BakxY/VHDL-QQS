@@ -307,18 +307,15 @@ export async function findAllEntitiesInWorkspace(): Promise<EntityQuickPickItem[
  * @author dwildmann
  */
 export function extractEntityName(filePath: string): string | null {
-    try {
-        const fileContent: string = fs.readFileSync(filePath, 'utf-8');
-        const entityMatch: RegExpMatchArray | null = fileContent.match(/entity\s+(\w+)\s+is/i);
+    //* Removed try catch statement and added length check to regex result
+    const fileContent: string = fs.readFileSync(filePath, 'utf-8');
+    const entityMatch: RegExpMatchArray | null = fileContent.match(/entity\s+(\w+)\s+is/i);
 
-        if (!entityMatch) {
-            return null;
-        }
-
-        return entityMatch[1];
-    } catch (error) {
+    if (!entityMatch || entityMatch.length < 2) {
         return null;
     }
+
+    return entityMatch[1];
 }
 
 /**

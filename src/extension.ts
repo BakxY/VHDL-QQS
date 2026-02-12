@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 // Import custom libs
 import * as quartus from './lib/QuartusUtils';
 import * as statusBarCreator from './lib/StatusBarUtils';
-import * as stutterModeUtils from './lib/StutterModeUtils'
+import * as stutterModeUtils from './lib/StutterModeUtils';
 import * as pathUtils from './lib/PathUtils';
 import * as vhdlLang from './lib/VhdlLang';
 
