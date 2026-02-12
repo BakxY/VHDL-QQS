@@ -10,6 +10,11 @@ export type entityProperty = {
     propertySignalDir: string | undefined;
 }
 
+/**
+ * @brief Extends vscode quick items to store both entity name and file path.
+ * 
+ * @author dwildmann
+ */
 export interface EntityQuickPickItem extends vscode.QuickPickItem {
     filePath: string;
     entityName: string;
@@ -24,6 +29,8 @@ const MATCH_PROPERTY_DIR: RegExp = /\s+(in|out|inout)\s+/i;
  * @param editor Currently opened vs code editor
  * 
  * @returns The selected expression as a string
+ * 
+ * @author BakxY
  */
 export function getSelectedExpression(editor: vscode.TextEditor | undefined): string | null {
     const selection = editor?.selection;
@@ -53,6 +60,8 @@ export function getSelectedExpression(editor: vscode.TextEditor | undefined): st
  * @param pathToEntityFile Path to the entity that the contents should extracted from
  * 
  * @returns The content of the entities declaration as a string
+ * 
+ * @author BakxY
  */
 export function getEntityContents(pathToEntityFile: string): string | null {
     const entityFile: string = fs.readFileSync(pathToEntityFile, 'utf-8');
@@ -85,6 +94,8 @@ export function getEntityContents(pathToEntityFile: string): string | null {
  * @param entityContent The entire entity declaration
  * 
  * @returns The separated generic content as a string
+ * 
+ * @author BakxY
  */
 export function getGenericContent(entityContent: string): string | null {
     // Remove comments from content
@@ -133,6 +144,8 @@ export function getGenericContent(entityContent: string): string | null {
  * @param entityContent The entire entity declaration
  * 
  * @returns The separated port content as a string
+ * 
+ * @author BakxY
  */
 export function getPortContent(entityContent: string): string | null {
     // Remove comments from content
@@ -178,6 +191,8 @@ export function getPortContent(entityContent: string): string | null {
  * @param entityContent The port content as a string
  * 
  * @returns An array of all entity port properties
+ * 
+ * @author BakxY
  */
 export function getPortPropertiesFromContent(entityContent: string | null): entityProperty[] | null {
     const entityProperties: entityProperty[] = [];
@@ -225,6 +240,8 @@ export function getPortPropertiesFromContent(entityContent: string | null): enti
  * @param entityContent The generic content as a string
  * 
  * @returns An array of all entity generic properties
+ * 
+ * @author BakxY
  */
 export function getGenericPropertiesFromContent(entityContent: string | null): entityProperty[] | null {
     // Check if there is no generic content
@@ -253,6 +270,8 @@ export function getGenericPropertiesFromContent(entityContent: string | null): e
  * @brief Finds all entities in the workspace
  * 
  * @returns Array of EntityQuickPickItem with available entities
+ * 
+ * @author dwildmann
  */
 export async function findAllEntitiesInWorkspace(): Promise<EntityQuickPickItem[]> {
     const entities: EntityQuickPickItem[] = [];
@@ -282,7 +301,10 @@ export async function findAllEntitiesInWorkspace(): Promise<EntityQuickPickItem[
  * @brief Extracts the entity name from a VHDL file
  * 
  * @param filePath Path to the VHDL file
+ * 
  * @returns Entity name or null if not found
+ * 
+ * @author dwildmann
  */
 export function extractEntityName(filePath: string): string | null {
     try {
@@ -305,7 +327,10 @@ export function extractEntityName(filePath: string): string | null {
  * @param entityName Name of the entity
  * @param genericProperties Array of generic properties
  * @param portProperties Array of port properties
+ * 
  * @returns Component declaration string
+ * 
+ * @author dwildmann
  */
 export function generateComponentDeclaration(
     entityName: string,
@@ -350,7 +375,10 @@ export function generateComponentDeclaration(
  * @param instanceName Name of the instance
  * @param genericProperties Array of generic properties
  * @param portProperties Array of port properties
+ * 
  * @returns Instance instantiation string
+ * 
+ * @author dwildmann
  */
 export function generateInstance(
     entityName: string,
@@ -394,7 +422,10 @@ export function generateInstance(
  * @param componentDeclaration Component declaration string
  * @param instanceString Instance instantiation string
  * @param componentName Name of the component
+ * 
  * @returns true if successful, false otherwise
+ * 
+ * @author dwildmann
  */
 export async function insertComponentAndInstance(
     editor: vscode.TextEditor,

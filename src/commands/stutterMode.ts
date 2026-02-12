@@ -5,7 +5,7 @@ import { outputChannel } from '../extension';
 /**
  * @brief Setup function for stutter mode - emacs-like shortcuts
  * Replaces ,, with <= and .. with =>
- * @author VHDL-QQS
+ * @author dwildmann
  */
 export function getCommand(): vscode.Disposable {
     return setupStutterModeKeybindings();
