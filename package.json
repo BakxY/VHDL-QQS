@@ -4,7 +4,7 @@
     "publisher": "BakxY",
     "description": "VS Code extension to automate the process of generating testbenches for vhdl entities.",
     "repository": "https://github.com/BakxY/VHDL-QQS",
-    "version": "4.4.7",
+    "version": "4.5.0",
     "engines": {
         "vscode": "^1.97.0"
     },
@@ -113,7 +113,7 @@
             },
             {
                 "command": "vhdl-qqs.removeFileFromProjectContext",
-                "title": "VHDL-QQS: Remove File to Project"
+                "title": "VHDL-QQS: Remove File from Project"
             },
             {
                 "command": "vhdl-qqs.removeFileFromProjectExplorer",
@@ -123,7 +123,7 @@
             },
             {
                 "command": "vhdl-qqs.removeFileFromProject",
-                "title": "VHDL-QQS: Remove current File to Project"
+                "title": "VHDL-QQS: Remove current File from Project"
             },
             {
                 "command": "vhdl-qqs.refreshSourceFiles",
@@ -134,6 +134,10 @@
             {
                 "command": "vhdl-qqs.createNewEntity",
                 "title": "VHDL-QQS: Create new entity"
+            },
+            {
+                "command": "vhdl-qqs.copyEntityToComponent",
+                "title": "VHDL-QQS: Copy entity to component with instance"
             },
             {
                 "command": "vhdl-qqs.selectQuestaProject",
@@ -222,6 +226,11 @@
                     "default": false,
                     "description": "Enable Questa integration"
                 },
+                "vhdl-qqs.stutterModeFeatureFlag": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable/Disable Stutter mode feature - emacs-like shortcuts (Requires restart)"
+                },
                 "vhdl-qqs.questaBinPath": {
                     "type": "string",
                     "default": "C:\\Program Files\\intelFPGA_pro\\24.2\\questa_fse\\win64",
@@ -251,6 +260,7 @@
         "@vscode/test-electron": "^2.4.1",
         "esbuild": "^0.25.1",
         "eslint": "^9.19.0",
+        "shx": "^0.4.0",
         "typescript": "^5.7.3"
     },
     "dependencies": {
