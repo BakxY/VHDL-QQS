@@ -15,7 +15,7 @@ const PATH_TO_CMD: string = '/Windows/System32/cmd.exe';
  */
 export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPath: string, currentTestScriptPath: string, pathToQuesta: string): void {
     const pathToProject = path.dirname(path.join(pathUtils.getWorkspacePath()!, currentProjectPath));
-    const pathToTestScript = path.dirname(path.join(pathUtils.getWorkspacePath()!, currentTestScriptPath));
+    const pathToTestScript = path.join(pathUtils.getWorkspacePath()!, currentTestScriptPath);
     const pathToVsim = path.join(pathToQuesta, 'vsim');
 
     const scriptCmd = '"' + pathToVsim + '" -c -do ' + pathToTestScript.replaceAll('\\', '/') + ' -do exit';
