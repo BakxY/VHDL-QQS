@@ -11,7 +11,7 @@ import { outputChannel } from '../extension';
  * @author BakxY
  */
 export function getCommand(context: vscode.ExtensionContext): vscode.Disposable {
-    return vscode.commands.registerCommand('vhdl-qqs.runQuestaTest', async () => {
+    return vscode.commands.registerCommand('vhdl-qqs.openQuestaWave', async () => {
         if (!vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag')) {
             vscode.window.showErrorMessage('Feature isn\'t enabled!');
             console.error('Feature isn\'t enabled!');
@@ -23,14 +23,10 @@ export function getCommand(context: vscode.ExtensionContext): vscode.Disposable 
         const activeProject: string | null = await pathUtils.getCurrentQuestaProject(context);
         if (activeProject === null) { return; }
 
-        // Get quartus test script path
-        const questaTestScript: string | null = await pathUtils.getCurrentQuestaTestScript(context);
-        if (questaTestScript === null) { return; }
-
         // Get quartus install bin path
         const questaPath: string | null = await pathUtils.getQuestaBinPath();
         if (questaPath === null) { return; }
 
-        testCommands.runQuestaTest(activeProject, questaTestScript, questaPath);
+        testCommands.convertAndOpenWaveFile(activeProject, questaPath);
     });
 } 

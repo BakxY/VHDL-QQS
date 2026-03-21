@@ -148,6 +148,10 @@
                 "title": "VHDL-QQS: Run Questa Tests"
             },
             {
+                "command": "vhdl-qqs.openQuestaWave",
+                "title": "VHDL-QQS: Convert and open Questa Wave"
+            },
+            {
                 "command": "vhdl-qqs.changeQuartusProjectProperty",
                 "title": "VHDL-QQS: Change quartus project property"
             },

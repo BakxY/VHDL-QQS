@@ -29,6 +29,7 @@ import * as copyEntityToComponent from './commands/copyEntityToComponent';
 import * as selectQuestaProject from './commands/selectQuestaProject';
 import * as selectQuestaTestScript from './commands/selectQuestaTestScript';
 import * as runQuestaTest from './commands/runQuestaTest';
+import * as openQuestaWave from './commands/openQuestaWave';
 import * as changeQuartusProjectProperty from './commands/changeQuartusProjectProperty';
 import * as genDebugDevInfo from './commands/genDebugDevInfo';
 
@@ -41,6 +42,7 @@ export let quartusProjectFilesView: quartus.QuartusProjectFileTreeDataProvider;
 export let quartusProjectPropertiesView: quartus.QuartusProjectPropertiesTreeDataProvider;
 export let currentQuestaProjectDisplay: vscode.StatusBarItem;
 export let runQuestaTestsButton: vscode.StatusBarItem;
+export let openQuestaWaveFileButton: vscode.StatusBarItem;
 export let currentQuartusProjectDisplay: vscode.StatusBarItem;
 export let currentQuestaTestScriptDisplay: vscode.StatusBarItem;
 export let currentTopLevelDisplay: vscode.StatusBarItem;
@@ -71,6 +73,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(selectQuestaProject.getCommand(context));
 	context.subscriptions.push(selectQuestaTestScript.getCommand(context));
 	context.subscriptions.push(runQuestaTest.getCommand(context));
+	context.subscriptions.push(openQuestaWave.getCommand(context));
 	context.subscriptions.push(changeQuartusProjectProperty.getCommand(context));
 	context.subscriptions.push(genDebugDevInfo.getCommand());
 
@@ -97,6 +100,10 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	// Create status bar item to run questa tests
 	runQuestaTestsButton = statusBarCreator.createRunTests();
 	context.subscriptions.push(runQuestaTestsButton);
+
+	// Create status bar item to open questa wave file
+	openQuestaWaveFileButton = statusBarCreator.createOpenWave();
+	context.subscriptions.push(openQuestaWaveFileButton);
 
 	// Attach function as event handler to config changes
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async event => {
