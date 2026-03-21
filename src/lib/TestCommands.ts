@@ -10,22 +10,15 @@ const PATH_TO_CMD: string = '/Windows/System32/cmd.exe';
  * 
  * @param context Context from where the command was ran
  * @param currentProjectPath Path to the currently selected project
+ * @param currentTestScriptPath Path to the currently selected test script
  * @param pathToQuesta Path to the users Questa installation, where the binaries reside
  */
-export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPath: string, pathToQuesta: string): void {
+export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPath: string, currentTestScriptPath: string, pathToQuesta: string): void {
     const pathToProject = path.dirname(path.join(pathUtils.getWorkspacePath()!, currentProjectPath));
+    const pathToTestScript = path.dirname(path.join(pathUtils.getWorkspacePath()!, currentTestScriptPath));
     const pathToVsim = path.join(pathToQuesta, 'vsim');
 
-    const pathToTests: string | undefined = vscode.workspace.getConfiguration('vhdl-qqs').get<string>('questaTestsPath');
-
-    if (pathToTests === undefined) {
-        console.error('No path to do tests file defined! Check your settings!');
-        vscode.window.showErrorMessage('No path to do tests file defined! Check your settings!');
-        outputChannel.appendLine('No path to do tests file defined! Check your settings!');
-        return;
-    }
-
-    const scriptCmd = '"' + pathToVsim + '" -c -do ' + pathToTests.replaceAll('\\', '/') + ' -do exit';
+    const scriptCmd = '"' + pathToVsim + '" -c -do ' + pathToTestScript.replaceAll('\\', '/') + ' -do exit';
 
     // Get all active terminals opened in editor
     const openTerminals = vscode.window.terminals;

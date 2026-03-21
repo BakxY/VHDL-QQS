@@ -74,7 +74,7 @@ export function resolvePathWithWildcards(wildcardPath: string, baseDir: string =
  * @returns The workstation path to the current project
  */
 export function getCurrentQuartusProject(context: vscode.ExtensionContext): string | null {
-    const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveQuartusProject', undefined);
+    const activeProject: string | undefined  = context.workspaceState.get('vhdl-qqs.currentActiveQuartusProject', undefined);
 
     // Check if no project is set in current workspace
     if (activeProject === undefined) {
@@ -95,7 +95,7 @@ export function getCurrentQuartusProject(context: vscode.ExtensionContext): stri
  * @returns The workstation path to the current project
  */
 export function getCurrentQuestaProject(context: vscode.ExtensionContext): string | null {
-    const activeProject = context.workspaceState.get('vhdl-qqs.currentActiveQuestaProject', undefined);
+    const activeProject: string | undefined  = context.workspaceState.get('vhdl-qqs.currentActiveQuestaProject', undefined);
 
     // Check if no project is set in current workspace
     if (activeProject === undefined) {
@@ -106,6 +106,27 @@ export function getCurrentQuestaProject(context: vscode.ExtensionContext): strin
     }
 
     return activeProject;
+}
+
+/**
+ * @brief Gets the currently selected questa test script from the workspace storage
+ * 
+ * @param context Context from where the command was ran
+ * 
+ * @returns The workstation path to the current questa test script
+ */
+export function getCurrentQuestaTestScript(context: vscode.ExtensionContext): string | null {
+    const activeTestScript: string | undefined  = context.workspaceState.get('vhdl-qqs.currentActiveQuestaTestScript', undefined);
+
+    // Check if no project is set in current workspace
+    if (activeTestScript === undefined) {
+        vscode.window.showErrorMessage('No questa test script selected!');
+        console.error('No questa test script selected!');
+        outputChannel.appendLine('No questa test script selected!');
+        return null;
+    }
+
+    return activeTestScript;
 }
 
 /**
