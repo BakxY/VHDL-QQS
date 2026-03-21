@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as pathUtils from './PathUtils';
 
 /**
- * @brief Gets all questa project files (file extension .qpf) in the current workspace
+ * @brief Gets all questa project files (file extension .mpf) in the current workspace
  * 
  * @returns An array of all questa project files
  */
@@ -15,6 +15,25 @@ export function getAllProjectFiles(): string[] {
     // Check all files for project file extension
     for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {
         if (path.extname(allFiles[fileIndex]) === '.mpf') {
+            allProjectFiles.push(allFiles[fileIndex].replace(vscode.workspace.workspaceFolders![0].uri.fsPath, '').replaceAll('\\', '/'));
+        }
+    }
+
+    return allProjectFiles;
+}
+
+/**
+ * @brief Gets all questa test runner scripts (file extension .do) in the current workspace
+ * 
+ * @returns An array of all questa test runner scripts
+ */
+export function getAllTestRunnerScripts(): string[] {
+    const allFiles: string[] = pathUtils.resolvePathWithWildcards(path.normalize('**/*.*'));
+    const allProjectFiles: string[] = [];
+
+    // Check all files for project file extension
+    for (let fileIndex = 0; fileIndex < allFiles.length; fileIndex++) {
+        if (path.extname(allFiles[fileIndex]) === '.do') {
             allProjectFiles.push(allFiles[fileIndex].replace(vscode.workspace.workspaceFolders![0].uri.fsPath, '').replaceAll('\\', '/'));
         }
     }

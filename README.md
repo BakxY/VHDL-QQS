@@ -82,12 +82,10 @@ The VHDL-QQS extension's behavior can be customized through VS Code settings.
 
 * `vhdl-qqs.questaBinPath`: (Required if `vhdl-qqs.questaFeatureFlag` is true) Enter the *full path* to your QuestaSim installation's `win64` (or equivalent for your OS) directory. This is where `vsim` is located. [Example: `C:\Program Files\intelFPGA_pro\24.2\questa_fse\win64`]
 
-* `vhdl-qqs.questaTestsPath`: (Required if `vhdl-qqs.questaFeatureFlag` is true) Enter the *relative path* from your Questa project file (`.mpf`) to the do file that runs all the simulations. This path is used to locate the test files.  [Example: `..\compile.do`]
-
 #### 1.3 Important Notes about Paths
 
 * Make sure to enter the *full paths* to the directories or executables for Quartus and QuestaSim (if applicable). Relative paths are not supported for these settings.
-* If you are not using QuestaSim, you can leave the `vhdl-qqs.questaFeatureFlag`, `vhdl-qqs.questaBinPath`, and `vhdl-qqs.questaTestsPath` settings at their default values.
+* If you are not using QuestaSim, you can leave the `vhdl-qqs.questaFeatureFlag` and `vhdl-qqs.questaBinPath` settings at their default values.
 
 ## Project Setup
 

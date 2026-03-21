@@ -23,10 +23,14 @@ export function getCommand(context: vscode.ExtensionContext): vscode.Disposable 
         const activeProject: string | null = await pathUtils.getCurrentQuestaProject(context);
         if (activeProject === null) { return; }
 
-        // Get  quartus install bin path
+        // Get quartus test script path
+        const questaTestScript: string | null = await pathUtils.getCurrentQuestaTestScript(context);
+        if (questaTestScript === null) { return; }
+
+        // Get quartus install bin path
         const questaPath: string | null = await pathUtils.getQuestaBinPath();
         if (questaPath === null) { return; }
 
-        testCommands.runQuestaTest(context, activeProject, questaPath);
+        testCommands.runQuestaTest(context, activeProject, questaTestScript, questaPath);
     });
 } 

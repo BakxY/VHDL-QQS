@@ -27,6 +27,7 @@ import * as refreshSourceFiles from './commands/refreshSourceFiles';
 import * as createNewEntity from './commands/createNewEntity';
 import * as copyEntityToComponent from './commands/copyEntityToComponent';
 import * as selectQuestaProject from './commands/selectQuestaProject';
+import * as selectQuestaTestScript from './commands/selectQuestaTestScript';
 import * as runQuestaTest from './commands/runQuestaTest';
 import * as changeQuartusProjectProperty from './commands/changeQuartusProjectProperty';
 import * as genDebugDevInfo from './commands/genDebugDevInfo';
@@ -41,6 +42,7 @@ export let quartusProjectPropertiesView: quartus.QuartusProjectPropertiesTreeDat
 export let currentQuestaProjectDisplay: vscode.StatusBarItem;
 export let runQuestaTestsButton: vscode.StatusBarItem;
 export let currentQuartusProjectDisplay: vscode.StatusBarItem;
+export let currentQuestaTestScriptDisplay: vscode.StatusBarItem;
 export let currentTopLevelDisplay: vscode.StatusBarItem;
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
@@ -67,6 +69,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(createNewEntity.getCommand(context));
 	context.subscriptions.push(copyEntityToComponent.getCommand());
 	context.subscriptions.push(selectQuestaProject.getCommand(context));
+	context.subscriptions.push(selectQuestaTestScript.getCommand(context));
 	context.subscriptions.push(runQuestaTest.getCommand(context));
 	context.subscriptions.push(changeQuartusProjectProperty.getCommand(context));
 	context.subscriptions.push(genDebugDevInfo.getCommand());
@@ -88,6 +91,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 	// Create status bar item to display the active questa project
 	currentQuestaProjectDisplay = statusBarCreator.createActiveQuestaProject(context);
+	currentQuestaTestScriptDisplay = statusBarCreator.createActiveQuestaTestScript(context);
 	context.subscriptions.push(currentQuestaProjectDisplay);
 
 	// Create status bar item to run questa tests
