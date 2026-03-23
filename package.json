@@ -235,7 +235,116 @@
                     "type": "string",
                     "default": "C:\\Program Files\\intelFPGA_pro\\24.2\\questa_fse\\win64",
                     "description": "The path to your questa installations bin folder"
-                }
+                },
+                "vhdl-qqs.formatter.insertFinalNewline": {
+					"type": "boolean",
+					"default": false,
+					"description": "Insert a final new line at the end of the file when formatting."
+				},
+				"vhdl-qqs.formatter.align.all": {
+					"type": "boolean",
+					"default": false,
+					"description": ""
+				},
+				"vhdl-qqs.formatter.align.port": {
+					"type": "boolean",
+					"default": false,
+					"description": ""
+				},
+				"vhdl-qqs.formatter.align.function": {
+					"type": "boolean",
+					"default": false,
+					"description": ""
+				},
+				"vhdl-qqs.formatter.align.procedure": {
+					"type": "boolean",
+					"default": false,
+					"description": ""
+				},
+				"vhdl-qqs.formatter.align.generic": {
+					"type": "boolean",
+					"default": false,
+					"description": ""
+				},
+				"vhdl-qqs.formatter.align.mode": {
+					"type": "string",
+					"default": "Local",
+					"enum": [
+						"Local",
+						"Global"
+					],
+					"description": ""
+				},
+				"vhdl-qqs.formatter.case.keyword": {
+					"type": "string",
+					"default": "UpperCase",
+					"enum": [
+						"UpperCase",
+						"LowerCase",
+						"DefaultCase"
+					],
+					"description": ""
+				},
+				"vhdl-qqs.formatter.case.typename": {
+					"type": "string",
+					"default": "UpperCase",
+					"enum": [
+						"UpperCase",
+						"LowerCase",
+						"DefaultCase"
+					],
+					"description": ""
+				},
+				"vhdl-qqs.formatter.newline.port": {
+					"type": "string",
+					"default": "None",
+					"enum": [
+						"NewLine",
+						"NoNewLine",
+						"None"
+					],
+					"description": ""
+				},
+				"vhdl-qqs.formatter.newline.then": {
+					"type": "string",
+					"default": "NewLine",
+					"enum": [
+						"NewLine",
+						"NoNewLine",
+						"None"
+					],
+					"description": ""
+				},
+				"vhdl-qqs.formatter.newline.semicolon": {
+					"type": "string",
+					"default": "NewLine",
+					"enum": [
+						"NewLine",
+						"NoNewLine",
+						"None"
+					],
+					"description": ""
+				},
+				"vhdl-qqs.formatter.newline.else": {
+					"type": "string",
+					"default": "NewLine",
+					"enum": [
+						"NewLine",
+						"NoNewLine",
+						"None"
+					],
+					"description": ""
+				},
+				"vhdl-qqs.formatter.newline.generic": {
+					"type": "string",
+					"default": "None",
+					"enum": [
+						"NewLine",
+						"NoNewLine",
+						"None"
+					],
+					"description": ""
+				}
             }
         }
     },
