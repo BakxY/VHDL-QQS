@@ -7,7 +7,7 @@ import { outputChannel } from '../extension';
 const PATH_TO_CMD: string = '/Windows/System32/cmd.exe';
 
 /**
- * @brief TODO
+ * @brief Run the active Questa testbench and shows output in a VS Code terminal.
  * 
  * @param currentProjectPath Path to the currently selected project
  * @param currentTestScriptPath Path to the currently selected test script
@@ -51,6 +51,12 @@ export function runQuestaTest(currentProjectPath: string, currentTestScriptPath:
     outputChannel.appendLine('Started test run in terminal!');
 }
 
+/**
+ * @brief Converts a .wlf file resulting from a Questa run into a .vcd file and uses VaporView to open that file.
+ * 
+ * @param currentProjectPath Path to the currently selected project
+ * @param pathToQuesta Path to the users Questa installation, where the binaries reside
+ */
 export async function convertAndOpenWaveFile(currentProjectPath: string, pathToQuesta: string): Promise<void> {
     const pathToProject = path.dirname(path.join(pathUtils.getWorkspacePath()!, currentProjectPath));
     const pathToWlf = path.join(pathToProject, 'vsim.wlf');
