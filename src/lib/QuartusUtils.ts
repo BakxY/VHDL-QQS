@@ -260,7 +260,7 @@ export function getProjectVerilogSourceFiles(context: vscode.ExtensionContext, c
  * @returns A path to the compile path
  */
 export function getProjectOutputDir(context: vscode.ExtensionContext, currentProjectPath: string, quartusBinPath: string): string {
-    return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'PROJECT_OUTPUT_DIRECTORY')[0];
+    return getProjectGlobal(context, currentProjectPath, quartusBinPath, 'PROJECT_OUTPUT_DIRECTORY')[0] ?? "";
 }
 
 /**
