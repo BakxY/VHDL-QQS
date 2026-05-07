@@ -80,7 +80,7 @@ export function analyseQuartusProject(context: vscode.ExtensionContext, currentP
     if (!quartusCompileShell) {
         switch (process.platform) {
             case 'win32':
-                quartusCompileShell = vscode.window.createTerminal('Quartus Compilation', PATH_TO_CMD);
+                quartusCompileShell = vscode.window.createTerminal('Quartus Compilation', process.env.COMSPEC || 'cmd.exe');
                 break;
             default:
                 quartusCompileShell = vscode.window.createTerminal('Quartus Compilation');
