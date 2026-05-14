@@ -3,8 +3,6 @@ import * as path from 'path';
 import * as pathUtils from './PathUtils';
 import { outputChannel } from '../extension';
 
-const PATH_TO_CMD: string = '/Windows/System32/cmd.exe';
-
 /**
  * @brief TODO
  * 
@@ -35,7 +33,7 @@ export function runQuestaTest(context: vscode.ExtensionContext, currentProjectPa
     if (!QuestaCompileShell) {
         switch (process.platform) {
             case 'win32':
-                QuestaCompileShell = vscode.window.createTerminal('Questa Tests', PATH_TO_CMD);
+                QuestaCompileShell = vscode.window.createTerminal('Questa Tests', process.env.COMSPEC || 'cmd.exe');
                 break;
             default:
                 QuestaCompileShell = vscode.window.createTerminal('Questa Tests');
