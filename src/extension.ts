@@ -91,8 +91,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 	// Create status bar item to display the active questa project
 	currentQuestaProjectDisplay = statusBarCreator.createActiveQuestaProject(context);
-	currentQuestaTestScriptDisplay = statusBarCreator.createActiveQuestaTestScript(context);
 	context.subscriptions.push(currentQuestaProjectDisplay);
+	currentQuestaTestScriptDisplay = statusBarCreator.createActiveQuestaTestScript(context);
+	context.subscriptions.push(currentQuestaTestScriptDisplay);
 
 	// Create status bar item to run questa tests
 	runQuestaTestsButton = statusBarCreator.createRunTests();
