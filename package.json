@@ -144,6 +144,10 @@
                 "title": "VHDL-QQS: Select Questa Project"
             },
             {
+                "command": "vhdl-qqs.selectQuestaTestScript",
+                "title": "VHDL-QQS: Select Questa Test Script Path"
+            },
+            {
                 "command": "vhdl-qqs.runQuestaTest",
                 "title": "VHDL-QQS: Run Questa Tests"
             },
