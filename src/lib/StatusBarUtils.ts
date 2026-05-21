@@ -97,7 +97,7 @@ export function createActiveQuestaTestScript(context: vscode.ExtensionContext): 
 }
 
 /**
- * @brief Function initializes the status bar item/button for compiling active project
+ * @brief Function initializes the status bar item/button for running questa tests
  * 
  * @returns The initialized status bar item
  */
@@ -114,6 +114,26 @@ export function createRunTests(): vscode.StatusBarItem {
     }
 
     return runTestsButton;
+}
+
+/**
+ * @brief Function initializes the status bar item/button for opening questa wave file
+ * 
+ * @returns The initialized status bar item
+ */
+export function createOpenWave(): vscode.StatusBarItem {
+    const openWaveButton: vscode.StatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 10);
+
+    openWaveButton.command = 'vhdl-qqs.openQuestaWave';
+    openWaveButton.text = '$(graph-line)';
+    openWaveButton.tooltip = 'Convert and open questa wave file';
+
+    if(vscode.workspace.getConfiguration('vhdl-qqs').get('questaFeatureFlag'))
+    {
+        openWaveButton.show();
+    }
+
+    return openWaveButton;
 }
 
 /**
